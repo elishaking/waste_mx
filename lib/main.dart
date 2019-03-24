@@ -9,10 +9,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        accentColor: Colors.yellow,
+        buttonColor: Colors.yellow,
+        fontFamily: 'Lato'
       ),
-      home: Center(
-        child: Text('Waste MX'),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Waste MX'),
+        ),
+        body: Center(
+          child: Text('Waste MX'),
+        ),
       ),
     );
   }
