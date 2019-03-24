@@ -28,6 +28,25 @@ class LoginPage extends StatelessWidget{
                         return 'Please enter a valid email';
                       }
                     },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        labelText: 'password'
+                    ),
+                    validator: (String value) {
+                      if(value.isEmpty){
+                        return 'Your email is required';
+                      } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
+                        return 'Please enter a valid email';
+                      }
+                    },
+                  ),
+                  RaisedButton(
+                    child: Text('Login'),
+                    onPressed: (){
+
+                    },
                   )
                 ],
               ),
