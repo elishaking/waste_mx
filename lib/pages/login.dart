@@ -16,33 +16,48 @@ class LoginPage extends StatelessWidget{
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text('Sign In With', style: TextStyle(
+              Text('Login With', style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.bold,
                   fontSize: 16
               ),),
-              ButtonBar(
-                alignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.gps_fixed),
-                    onPressed: () {
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 18.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    OutlineButton(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(1000),
+                      ),
+                      child: Image.asset('assets/facebook.png', scale: 1.7,),
+                      onPressed: () {
 
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.face),
-                    onPressed: () {
+                      },
+                    ),
+                    OutlineButton(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(1000),
+                      ),
+                      child: Image.asset('assets/google.png', scale: 1.7,),
+                      onPressed: () {
 
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.face),
-                    onPressed: () {
+                      },
+                    ),
+                    OutlineButton(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(1000),
+                      ),
+                      child: Image.asset('assets/twitter.png', scale: 1.7,),
+                      onPressed: () {
 
-                    },
-                  ),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               ),
               Form(
                 key: _formKey,
