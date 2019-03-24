@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './pages/login.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -14,14 +16,7 @@ class MyApp extends StatelessWidget {
         buttonColor: Colors.yellow,
         fontFamily: 'Lato'
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Waste MX'),
-        ),
-        body: Center(
-          child: Text('Waste MX'),
-        ),
-      ),
+      home: LoginPage(),
     );
   }
 }
