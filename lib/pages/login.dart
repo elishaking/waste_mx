@@ -12,43 +12,50 @@ class LoginPage extends StatelessWidget{
       body: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Sign In With'),
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.face),
-                  onPressed: () {
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Sign In With', style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+              ),),
+              ButtonBar(
+                alignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.gps_fixed),
+                    onPressed: () {
 
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.face),
-                  onPressed: () {
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.face),
+                    onPressed: () {
 
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.face),
-                  onPressed: () {
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.face),
+                    onPressed: () {
 
-                  },
-                ),
-              ],
-            ),
-            Form(
-              key: _formKey,
-              child: SingleChildScrollView(
+                    },
+                  ),
+                ],
+              ),
+              Form(
+                key: _formKey,
                 child: Container(
                   child: Column(
                     children: <Widget>[
                       TextFormField(
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email),
-                            labelText: 'email'
+                            labelText: 'email',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            )
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
@@ -58,10 +65,14 @@ class LoginPage extends StatelessWidget{
                           }
                         },
                       ),
+                      SizedBox(height: 25,),
                       TextFormField(
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock),
-                            labelText: 'password'
+                            labelText: 'password',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            )
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
@@ -81,6 +92,7 @@ class LoginPage extends StatelessWidget{
                         ),
                       ),
                       RaisedButton(
+                        textColor: Colors.white,
                         child: Text('Login'),
                         onPressed: (){
 
@@ -95,9 +107,9 @@ class LoginPage extends StatelessWidget{
                     ],
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
