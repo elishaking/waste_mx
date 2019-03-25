@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  final double pad_vertical = 13.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
                 image: DecorationImage(
                   image: AssetImage('assets/waste_home.jpg'),
                   colorFilter: ColorFilter.mode(
-                    Colors.black45,
+                    Colors.black54,
                     BlendMode.darken
                   ),
                   fit: BoxFit.cover
@@ -40,7 +41,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
                     child: Text(
                       'You earned 50 points just for installation, check your wallet',
                       textAlign: TextAlign.center,
@@ -54,7 +55,7 @@ class HomePage extends StatelessWidget {
 //                    child: Text('Search vendor recycler'),
 //                  ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -108,7 +109,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(top: 18, bottom: 0, left: 10, right: 10),
+                    padding: EdgeInsets.only(top: pad_vertical, bottom: 0, left: 10, right: 10),
                     child: Text(
                       'Make money with waste',
                       textAlign: TextAlign.left,
@@ -135,8 +136,145 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Container(
-              child: Column(
+              margin: EdgeInsets.symmetric(vertical: pad_vertical, horizontal: 10),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <Widget>[
+                    Card(
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              width: 130,
+                              image: AssetImage('assets/dispose.jpg'),
+                            ),
+                            ButtonTheme.bar(
+                              child: ButtonBar(
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text('Dispose Waste'),
+                                    onPressed: (){
 
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                    Card(
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              width: 130,
+                              image: AssetImage('assets/dispose.jpg'),
+                            ),
+                            ButtonTheme.bar(
+                              child: ButtonBar(
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text('Recycle Waste'),
+                                    onPressed: (){
+
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                    Card(
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              width: 130,
+                              image: AssetImage('assets/dispose.jpg'),
+                            ),
+                            ButtonTheme.bar(
+                              child: ButtonBar(
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text('De-cluster'),
+                                    onPressed: (){
+
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                    Card(
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              width: 130,
+                              image: AssetImage('assets/dispose.jpg'),
+                            ),
+                            ButtonTheme.bar(
+                              child: ButtonBar(
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text('Upcycling'),
+                                    onPressed: (){
+
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                    Card(
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              width: 130,
+                              image: AssetImage('assets/dispose.jpg'),
+                            ),
+                            ButtonTheme.bar(
+                              child: ButtonBar(
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text('Downcycling'),
+                                    onPressed: (){
+
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                    Card(
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              width: 130,
+                              image: AssetImage('assets/dispose.jpg'),
+                            ),
+                            ButtonTheme.bar(
+                              child: ButtonBar(
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text('Info Center'),
+                                    onPressed: (){
+
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                  ],
+                ),
               ),
             )
           ],
