@@ -5,6 +5,13 @@ class SignUpPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> _formData = {
+      'phone': '',
+      'email': '',
+      'username': '',
+      'password': ''
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign Up'),
@@ -76,14 +83,17 @@ class SignUpPage extends StatelessWidget{
                             labelText: 'phone',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)
-                            )
+                            ),
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
-                            return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid email';
+                            return 'Your phone number is required';
+                          } else if(!RegExp(r'^[0-9]+$').hasMatch(value.toLowerCase())){
+                            return 'Please enter a valid phone number';
                           }
+                        },
+                        onSaved: (String value){
+                          _formData['phone'] = value;
                         },
                       ),
                       SizedBox(height: 25,),
@@ -102,6 +112,9 @@ class SignUpPage extends StatelessWidget{
                             return 'Please enter a valid email';
                           }
                         },
+                        onSaved: (String value){
+                          _formData['email'] = value;
+                        },
                       ),
                       SizedBox(height: 25,),
                       TextFormField(
@@ -114,10 +127,14 @@ class SignUpPage extends StatelessWidget{
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
-                            return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid email';
+                            return 'Your username is required';
                           }
+                          /*else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
+                            return 'Please enter a valid username';
+                          }*/
+                        },
+                        onSaved: (String value){
+                          _formData['username'] = value;
                         },
                       ),
                       SizedBox(height: 25,),
@@ -131,10 +148,11 @@ class SignUpPage extends StatelessWidget{
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
-                            return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid email';
+                            return 'Your password is required';
                           }
+                        },
+                        onSaved: (String value){
+                          _formData['password'] = value;
                         },
                       ),
                       SizedBox(height: 25,),
@@ -148,9 +166,9 @@ class SignUpPage extends StatelessWidget{
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
-                            return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid email';
+                            return 'Re-enter your password';
+                          } else if(_formData['password'] != value){
+                            return "Passwords don't match";
                           }
                         },
                       ),
@@ -159,7 +177,10 @@ class SignUpPage extends StatelessWidget{
                         textColor: Colors.white,
                         child: Text('Sign Up'),
                         onPressed: (){
-
+                          if(_formKey.currentState.validate()){
+                            _formKey.currentState.save();
+                            Navigator.pushReplacementNamed(context, 'home');
+                          }
                         },
                       ),
                       FlatButton(
