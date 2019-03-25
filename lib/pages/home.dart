@@ -133,6 +133,48 @@ class HomePage extends StatelessWidget {
                   )
                 ],
               ),
+            ),
+            Container(
+              child: Column(
+
+              ),
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.black, width: 0.5)
+          )
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            FlatButton(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(Icons.home, color: Theme.of(context).accentColor,),
+                  Text('Home', style: TextStyle(color: Theme.of(context).accentColor),)
+                ],
+              ),
+              onPressed: (){
+
+              },
+            ),
+            FlatButton(
+              child: Icon(Icons.person),
+              onPressed: (){
+
+              },
+            ),
+            FlatButton(
+              child: Icon(Icons.account_balance_wallet),
+              onPressed: (){
+
+              },
             )
           ],
         ),
