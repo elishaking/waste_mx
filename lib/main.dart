@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './pages/login.dart';
 import './pages/signup.dart';
+import './pages/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,10 +18,11 @@ class MyApp extends StatelessWidget {
         buttonColor: Colors.amber,
         fontFamily: 'Lato'
       ),
-      home: LoginPage(),
+      home: HomePage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
+        'home': (BuildContext context) => HomePage(),
       }
     );
   }
