@@ -5,6 +5,11 @@ class LoginPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> _formData = {
+      'email': '',
+      'password': ''
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -79,6 +84,9 @@ class LoginPage extends StatelessWidget{
                             return 'Please enter a valid email';
                           }
                         },
+                        onSaved: (String value){
+                          _formData['email'] = value;
+                        },
                       ),
                       SizedBox(height: 25,),
                       TextFormField(
@@ -91,10 +99,11 @@ class LoginPage extends StatelessWidget{
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
-                            return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid email';
+                            return 'Your password is required';
                           }
+                        },
+                        onSaved: (String value){
+                          _formData['password'] = value;
                         },
                       ),
                       Container(
@@ -110,7 +119,10 @@ class LoginPage extends StatelessWidget{
                         textColor: Colors.white,
                         child: Text('Login'),
                         onPressed: (){
-
+                          if(_formKey.currentState.validate()){
+                            _formKey.currentState.save();
+                            Navigator.pushReplacementNamed(context, 'home');
+                          }
                         },
                       ),
                       FlatButton(
