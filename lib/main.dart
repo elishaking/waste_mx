@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
+import './pages/search.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
         'home': (BuildContext context) => HomePage(),
+        'search': (BuildContext context) => SearchPage()
       }
     );
   }

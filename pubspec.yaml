@@ -48,6 +48,7 @@ flutter:
   - assets/facebook.png
   - assets/google.png
   - assets/twitter.png
+  - assets/waste_home.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
