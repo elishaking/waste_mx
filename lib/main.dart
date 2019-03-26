@@ -4,6 +4,7 @@ import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
 import './pages/search.dart';
+import './pages/profile.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,12 +20,13 @@ class MyApp extends StatelessWidget {
         buttonColor: Colors.amber,
         fontFamily: 'Lato'
       ),
-      home: HomePage(),
+      home: ProfilePage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
         'home': (BuildContext context) => HomePage(),
-        'search': (BuildContext context) => SearchPage()
+        'search': (BuildContext context) => SearchPage(),
+        'profile': (BuildContext context) => ProfilePage(),
       }
     );
   }
