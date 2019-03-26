@@ -4,15 +4,71 @@ class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
   @override
   Widget build(BuildContext context) {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       drawer: Drawer(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 230,
-              color: Theme.of(context).primaryColor,
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 230,
+                width: deviceWidth,
+                color: Theme.of(context).primaryColor,
+//                child: CircleAvatar(
+//                  child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
+//                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text('Home'),
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                selected: true,
+              ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Profile'),
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'profile');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.account_balance_wallet),
+                title: Text('Wallet'),
+                onTap: (){
+                  Navigator.pop(context);
+//                  Navigator.pushNamed(context, 'profile');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.shopping_cart),
+                title: Text('Shop'),
+                onTap: (){
+                  Navigator.pop(context);
+//                  Navigator.pushNamed(context, 'profile');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.supervised_user_circle),
+                title: Text('Vendors'),
+                onTap: (){
+                  Navigator.pop(context);
+//                  Navigator.pushNamed(context, 'profile');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.markunread_mailbox),
+                title: Text('Packages'),
+                onTap: (){
+                  Navigator.pop(context);
+//                  Navigator.pushNamed(context, 'profile');
+                },
+              ),
+            ],
+          ),
         ),
       ),
       appBar: AppBar(
