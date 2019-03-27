@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget{
+class LoginPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _LoginPageState();
+  }
+}
+
+class _LoginPageState extends State<LoginPage>{
+  final Map<String, dynamic> _formData = {
+    'email': '',
+    'password': ''
+  };
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool showPassword = false;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> _formData = {
-      'email': '',
-      'password': ''
-    };
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -77,6 +86,7 @@ class LoginPage extends StatelessWidget{
                                 borderRadius: BorderRadius.circular(10)
                             )
                         ),
+                        keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'Your email is required';
@@ -95,8 +105,17 @@ class LoginPage extends StatelessWidget{
                             labelText: 'password',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)
-                            )
+                            ),
+                            suffixIcon: GestureDetector(
+                              child: Icon(Icons.remove_red_eye),
+                              onTap: (){
+                                setState(() {
+                                  showPassword = !showPassword;
+                                });
+                              },
+                            ),
                         ),
+                        obscureText: showPassword,
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'Your password is required';
