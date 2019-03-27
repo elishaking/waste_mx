@@ -363,7 +363,7 @@ class HomePage extends StatelessWidget {
             FlatButton(
               child: Icon(Icons.person),
               onPressed: (){
-
+                Navigator.pushNamed(context, 'profile');
               },
             ),
             FlatButton(

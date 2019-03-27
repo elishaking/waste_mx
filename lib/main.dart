@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         buttonColor: Colors.amber,
         fontFamily: 'Lato'
       ),
-      home: LoginPage(),
+      home: HomePage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),

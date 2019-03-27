@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 
+import './vendor_list.dart';
+
 class DisposeWastePage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    void _pushRoute(route){
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) {
+            return route;
+          }
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Dispose Waste'),
@@ -28,7 +38,9 @@ class DisposeWastePage extends StatelessWidget{
                           children: <Widget>[
                             FlatButton(
                               child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {
+                                _pushRoute(VendorListPage());
+                              },
                             ),
                           ],
                         ),
@@ -53,7 +65,9 @@ class DisposeWastePage extends StatelessWidget{
                           children: <Widget>[
                             FlatButton(
                               child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {
+                                _pushRoute(VendorListPage());
+                              },
                             ),
                           ],
                         ),
@@ -78,7 +92,9 @@ class DisposeWastePage extends StatelessWidget{
                           children: <Widget>[
                             FlatButton(
                               child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {
+                                _pushRoute(VendorListPage());
+                              },
                             ),
                           ],
                         ),
@@ -103,7 +119,9 @@ class DisposeWastePage extends StatelessWidget{
                           children: <Widget>[
                             FlatButton(
                               child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {
+                                _pushRoute(VendorListPage());
+                              },
                             ),
                           ],
                         ),
@@ -128,7 +146,9 @@ class DisposeWastePage extends StatelessWidget{
                           children: <Widget>[
                             FlatButton(
                               child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {
+                                _pushRoute(VendorListPage());
+                              },
                             ),
                           ],
                         ),
