@@ -14,14 +14,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Waste MX',
       theme: ThemeData(
         primarySwatch: Colors.green,
         accentColor: Colors.amber,
         buttonColor: Colors.amber,
         fontFamily: 'Lato'
       ),
-      home: HomePage(),
+      home: LoginPage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
