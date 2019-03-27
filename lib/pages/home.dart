@@ -76,7 +76,9 @@ class HomePage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, 'search');
+            },
           )
         ],
       ),
@@ -210,7 +212,7 @@ class HomePage extends StatelessWidget {
                                   FlatButton(
                                     child: Text('Dispose Waste'),
                                     onPressed: (){
-
+                                      Navigator.pushNamed(context, 'dispose_waste');
                                     },
                                   )
                                 ],
