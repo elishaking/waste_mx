@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 
+import './profile_edit.dart';
+
 class ProfilePage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
+
+    void _pushRoute(route){
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) {
+            return route;
+          }
+      ));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -12,7 +22,7 @@ class ProfilePage extends StatelessWidget{
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-
+              _pushRoute(ProfileEditPage());
             },
           )
         ],
