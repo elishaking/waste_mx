@@ -20,9 +20,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         accentColor: Colors.amber,
         buttonColor: Colors.amber,
-        fontFamily: 'Lato'
+        fontFamily: 'Lato',
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.amber,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))
+        )
       ),
-      home: SelectRolePage(),
+      home: HomePage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
