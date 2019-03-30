@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './pages/welcome.dart';
+import './pages/select_role.dart';
 import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         buttonColor: Colors.amber,
         fontFamily: 'Lato'
       ),
-      home: WelcomePage(),
+      home: SelectRolePage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),

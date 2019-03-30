@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class TitleText extends StatelessWidget{
   final String text;
   final Color textColor;
+  final TextAlign textAlign;
 
-  TitleText({this.text, this.textColor = Colors.white});
+  TitleText({this.text, this.textColor = Colors.white, this.textAlign = TextAlign.left});
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,9 @@ class TitleText extends StatelessWidget{
           fontWeight: FontWeight.w900,
           fontSize: 20,
           color: textColor,
-          letterSpacing: 2
+          letterSpacing: 2,
         ),
+        textAlign: textAlign,
       ),
     );
   }

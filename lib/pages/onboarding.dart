@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as custom_text;
 
+import './select_role.dart';
+
 class OnboardingPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -44,6 +46,12 @@ class _OnboardingPageState extends State<OnboardingPage>{
     );
   }
 
+  void _navPush(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext context) => SelectRolePage()
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +62,7 @@ class _OnboardingPageState extends State<OnboardingPage>{
               _tabPos++;
             });
           } else if(_tabPos == 4){
-            Navigator.pushReplacementNamed(context, 'signup');
+            _navPush(context);
           }
         },
         child: Container(
@@ -87,9 +95,7 @@ class _OnboardingPageState extends State<OnboardingPage>{
                     FlatButton(
                       child: Text('SKIP'),
                       textColor: Colors.white,
-                      onPressed: (){
-                        Navigator.pushReplacementNamed(context, 'signup');
-                      },
+                      onPressed: () => _navPush(context),
                     )
                   ],
                 ),
