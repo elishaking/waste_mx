@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './pages/select_role.dart';
+import './pages/vendor_list.dart';
 import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))
         )
       ),
-      home: HomePage(),
+      home: VendorListPage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
