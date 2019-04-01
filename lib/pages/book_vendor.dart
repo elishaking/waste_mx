@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_text.dart' as customText;
 
 import './book_vendor_success.dart';
+import './book_vendor_fail.dart';
 
 class BookVendorPage extends StatefulWidget{
   @override
@@ -182,7 +183,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
                         onPressed: (){
                           Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => BookVendorSuccessPage('Json Martinz Partners')
+                            builder: (BuildContext context) => BookVendorFailPage('Json Martinz Partners')
                           ));
                         },
                       )
