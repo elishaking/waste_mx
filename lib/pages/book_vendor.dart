@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import './book_vendor_success.dart';
+
 class BookVendorPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -179,7 +181,9 @@ class _BookVendorPageState extends State<BookVendorPage>{
                       RaisedButton(
                         child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
                         onPressed: (){
-                          
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) => BookVendorSuccessPage()
+                          ));
                         },
                       )
                     ],
