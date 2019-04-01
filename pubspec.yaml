@@ -28,6 +28,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: ^0.7.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -48,6 +50,16 @@ flutter:
   - assets/facebook.png
   - assets/google.png
   - assets/twitter.png
+  - assets/waste_home.jpg
+  - assets/dispose.jpg
+  - assets/profile.png
+  - assets/obd-1.png
+  - assets/obd-2.png
+  - assets/obd-3.png
+  - assets/obd-4.png
+  - assets/logo.png
+  - assets/welcome-img.png
+  - assets/success.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

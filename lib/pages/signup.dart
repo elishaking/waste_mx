@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 
-class SignUpPage extends StatelessWidget{
+class SignUpPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _SignUpPageState();
+  }
+}
+
+class _SignUpPageState extends State<SignUpPage>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> _formData = {
+    'phone': '',
+    'email': '',
+    'username': '',
+    'password': ''
+  };
+
+  bool showPassword1 = true;
+  bool showPassword2 = true;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> _formData = {
-      'phone': '',
-      'email': '',
-      'username': '',
-      'password': ''
-    };
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign Up'),
@@ -26,11 +35,11 @@ class SignUpPage extends StatelessWidget{
               Container(
                 padding: EdgeInsets.only(top: 18),
                 child: Text(
-                    'Sign up With',
-                    style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16
+                  'Sign up With',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
                   ),
                 ),
               ),
@@ -79,11 +88,11 @@ class SignUpPage extends StatelessWidget{
                     children: <Widget>[
                       TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.phone),
-                            labelText: 'phone',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            ),
+                          prefixIcon: Icon(Icons.phone),
+                          labelText: 'phone',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
@@ -140,12 +149,21 @@ class SignUpPage extends StatelessWidget{
                       SizedBox(height: 25,),
                       TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.lock),
-                            labelText: 'password',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
+                          prefixIcon: Icon(Icons.lock),
+                          labelText: 'password',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          suffixIcon: GestureDetector(
+                            child: Icon(Icons.remove_red_eye),
+                            onTap: (){
+                              setState(() {
+                                showPassword1 = !showPassword1;
+                              });
+                            },
+                          ),
                         ),
+                        obscureText: showPassword1,
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'Your password is required';
@@ -158,12 +176,21 @@ class SignUpPage extends StatelessWidget{
                       SizedBox(height: 25,),
                       TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.lock),
-                            labelText: 'confirm password',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
+                          prefixIcon: Icon(Icons.lock),
+                          labelText: 'confirm password',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          suffixIcon: GestureDetector(
+                            child: Icon(Icons.remove_red_eye),
+                            onTap: (){
+                              setState(() {
+                                showPassword2 = !showPassword2;
+                              });
+                            },
+                          ),
                         ),
+                        obscureText: showPassword2,
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'Re-enter your password';

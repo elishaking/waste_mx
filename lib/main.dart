@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import './pages/vendor_list.dart';
 import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
+import './pages/search.dart';
+import './pages/profile.dart';
+import './pages/dispose_waste.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,18 +15,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Waste MX',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        accentColor: Colors.yellow,
+        accentColor: Colors.amber,
         buttonColor: Colors.amber,
-        fontFamily: 'Lato'
+        fontFamily: 'Lato',
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.amber,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))
+        )
       ),
-      home: HomePage(),
+      home: VendorListPage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
         'home': (BuildContext context) => HomePage(),
+        'search': (BuildContext context) => SearchPage(),
+        'profile': (BuildContext context) => ProfilePage(),
+        'dispose_waste': (BuildContext context) => DisposeWastePage(),
       }
     );
   }
