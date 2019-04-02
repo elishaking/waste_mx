@@ -26,7 +26,7 @@ class VendorPage extends StatelessWidget{
               background: Hero(
                 tag: _vendor['id'],
                 child: FadeInImage(
-                  placeholder: AssetImage('assets/profile.png'), // some placeholder
+                  placeholder: AssetImage('assets/profile.png'), //! some placeholder
                   image: AssetImage(_vendor['imageUrl']),
                   fit: BoxFit.cover
 
