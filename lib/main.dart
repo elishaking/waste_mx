@@ -7,6 +7,7 @@ import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
+import './pages/vendor_home.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,11 +27,12 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))
         )
       ),
-      home: VendorListPage(),
+      home: VendorHomePage(),
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'signup': (BuildContext context) => SignUpPage(),
         'home': (BuildContext context) => HomePage(),
+        'vendor_home': (BuildContext context) => VendorHomePage(),
         'search': (BuildContext context) => SearchPage(),
         'profile': (BuildContext context) => ProfilePage(),
         'dispose_waste': (BuildContext context) => DisposeWastePage(),
