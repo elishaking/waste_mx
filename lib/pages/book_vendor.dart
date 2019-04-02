@@ -4,6 +4,7 @@ import '../widgets/custom_text.dart' as customText;
 
 import './book_vendor_success.dart';
 import './book_vendor_fail.dart';
+import './edit_price.dart';
 
 class BookVendorPage extends StatefulWidget{
   @override
@@ -148,13 +149,17 @@ class _BookVendorPageState extends State<BookVendorPage>{
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: (){
-
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => EditPricePage()
+                                ));
                               },
                             )
                           ],
                         ),
                         onPressed: (){
-                          
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => EditPricePage()
+                          ));
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
