@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
 
-    final List<Map<String, dynamic>> wasteMXUserOptions = [
+    final List<Map<String, dynamic>> _wasteMXUserOptions = [
       {
         'name': 'Dispose Waste',
         'imageUrl': 'assets/dispose.jpg',
@@ -31,6 +31,15 @@ class HomePage extends StatelessWidget {
       },
     ];
 
+    final List<Map<String, dynamic>> _messages = [
+      {
+        'icon': Icons.account_balance_wallet,
+        'title': 'Earned Coins',
+        'message': 'You earned 50 points just for installation, check your wallet',
+        'action': 'WALLET'
+      }
+    ];
+
     Widget _buildTopSection(BuildContext context){
       return Container(
         decoration: BoxDecoration(
@@ -45,20 +54,21 @@ class HomePage extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
-              child: Text(
-                'You earned 50 points just for installation, check your wallet',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
+            //   child: Text(
+            //     'You earned 50 points just for installation, check your wallet',
+            //     textAlign: TextAlign.center,
+            //     style: TextStyle(
+            //       fontWeight: FontWeight.bold,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
 //                  OutlineButton(
 //                    child: Text('Search vendor recycler'),
 //                  ),
+            SizedBox(height: 30,),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
               child: Row(
@@ -141,7 +151,78 @@ class HomePage extends StatelessWidget {
         ),
       );
     }
+    
+    Widget _buildBottomSection(){
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: pad_vertical, horizontal: 10),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(_wasteMXUserOptions.length, (int index) => Card(
+                child: Column(
+                  children: <Widget>[
+                    Image(
+                      width: 130,
+                      image: AssetImage(_wasteMXUserOptions[index]['imageUrl']),
+                    ),
+                    ButtonTheme.bar(
+                      child: ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                            child: Text(_wasteMXUserOptions[index]['name']),
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) => _wasteMXUserOptions[index]['page']
+                              ));
+                            },
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                )
+              )
+            )
+          ),
+        ),
+      );
+    }
 
+    Widget _buildMessagesSection(){
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10,),
+        child: Column(
+          children: List.generate(_messages.length, (int index) => Card(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(_messages[index]['icon']),
+                    title: Text(_messages[index]['title']),
+                    subtitle: Text(_messages[index]['message']),
+                  ),
+                  ButtonTheme.bar(
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text(_messages[index]['action']),
+                          onPressed: (){
+                            
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+          )),
+        ),
+      );
+    }
+    
     Widget _buildDrawer(){
       return Drawer(
         child: SingleChildScrollView(
@@ -226,52 +307,8 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildTopSection(context),
-            GridView.count(
-              padding: EdgeInsets.symmetric(horizontal: 7, vertical: 10),
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
-              children: List.generate(wasteMXUserOptions.length, (index) {
-                return Container(
-                  decoration: BoxDecoration(
-
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 70,
-                        child: FittedBox(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset(wasteMXUserOptions[index]['imageUrl']),
-                        ),
-                      ),
-                      SizedBox(height: 20,),
-                      customText.BodyText(
-                        text: wasteMXUserOptions[index]['summary'],
-                        textColor: Theme.of(context).primaryColor,
-                        textAlign: TextAlign.center,
-                      ),
-                      ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text(wasteMXUserOptions[index]['name'],),
-                              onPressed: (){
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => wasteMXUserOptions[index]['page']
-                                ));
-                              },
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                );
-              }),
-            )
+            _buildBottomSection(),
+            _buildMessagesSection()
           ],
         ),
       ),

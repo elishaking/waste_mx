@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Lato',
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.amber,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))
-        )
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        ),
       ),
       color: Colors.green,
       home: HomePage(),
