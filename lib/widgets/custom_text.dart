@@ -43,6 +43,7 @@ class BodyText extends StatelessWidget{
             color: textColor
         ),
         textAlign: textAlign,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
