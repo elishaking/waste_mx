@@ -15,9 +15,14 @@ class _OnboardingPageState extends State<OnboardingPage>{
   int _tabPos = 1;
   List<Map<String, String>> _infoList = [
     {
+      'imageUrl': 'assets/intro.png',
+      'title': 'How Waste MX works',
+      'body': "Let's quickly review how you can use Waste MX",
+    },
+    {
       'imageUrl': 'assets/obd-1.png',
       'title': 'User',
-      'body': 'User initiate waste pickup by publishing waste bags to waste collectors',
+      'body': 'User can initiate waste pickup by publishing waste bags to waste collectors',
     },
     {
       'imageUrl': 'assets/obd-2.png',
@@ -54,14 +59,15 @@ class _OnboardingPageState extends State<OnboardingPage>{
 
   @override
   Widget build(BuildContext context) {
+    final int _maxTabs = 5;
     return Scaffold(
       body: GestureDetector(
         onTap: (){
-          if(_tabPos < 4){
+          if(_tabPos < 5){
             setState(() {
               _tabPos++;
             });
-          } else if(_tabPos == 4){
+          } else if(_tabPos == 5){
             _navPush(context);
           }
         },
@@ -76,6 +82,7 @@ class _OnboardingPageState extends State<OnboardingPage>{
                   _buildOnboardingTab(pos: 2),
                   _buildOnboardingTab(pos: 3),
                   _buildOnboardingTab(pos: 4),
+                  _buildOnboardingTab(pos: 5),
                 ],
               ),
               Container(
