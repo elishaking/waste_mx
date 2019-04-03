@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget{
+  final String role;
+
+  LoginPage(this.role);
+
   @override
   State<StatefulWidget> createState() {
     return _LoginPageState();
@@ -140,7 +144,11 @@ class _LoginPageState extends State<LoginPage>{
                         onPressed: (){
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
-                            Navigator.pushReplacementNamed(context, 'home');
+                            if(widget.role == 'user'){
+                              Navigator.pushReplacementNamed(context, 'home');
+                            } else{
+                              Navigator.pushReplacementNamed(context, 'vendor_home');
+                            }
                           }
                         },
                       ),

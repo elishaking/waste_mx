@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './pages/vendor_list.dart';
-import './pages/login.dart';
-import './pages/signup.dart';
+import './pages/welcome.dart';
+// import './pages/login.dart';
+// import './pages/signup.dart';
 import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
@@ -27,10 +27,11 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))
         )
       ),
-      home: VendorHomePage(),
+      color: Colors.green,
+      home: WelcomePage(),
       routes: {
-        'login': (BuildContext context) => LoginPage(),
-        'signup': (BuildContext context) => SignUpPage(),
+        // 'login': (BuildContext context) => LoginPage(),
+        // 'signup': (BuildContext context) => SignUpPage(),
         'home': (BuildContext context) => HomePage(),
         'vendor_home': (BuildContext context) => VendorHomePage(),
         'search': (BuildContext context) => SearchPage(),

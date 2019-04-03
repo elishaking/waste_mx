@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import './signup.dart';
+
 class SelectRolePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -66,7 +68,9 @@ class _SelectRolePageState extends State<SelectRolePage>{
                   child: Text('Next'),
                   textColor: Colors.white,
                   onPressed: (){
-                    Navigator.pushReplacementNamed(context, 'signup');
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => SignUpPage(_userSelected ? 'user' : 'vendor')
+                    ));
                   },
                 ),
               )

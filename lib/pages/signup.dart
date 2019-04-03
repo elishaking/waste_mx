@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
+import './login.dart';
+
 class SignUpPage extends StatefulWidget{
+  final String role;
+
+  SignUpPage(this.role);
+
   @override
   State<StatefulWidget> createState() {
     return _SignUpPageState();
@@ -206,14 +212,20 @@ class _SignUpPageState extends State<SignUpPage>{
                         onPressed: (){
                           if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
-                            Navigator.pushReplacementNamed(context, 'home');
+                            if(widget.role == 'user'){
+                              Navigator.pushReplacementNamed(context, 'home');
+                            } else{
+                              Navigator.popAndPushNamed(context, 'vendor_home');
+                            }
                           }
                         },
                       ),
                       FlatButton(
                         child: Text("Already have an account, Login"),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, 'login');
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => LoginPage(widget.role)
+                          ));
                         },
                       )
                     ],

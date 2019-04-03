@@ -30,8 +30,9 @@ class VendorHomePage extends StatelessWidget{
     } else{
       final List<Map<String, dynamic>> _wasteOffer = _wasteOffers[key];
       return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             customText.TitleText(
               text: key,
