@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import './pages/welcome.dart';
 // import './pages/login.dart';
-// import './pages/signup.dart';
+import './pages/signup.dart';
 import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       color: Colors.green,
-      home: HomePage(),
+      home: SignUpPage('user'),
       routes: {
         // 'login': (BuildContext context) => LoginPage(),
         // 'signup': (BuildContext context) => SignUpPage(),

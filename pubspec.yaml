@@ -28,6 +28,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  scoped_model: "^1.0.1"
+  http: "^0.12.0+1"
   flutter_launcher_icons: ^0.7.0
 
 
