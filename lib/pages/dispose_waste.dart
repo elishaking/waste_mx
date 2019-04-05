@@ -7,36 +7,66 @@ import './vendor_list.dart';
 class DisposeWastePage extends StatelessWidget{
   final List<Map<String, dynamic>> _categories = [
     {
+      'name': 'household_waste',
       'title': 'Household waste',
       'subtitle': 'Waste created at home',
       'icon': Icons.broken_image,
     },
     {
-      'title': 'Household waste',
-      'subtitle': 'Waste created at home',
-      'icon': Icons.broken_image,
+      'name': 'office_waste',
+      'title': 'Office waste',
+      'subtitle': 'Waste created at the Office',
+      'icon': Icons.group_work,
     },
     {
-      'title': 'Household waste',
-      'subtitle': 'Waste created at home',
-      'icon': Icons.broken_image,
+      'name': 'liquid_waste',
+      'title': 'Liquid Waste',
+      'subtitle': 'Custom description ......',
+      'icon': Icons.delete_outline,
+    },
+    {
+      'name': 'hospital_waste',
+      'title': 'Hospital Waste',
+      'subtitle': 'Custom description ......',
+      'icon': Icons.local_hospital,
     },
   ];
 
-  List<Widget> _buildCategories(){
-    
+  List<Widget> _buildCategories(BuildContext context){
+    return List.generate(_categories.length, (int index) => Card(
+        child: Container(
+          padding: EdgeInsets.all(5),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(_categories[index]['icon']),
+                title: Text(_categories[index]['title']),
+                subtitle: Text(_categories[index]['subtitle']),
+              ),
+              ButtonTheme.bar( // make buttons use the appropriate styles for cards
+                child: ButtonBar(
+                  children: <Widget>[
+                    FlatButton(
+                      child: const Text('SCHEDULE PICKUP'),
+                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return VendorListPage();
+                        }
+                      )),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    void _pushRoute(route){
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) {
-            return route;
-          }
-      ));
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Dispose Waste'),
@@ -45,116 +75,7 @@ class DisposeWastePage extends StatelessWidget{
         child: Container(
           padding: EdgeInsets.all(18),
           child: Column(
-            children: <Widget>[
-              Card(
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.broken_image),
-                        title: Text('Household waste'),
-                        subtitle: Text('Waste created at home'),
-                      ),
-                      ButtonTheme.bar( // make buttons use the appropriate styles for cards
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () {
-                                _pushRoute(VendorListPage());
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.group_work),
-                        title: Text('Office waste'),
-                        subtitle: Text('Waste created at the Office'),
-                      ),
-                      ButtonTheme.bar( // make buttons use the appropriate styles for cards
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () {
-                                _pushRoute(VendorListPage());
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.delete_outline),
-                        title: Text('Liquid Waste'),
-                        subtitle: Text('Custom description ......'),
-                      ),
-                      ButtonTheme.bar( // make buttons use the appropriate styles for cards
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () {
-                                _pushRoute(VendorListPage());
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.local_hospital),
-                        title: Text('Hospital waste'),
-                        subtitle: Text('Custom description ......'),
-                      ),
-                      ButtonTheme.bar( // make buttons use the appropriate styles for cards
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('SCHEDULE PICKUP'),
-                              onPressed: () {
-                                _pushRoute(VendorListPage());
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            children: _buildCategories(context)
           ),
         ),
       ),
