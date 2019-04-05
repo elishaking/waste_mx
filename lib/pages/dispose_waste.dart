@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/bottom_navigation_bar.dart';
+
 import './vendor_list.dart';
 
 class DisposeWastePage extends StatelessWidget{
@@ -161,6 +163,7 @@ class DisposeWastePage extends StatelessWidget{
           ),
         ),
       ),
+      bottomNavigationBar: ButtomNavigationBar('dispose'),
     );
   }
 }

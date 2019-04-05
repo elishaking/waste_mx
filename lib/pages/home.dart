@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
+import '../widgets/bottom_navigation_bar.dart';
 
 import './dispose_waste.dart';
+import './recycle_waste.dart';
 
 class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
@@ -37,7 +39,7 @@ class HomePage extends StatelessWidget {
         'title': 'Earned Coins',
         'message': 'You earned 50 points just for installation, check your wallet',
         'action': 'WALLET'
-      }
+      },
     ];
 
     Widget _buildTopSection(BuildContext context){
@@ -307,48 +309,13 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _buildTopSection(context),
-            _buildBottomSection(),
+            // _buildBottomSection(),
+            SizedBox(height: 20,),
             _buildMessagesSection()
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: Colors.black, width: 0.5)
-          )
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            FlatButton(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(Icons.home, color: Theme.of(context).accentColor,),
-                  Text('Home', style: TextStyle(color: Theme.of(context).accentColor),)
-                ],
-              ),
-              onPressed: (){
-
-              },
-            ),
-            FlatButton(
-              child: Icon(Icons.person),
-              onPressed: (){
-                Navigator.pushNamed(context, 'profile');
-              },
-            ),
-            FlatButton(
-              child: Icon(Icons.account_balance_wallet),
-              onPressed: (){
-
-              },
-            )
-          ],
-        ),
-      ),
+      bottomNavigationBar: ButtomNavigationBar('home'),
     );
   }
 }
