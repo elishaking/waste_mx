@@ -78,6 +78,7 @@ flutter:
   - assets/bulk.png
   - assets/nuclear-plant.png
   - assets/throw-to-paper-bin.png
+  - assets/wallet-enclosed.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
