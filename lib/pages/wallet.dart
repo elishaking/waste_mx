@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import './credit_wallet.dart';
+
 class WalletPage extends StatelessWidget{
   final double walletBalance = 0.0;
 
@@ -42,14 +44,16 @@ class WalletPage extends StatelessWidget{
                   OutlineButton(
                     child: Text('Credit Wallet'),
                     onPressed: (){
-
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => CreditWalletPage()
+                      ));
                     },
                   ),
                 ],
               ),
               SizedBox(height: 30,),
               RaisedButton(
-                child: Text('Make Payment'),
+                child: customText.BodyText(text: 'Make Payment', textColor: Colors.white,),
                 onPressed: (){
 
                 },

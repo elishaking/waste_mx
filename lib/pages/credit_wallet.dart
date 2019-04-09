@@ -10,8 +10,10 @@ class CreditWalletPage extends StatelessWidget{
         title: Text('Credit Wallet'),
       ),
       body: Container(
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
         child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text('Add money to wallet',),
               SizedBox(height: 15,),
