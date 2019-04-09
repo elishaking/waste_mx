@@ -32,6 +32,11 @@ class BodyText extends StatelessWidget{
 
   BodyText({this.text, this.textColor = Colors.white, this.textAlign = TextAlign.left});
 
+  double _getTextSize(final double targetWidth){
+    // at 1440px width, fontsize = 14
+    return 0.0027 * targetWidth + 10.136;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,7 +44,7 @@ class BodyText extends StatelessWidget{
       child: Text(text,
         style: TextStyle(
             fontFamily: 'Lato',
-            fontSize: 14,
+            fontSize: _getTextSize(MediaQuery.of(context).size.width),
             color: textColor
         ),
         textAlign: textAlign,
