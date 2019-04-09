@@ -113,7 +113,7 @@ class DisposeWastePage extends StatelessWidget{
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _buildCategoryWidget(context, 'Household Waste', 'assets/house.png'),
               _buildCategoryWidget(context, 'Industrial Waste', 'assets/industrial.png')
@@ -121,7 +121,7 @@ class DisposeWastePage extends StatelessWidget{
           ),
           SizedBox(height: _getSize(15),),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _buildCategoryWidget(context, 'Agric Waste', 'assets/harvest.png'),
               _buildCategoryWidget(context, 'Bulk Waste', 'assets/bulk.png')
@@ -129,7 +129,7 @@ class DisposeWastePage extends StatelessWidget{
           ),
           SizedBox(height: _getSize(15),),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _buildCategoryWidget(context, 'Nuclear Waste', 'assets/nuclear-plant.png'),
               _buildCategoryWidget(context, 'Other Waste', 'assets/throw-to-paper-bin.png')
@@ -157,9 +157,12 @@ class DisposeWastePage extends StatelessWidget{
               padding: EdgeInsets.all(_getSize(18)),
               child: Column(
                 children: <Widget>[
-                  Image(
-                    height: _getSize(50),
-                    image: AssetImage('assets/garbage-can.png'),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: _getSize(20)),
+                    child: Image(
+                      height: _getSize(50),
+                      image: AssetImage('assets/garbage-can.png'),
+                    ),
                   ),
                   _buildCategoriesSection(context)
                 ],
