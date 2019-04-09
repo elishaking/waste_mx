@@ -11,10 +11,11 @@ class WalletPage extends StatelessWidget{
       appBar: AppBar(
         title: Text('Wallet'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+        child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image(
                 width: 200,
@@ -28,64 +29,31 @@ class WalletPage extends StatelessWidget{
                 text: walletBalance.toString(),
                 textColor: Theme.of(context).primaryColor,
               ),
-              OutlineButton(
-                child: Text('View Statement'),
+              SizedBox(height: 15,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  OutlineButton(
+                    child: Text('View Statement'),
+                    onPressed: (){
+
+                    },
+                  ),
+                  OutlineButton(
+                    child: Text('Credit Wallet'),
+                    onPressed: (){
+
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 30,),
+              RaisedButton(
+                child: Text('Make Payment'),
                 onPressed: (){
 
                 },
-              ),
-              SizedBox(height: 30,),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder()
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Text('Add money to wallet',),
-                    SizedBox(height: 15,),
-                    Form(
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.attach_money),
-                              labelText: 'amount',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 15,),
-                          RaisedButton(
-                            child: customText.BodyText(
-                              text: 'Proceed',
-                              textColor: Colors.white,
-                            ),
-                            onPressed: (){
-
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 25,),
-                    FlatButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.info_outline),
-                          SizedBox(width: 10,),
-                          Text('Why use Waste MX Wallet')
-                        ],
-                      ),
-                      onPressed: (){
-
-                      },
-                    )
-                  ],
-                ),
-              ),
+              )
             ],
           ),
         ),
