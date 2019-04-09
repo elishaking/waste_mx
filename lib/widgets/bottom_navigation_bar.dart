@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './custom_text.dart' as customText;
+
 import '../pages/home.dart';
 import '../pages/dispose_waste.dart';
 import '../pages/recycle_waste.dart';
@@ -9,12 +11,22 @@ class ButtomNavigationBar extends StatelessWidget{
 
   ButtomNavigationBar(this.page);
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   Widget _buildPageSelected(BuildContext context, IconData iconData, String title){
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Icon(iconData, color: Theme.of(context).accentColor,),
-        Text(title, style: TextStyle(color: Theme.of(context).accentColor),)
+        Text(title, style: TextStyle(
+          color: Theme.of(context).accentColor,
+          fontSize: _getSize(11),
+        ),
+        overflow: TextOverflow.ellipsis,)
       ],
     );
   }
@@ -29,8 +41,10 @@ class ButtomNavigationBar extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: _getSize(3)),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: Colors.black, width: 0.5)
