@@ -33,10 +33,16 @@ class DisposeWastePage extends StatelessWidget{
     },
   ];
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   List<Widget> _buildCategories(BuildContext context){
     return List.generate(_categories.length, (int index) => Card(
         child: Container(
-          padding: EdgeInsets.all(5),
+          // padding: EdgeInsets.all(5),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -65,7 +71,7 @@ class DisposeWastePage extends StatelessWidget{
       )
     );
   }
-
+  
   Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
     return RaisedButton(
       elevation: 0,
@@ -74,24 +80,24 @@ class DisposeWastePage extends StatelessWidget{
         side: BorderSide(color: Theme.of(context).primaryColor)
       ),
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      padding: EdgeInsets.symmetric(horizontal: _getSize(18), vertical: _getSize(18)),
       child: SizedBox(
-        width: 120,
-        height: 120,
+        width: _getSize(120),
+        height: _getSize(120),
         child: Column(
-        children: <Widget>[
-          Image(
-            width: 70,
-            height: 70,
-            image: AssetImage(imageUrl),
-          ),
-          SizedBox(height: 15,),
-          customText.BodyText(
-            text: title,
-            textColor: Theme.of(context).primaryColor,
-          )
-        ],
-      ),
+          children: <Widget>[
+            Image(
+              width: _getSize(70),
+              height: _getSize(70),
+              image: AssetImage(imageUrl),
+            ),
+            SizedBox(height: _getSize(15),),
+            customText.BodyText(
+              text: title,
+              textColor: Theme.of(context).primaryColor,
+            )
+          ],
+        ),
       ),
       onPressed: (){
         Navigator.of(context).push(MaterialPageRoute(
@@ -103,7 +109,7 @@ class DisposeWastePage extends StatelessWidget{
 
   Widget _buildCategoriesSection(BuildContext context){
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      padding: EdgeInsets.symmetric(horizontal: _getSize(20), vertical: _getSize(30)),
       child: Column(
         children: <Widget>[
           Row(
@@ -113,7 +119,7 @@ class DisposeWastePage extends StatelessWidget{
               _buildCategoryWidget(context, 'Industrial Waste', 'assets/industrial.png')
             ],
           ),
-          SizedBox(height: 30,),
+          SizedBox(height: _getSize(15),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -121,7 +127,7 @@ class DisposeWastePage extends StatelessWidget{
               _buildCategoryWidget(context, 'Bulk Waste', 'assets/bulk.png')
             ],
           ),
-          SizedBox(height: 30,),
+          SizedBox(height: _getSize(15),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -136,6 +142,8 @@ class DisposeWastePage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Dispose Waste'),
@@ -143,14 +151,14 @@ class DisposeWastePage extends StatelessWidget{
       ),
       body: Stack(
         children: <Widget>[
-          Container(height: 200, color: Theme.of(context).primaryColor,),
+          Container(height: _getSize(200), color: Theme.of(context).primaryColor,),
           SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.all(18),
+              padding: EdgeInsets.all(_getSize(18)),
               child: Column(
                 children: <Widget>[
                   Image(
-                    height: 50,
+                    height: _getSize(50),
                     image: AssetImage('assets/garbage-can.png'),
                   ),
                   _buildCategoriesSection(context)
