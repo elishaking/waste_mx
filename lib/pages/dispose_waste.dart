@@ -105,24 +105,24 @@ class DisposeWastePage extends StatelessWidget{
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildCategoryWidget(context, 'Dispose Waste', 'assets/recycling-bin.png'),
-              _buildCategoryWidget(context, 'Recycle Waste', 'assets/eco-factory.png')
+              _buildCategoryWidget(context, 'Household Waste', 'assets/house.png'),
+              _buildCategoryWidget(context, 'Industrial Waste', 'assets/industrial.png')
             ],
           ),
           SizedBox(height: 30,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildCategoryWidget(context, 'De-clustering', 'assets/target.png'),
-              _buildCategoryWidget(context, 'Sewage', 'assets/sewage.png')
+              _buildCategoryWidget(context, 'Agric Waste', 'assets/harvest.png'),
+              _buildCategoryWidget(context, 'Bulk Waste', 'assets/bulk.png')
             ],
           ),
           SizedBox(height: 30,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildCategoryWidget(context, 'Upcycling', 'assets/creative.png'),
-              _buildCategoryWidget(context, 'Info Center', 'assets/analysis.png')
+              _buildCategoryWidget(context, 'Nuclear Waste', 'assets/nuclear-plant.png'),
+              _buildCategoryWidget(context, 'Other Waste', 'assets/throw-to-paper-bin.png')
             ],
           ),
         ],
