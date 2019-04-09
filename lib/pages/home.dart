@@ -196,8 +196,9 @@ class HomePage extends StatelessWidget {
   Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
     return OutlineButton(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5)
+        borderRadius: BorderRadius.circular(5),
       ),
+      borderSide: BorderSide(color: Theme.of(context).primaryColor),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: pad_vertical),
       child: Column(
         children: <Widget>[
