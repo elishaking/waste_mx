@@ -154,7 +154,7 @@ class HomePage extends StatelessWidget {
       );
     }
     
-    Widget _buildBottomSection(){
+    Widget _buildSlidingSection(){
       return Container(
         margin: EdgeInsets.symmetric(vertical: pad_vertical, horizontal: 10),
         child: SingleChildScrollView(
@@ -190,6 +190,66 @@ class HomePage extends StatelessWidget {
       );
     }
 
+    Widget _buildCategoryWidget(String title, String imageUrl, [dynamic route]){
+      return OutlineButton(
+        shape: RoundedRectangleBorder(),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: pad_vertical),
+        child: Column(
+          children: <Widget>[
+            Image(
+              width: 110,
+              height: 110,
+              image: AssetImage(imageUrl),
+            ),
+            SizedBox(height: 15,),
+            customText.BodyText(
+              text: title,
+              textColor: Theme.of(context).primaryColor,
+            )
+          ],
+        ),
+        onPressed: (){
+          if(route == null) return;
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => route
+          ));
+        },
+      );
+    }
+    
+    Widget _buildCategoriesSection(){
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _buildCategoryWidget('Dispose Waste', 'assets/recycling-bin.png', DisposeWastePage()),
+                _buildCategoryWidget('Recycle Waste', 'assets/eco-factory.png', RecycleWastePage())
+              ],
+            ),
+            SizedBox(height: 30,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _buildCategoryWidget('De-clustering', 'assets/target.png'),
+                _buildCategoryWidget('Sewage', 'assets/sewage.png')
+              ],
+            ),
+            SizedBox(height: 30,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _buildCategoryWidget('Upcycling', 'assets/creative.png'),
+                _buildCategoryWidget('Info Center', 'assets/analysis.png')
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+    
     Widget _buildMessagesSection(){
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 10,),
@@ -310,8 +370,9 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             _buildTopSection(context),
             // _buildBottomSection(),
-            SizedBox(height: 20,),
-            _buildMessagesSection()
+            _buildCategoriesSection(),
+            // SizedBox(height: 20,),
+            // _buildMessagesSection()
           ],
         ),
       ),

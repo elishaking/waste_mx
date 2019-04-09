@@ -7,6 +7,7 @@ class RatingDisplay extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final Color fillColor = Theme.of(context).accentColor;
     return IconTheme(
       data: IconThemeData(
           color: Colors.grey,
@@ -15,11 +16,11 @@ class RatingDisplay extends StatelessWidget{
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          rating > 0 ? Icon(Icons.star,) : Icon(Icons.star_border),
-          rating > 1 ? Icon(Icons.star) : Icon(Icons.star_border),
-          rating > 2 ? Icon(Icons.star) : Icon(Icons.star_border),
-          rating > 3 ? Icon(Icons.star) : Icon(Icons.star_border),
-          rating > 4 ? Icon(Icons.star) : Icon(Icons.star_border),
+          rating > 0 ? Icon(Icons.star, color: fillColor) : Icon(Icons.star_border),
+          rating > 1 ? Icon(Icons.star, color: fillColor) : Icon(Icons.star_border),
+          rating > 2 ? Icon(Icons.star, color: fillColor) : Icon(Icons.star_border),
+          rating > 3 ? Icon(Icons.star, color: fillColor) : Icon(Icons.star_border),
+          rating > 4 ? Icon(Icons.star, color: fillColor) : Icon(Icons.star_border),
         ],
       ),
     );

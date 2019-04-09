@@ -45,23 +45,68 @@ class VendorListPage extends StatelessWidget{
         padding: EdgeInsets.all(10),
         child: ListView.builder(
           itemBuilder: (BuildContext context, int index){
-            return Column(
-              children: <Widget>[
-                ListTile(
-                  leading: Hero(
-                    tag: _vendors[index]['id'],
-                    child: CircleAvatar(child: Image.asset(_vendors[index]['imageUrl']),),
+            return Card(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Hero(
+                      tag: _vendors[index]['id'],
+                      child: CircleAvatar(child: Image.asset(_vendors[index]['imageUrl']),),
+                    ),
+                    title: Text(_vendors[index]['title'], style: TextStyle(fontSize: 18),),
+                    subtitle: _buildVendorRating(_vendors[index]['rating']),
+                    // onTap: (){
+                    //   Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (BuildContext context) => VendorPage(_vendors[index])
+                    //   ));
+                    // },
                   ),
-                  title: Text(_vendors[index]['title'], style: TextStyle(fontSize: 18),),
-                  subtitle: _buildVendorRating(_vendors[index]['rating']),
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => VendorPage(_vendors[index])
-                    ));
-                  },
-                ),
-                Divider()
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.chat_bubble_outline),
+                            SizedBox(width: 10,),
+                            Text('Chat')
+                          ],
+                        ),
+                        onPressed: (){
+
+                        },
+                      ),
+                      FlatButton(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.call),
+                            SizedBox(width: 10,),
+                            Text('Call')
+                          ],
+                        ),
+                        onPressed: (){
+
+                        },
+                      ),
+                      FlatButton(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.info_outline),
+                            SizedBox(width: 10,),
+                            Text('Details')
+                          ],
+                        ),
+                        onPressed: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => VendorPage(_vendors[index])
+                          ));
+                        },
+                      )
+                    ],
+                  ),
+                  Divider()
+                ],
+              ),
             );
           },
           itemCount: _vendors.length,

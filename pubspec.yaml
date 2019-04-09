@@ -65,6 +65,20 @@ flutter:
   - assets/fail.png
   - assets/organic.png
   - assets/intro.png
+  - assets/recycling-bin.png
+  - assets/eco-factory.png
+  - assets/target.png
+  - assets/sewage.png
+  - assets/analysis.png
+  - assets/creative.png
+  - assets/garbage-can.png
+  - assets/house.png
+  - assets/industrial.png
+  - assets/harvest.png
+  - assets/bulk.png
+  - assets/nuclear-plant.png
+  - assets/throw-to-paper-bin.png
+  - assets/wallet-enclosed.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
