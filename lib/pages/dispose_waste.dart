@@ -33,6 +33,7 @@ class DisposeWastePage extends StatelessWidget{
     },
   ];
 
+
   List<Widget> _buildCategories(BuildContext context){
     return List.generate(_categories.length, (int index) => Card(
         child: Container(
@@ -67,6 +68,15 @@ class DisposeWastePage extends StatelessWidget{
   }
 
   Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
+    double _categoryButtonSize = 0;
+    double _categoryIconSize = 0;
+    double targetWidth = MediaQuery.of(context).size.width;
+
+    if(targetWidth < 500){
+      _categoryButtonSize = 80;
+      _categoryIconSize = 40;
+    }
+    
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -75,11 +85,14 @@ class DisposeWastePage extends StatelessWidget{
       ),
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-      child: Column(
+      child: SizedBox(
+        width: _categoryButtonSize,
+        height: _categoryButtonSize,
+        child: Column(
         children: <Widget>[
           Image(
-            width: 110,
-            height: 110,
+            width: _categoryIconSize,
+            height: _categoryIconSize,
             image: AssetImage(imageUrl),
           ),
           SizedBox(height: 15,),
@@ -88,6 +101,7 @@ class DisposeWastePage extends StatelessWidget{
             textColor: Theme.of(context).primaryColor,
           )
         ],
+      ),
       ),
       onPressed: (){
         Navigator.of(context).push(MaterialPageRoute(
