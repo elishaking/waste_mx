@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/custom_text.dart' as customText;
 
 import './vendor_list.dart';
 
@@ -65,19 +66,96 @@ class DisposeWastePage extends StatelessWidget{
     );
   }
 
+  Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
+    return RaisedButton(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+        side: BorderSide(color: Theme.of(context).primaryColor)
+      ),
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      child: Column(
+        children: <Widget>[
+          Image(
+            width: 110,
+            height: 110,
+            image: AssetImage(imageUrl),
+          ),
+          SizedBox(height: 15,),
+          customText.BodyText(
+            text: title,
+            textColor: Theme.of(context).primaryColor,
+          )
+        ],
+      ),
+      onPressed: (){
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => route != null ? route : VendorListPage()
+        ));
+      },
+    );
+  }
+
+  Widget _buildCategoriesSection(BuildContext context){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _buildCategoryWidget(context, 'Dispose Waste', 'assets/recycling-bin.png'),
+              _buildCategoryWidget(context, 'Recycle Waste', 'assets/eco-factory.png')
+            ],
+          ),
+          SizedBox(height: 30,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _buildCategoryWidget(context, 'De-clustering', 'assets/target.png'),
+              _buildCategoryWidget(context, 'Sewage', 'assets/sewage.png')
+            ],
+          ),
+          SizedBox(height: 30,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _buildCategoryWidget(context, 'Upcycling', 'assets/creative.png'),
+              _buildCategoryWidget(context, 'Info Center', 'assets/analysis.png')
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dispose Waste'),
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(18),
-          child: Column(
-            children: _buildCategories(context)
-          ),
-        ),
+      body: Stack(
+        children: <Widget>[
+          Container(height: 200, color: Theme.of(context).primaryColor,),
+          SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(18),
+              child: Column(
+                children: <Widget>[
+                  Image(
+                    height: 50,
+                    image: AssetImage('assets/garbage-can.png'),
+                  ),
+                  _buildCategoriesSection(context)
+                ],
+                // children: _buildCategories(context)
+              ),
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: ButtomNavigationBar('dispose'),
     );
