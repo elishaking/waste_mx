@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
-import './vendor.dart';
-
 import '../widgets/rating.dart' as ratingWidgets;
+import '../widgets/custom_text.dart' as customText;
+
+import './vendor.dart';
 
 class VendorListPage extends StatelessWidget{
   Widget _buildVendorRating(int rating){
     return ratingWidgets.RatingDisplay(rating: rating,);
   }
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
+
     List<Map<String, dynamic>> _vendors = [
       {
         'id': '12290ol23nn',
@@ -37,6 +46,7 @@ class VendorListPage extends StatelessWidget{
         'rating': 5
       },
     ];
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Vendor List'),
@@ -53,7 +63,7 @@ class VendorListPage extends StatelessWidget{
                       tag: _vendors[index]['id'],
                       child: CircleAvatar(child: Image.asset(_vendors[index]['imageUrl']),),
                     ),
-                    title: Text(_vendors[index]['title'], style: TextStyle(fontSize: 18),),
+                    title: Text(_vendors[index]['title'], style: TextStyle(fontSize: _getSize(18)),),
                     subtitle: _buildVendorRating(_vendors[index]['rating']),
                     // onTap: (){
                     //   Navigator.of(context).push(MaterialPageRoute(
@@ -67,9 +77,14 @@ class VendorListPage extends StatelessWidget{
                       FlatButton(
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.chat_bubble_outline),
-                            SizedBox(width: 10,),
-                            Text('Chat')
+                            Icon(Icons.chat_bubble_outline,
+                            color: Theme.of(context).primaryColor,
+                            size: _getSize(23),),
+                            SizedBox(width: _getSize(10),),
+                            customText.BodyText(
+                              text: 'Chat',
+                              textColor: Theme.of(context).primaryColor,
+                            )
                           ],
                         ),
                         onPressed: (){
@@ -79,9 +94,14 @@ class VendorListPage extends StatelessWidget{
                       FlatButton(
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.call),
-                            SizedBox(width: 10,),
-                            Text('Call')
+                            Icon(Icons.call,
+                            color: Theme.of(context).primaryColor,
+                            size: _getSize(23),),
+                            SizedBox(width: _getSize(10),),
+                            customText.BodyText(
+                              text: 'Call',
+                              textColor: Theme.of(context).primaryColor,
+                            )
                           ],
                         ),
                         onPressed: (){
@@ -91,9 +111,14 @@ class VendorListPage extends StatelessWidget{
                       FlatButton(
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.info_outline),
-                            SizedBox(width: 10,),
-                            Text('Details')
+                            Icon(Icons.info_outline,
+                            color: Theme.of(context).primaryColor,
+                            size: _getSize(23),),
+                            SizedBox(width: _getSize(10),),
+                            customText.BodyText(
+                              text: 'Details',
+                              textColor: Theme.of(context).primaryColor,
+                            )
                           ],
                         ),
                         onPressed: (){
@@ -104,7 +129,6 @@ class VendorListPage extends StatelessWidget{
                       )
                     ],
                   ),
-                  Divider()
                 ],
               ),
             );
