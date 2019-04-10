@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import '../models/user.dart';
 
-class MainModel extends UserModel{
+class MainModel extends Model with UserModel{
   
 }
 
@@ -12,8 +12,13 @@ class UserModel extends Model {
   User _authenticatedUser;
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
 
+  bool isLoading = false;
+
   Future<Map<String, dynamic>> signup(String email, String password) async{
     // final Map<String, dynamic> authData = 
+    isLoading = true;
+    notifyListeners();
+    
     final http.Response response = await http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${_apiKey}',
       headers: {
@@ -26,6 +31,9 @@ class UserModel extends Model {
       })
     );
 
+    isLoading = false;
+    notifyListeners();
+
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
     String message = 'Authentication Success';
@@ -34,7 +42,11 @@ class UserModel extends Model {
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
-          message = 'This email already exists';
+          message = 'Your email already exists';
+          break;
+
+        case 'INVALID_EMAIL':
+          message = 'Your email is invalid';
           break;
 
         default:

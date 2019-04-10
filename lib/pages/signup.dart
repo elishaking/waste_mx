@@ -71,6 +71,44 @@ class _SignUpPageState extends State<SignUpPage>{
     );
   }
 
+  Widget _buildSubmitButton(MainModel model){
+    return RaisedButton(
+      textColor: Colors.white,
+      child: Text('Sign Up'),
+      onPressed: (){
+        // if(_formKey.currentState.validate()){
+          _formKey.currentState.save();
+          if(widget.role == 'user'){
+            model.signup(_formData['email'], _formData['password']).then((data) {
+              if(data['success']){
+                Navigator.pushReplacementNamed(context, 'home');
+              } else{
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      title: Text('An Error Ocurred'),
+                      content: Text(data['message']),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('OK'),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                );
+              }
+            });
+          } else{
+            Navigator.popAndPushNamed(context, 'vendor_home');
+          }
+        // }
+      },
+    );
+  }
   // Widget _buildEmailField(){
   //   return 
   // }
@@ -222,42 +260,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       SizedBox(height: 25,),
                       ScopedModelDescendant<MainModel>(
                         builder: (BuildContext context, Widget child, MainModel model){
-                          return RaisedButton(
-                            textColor: Colors.white,
-                            child: Text('Sign Up'),
-                            onPressed: (){
-                              // if(_formKey.currentState.validate()){
-                                _formKey.currentState.save();
-                                if(widget.role == 'user'){
-                                  model.signup(_formData['email'], _formData['password']).then((data) {
-                                    if(data['success']){
-                                      Navigator.pushReplacementNamed(context, 'home');
-                                    } else{
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context){
-                                          return AlertDialog(
-                                            title: Text('An Error Ocurred'),
-                                            content: Text(data['message']),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                child: Text('OK'),
-                                                onPressed: (){
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        }
-                                      );
-                                    }
-                                  });
-                                } else{
-                                  Navigator.popAndPushNamed(context, 'vendor_home');
-                                }
-                              // }
-                            },
-                          );
+                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
                         },
                       ),
                       FlatButton(
