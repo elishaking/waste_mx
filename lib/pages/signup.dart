@@ -232,6 +232,24 @@ class _SignUpPageState extends State<SignUpPage>{
                                   model.signup(_formData['email'], _formData['password']).then((data) {
                                     if(data['success']){
                                       Navigator.pushReplacementNamed(context, 'home');
+                                    } else{
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context){
+                                          return AlertDialog(
+                                            title: Text('An Error Ocurred'),
+                                            content: Text(data['message']),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                child: Text('OK'),
+                                                onPressed: (){
+                                                  Navigator.of(context).pop();
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        }
+                                      );
                                     }
                                   });
                                 } else{

@@ -26,8 +26,24 @@ class UserModel extends Model {
       })
     );
 
-    print(json.decode(response.body));
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    bool success = false;
+    String message = 'Authentication Success';
+    if(responseData.containsKey('idToken')){
+      success = true;
+    } else{
+      switch(responseData['error']['message']){
+        case 'EMAIL_EXISTS':
+          message = 'This email already exists';
+          break;
 
-    return {'success': true};
+        default:
+          message = 'Something went wrong';
+          print(responseData['error']['message']);
+          break;
+      }
+    }
+
+    return {'success': success, 'message': message};
   }
 }
