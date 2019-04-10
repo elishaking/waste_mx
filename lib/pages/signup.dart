@@ -103,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage>{
               }
             });
           } else{
-            Navigator.popAndPushNamed(context, 'vendor_home');
+            Navigator.pushReplacementNamed(context, 'vendor_home');
           }
         // }
       },

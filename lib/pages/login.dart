@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped_models/main.dart';
 
 class LoginPage extends StatefulWidget{
   final String role;
@@ -21,6 +23,86 @@ class _LoginPageState extends State<LoginPage>{
 
   bool showPassword = true;
 
+  Widget _buildSocialMediaLogin(){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          OutlineButton(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: Image.asset('assets/facebook.png', scale: 1.7,),
+            onPressed: () {
+
+            },
+          ),
+          OutlineButton(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: Image.asset('assets/google.png', scale: 1.7,),
+            onPressed: () {
+
+            },
+          ),
+          OutlineButton(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: Image.asset('assets/twitter.png', scale: 1.7,),
+            onPressed: () {
+
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton(MainModel model){
+    return RaisedButton(
+      textColor: Colors.white,
+      child: Text('Login'),
+      onPressed: (){
+        // if(_formKey.currentState.validate()){
+          _formKey.currentState.save();
+          if(widget.role == 'user'){
+            model.login(_formData['email'], _formData['password']).then((data) {
+              if(data['success']){
+                Navigator.pushReplacementNamed(context, 'home');
+              } else{
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      title: Text('An Error Ocurred'),
+                      content: Text(data['message']),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('OK'),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                );
+              }
+            });
+          } else{
+            Navigator.pushReplacementNamed(context, 'vendor_home');
+          }
+        // }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,44 +121,7 @@ class _LoginPageState extends State<LoginPage>{
                   fontWeight: FontWeight.bold,
                   fontSize: 16
               ),),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    OutlineButton(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: Image.asset('assets/facebook.png', scale: 1.7,),
-                      onPressed: () {
-
-                      },
-                    ),
-                    OutlineButton(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: Image.asset('assets/google.png', scale: 1.7,),
-                      onPressed: () {
-
-                      },
-                    ),
-                    OutlineButton(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: Image.asset('assets/twitter.png', scale: 1.7,),
-                      onPressed: () {
-
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              _buildSocialMediaLogin(),
               Form(
                 key: _formKey,
                 child: Container(
@@ -138,18 +183,9 @@ class _LoginPageState extends State<LoginPage>{
                           },
                         ),
                       ),
-                      RaisedButton(
-                        textColor: Colors.white,
-                        child: Text('Login'),
-                        onPressed: (){
-                          if(_formKey.currentState.validate()){
-                            _formKey.currentState.save();
-                            if(widget.role == 'user'){
-                              Navigator.pushReplacementNamed(context, 'home');
-                            } else{
-                              Navigator.pushReplacementNamed(context, 'vendor_home');
-                            }
-                          }
+                      ScopedModelDescendant<MainModel>(
+                        builder: (BuildContext context, Widget child, MainModel model){
+                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
                         },
                       ),
                       FlatButton(

@@ -18,7 +18,7 @@ class UserModel extends Model {
     // final Map<String, dynamic> authData = 
     isLoading = true;
     notifyListeners();
-    
+
     final http.Response response = await http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${_apiKey}',
       headers: {
@@ -57,5 +57,57 @@ class UserModel extends Model {
     }
 
     return {'success': success, 'message': message};
+  }
+
+  Future<Map<String, dynamic>> login(String email, String password) async{
+    isLoading = true;
+    notifyListeners();
+    
+    final http.Response response = await http.post(
+      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${_apiKey}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: json.encode({
+        'email': email,
+        'password': password,
+        'returnSecureToken': true
+      })
+    );
+
+    isLoading = false;
+    notifyListeners();
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    bool success = false;
+    String message = 'Authentication Success';
+    int code = -1;
+    if(responseData.containsKey('idToken')){
+      success = true;
+    } else{
+      switch(responseData['error']['message']){
+        case 'EMAIL_NOT_FOUND':
+          message = 'Your email is not registered';
+          code = 0;
+          break;
+
+        case 'INVALID_PASSWORD':
+          message = 'Your password is invalid';
+          code = 1;
+          break;
+
+        case 'USER_DISABLED':
+          message = 'Your account has been disabled';
+          code = 2;
+          break;
+
+        default:
+          message = 'Something went wrong';
+          print(responseData['error']['message']);
+          break;
+      }
+    }
+
+    return {'success': success, 'message': message, 'code': code};
   }
 }

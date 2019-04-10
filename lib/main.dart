@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import './scoped_models/main.dart';
 
 import './pages/welcome.dart';
-// import './pages/login.dart';
+import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
 import './pages/search.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         color: Colors.green,
-        home: SignUpPage('user'),
+        home: LoginPage('user'),
         routes: {
           // 'login': (BuildContext context) => LoginPage(),
           // 'signup': (BuildContext context) => SignUpPage('user'),
