@@ -25,6 +25,51 @@ class _SignUpPageState extends State<SignUpPage>{
   bool showPassword1 = true;
   bool showPassword2 = true;
 
+  Widget _buildSocialMediaLogin(){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          OutlineButton(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: Image.asset('assets/facebook.png', scale: 1.7,),
+            onPressed: () {
+
+            },
+          ),
+          OutlineButton(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: Image.asset('assets/google.png', scale: 1.7,),
+            onPressed: () {
+
+            },
+          ),
+          OutlineButton(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1000),
+            ),
+            child: Image.asset('assets/twitter.png', scale: 1.7,),
+            onPressed: () {
+
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget _buildEmailField(){
+  //   return 
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,44 +94,7 @@ class _SignUpPageState extends State<SignUpPage>{
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    OutlineButton(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: Image.asset('assets/facebook.png', scale: 1.7,),
-                      onPressed: () {
-
-                      },
-                    ),
-                    OutlineButton(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: Image.asset('assets/google.png', scale: 1.7,),
-                      onPressed: () {
-
-                      },
-                    ),
-                    OutlineButton(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: Image.asset('assets/twitter.png', scale: 1.7,),
-                      onPressed: () {
-
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              _buildSocialMediaLogin(),
               Form(
                 key: _formKey,
                 child: Container(

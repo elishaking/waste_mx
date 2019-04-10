@@ -189,7 +189,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
                         onPressed: (){
                           Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => WalletPage()
+                            builder: (BuildContext context) => WalletPage(true)
                           ));
                         },
                       )

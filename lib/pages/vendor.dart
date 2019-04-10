@@ -13,16 +13,21 @@ class VendorPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text(_vendor['title']),
-//      ),
+    //  appBar: AppBar(
+    //    title: Text(_vendor['title']),
+    //  ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             expandedHeight: 200,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(_vendor['title']),
+              title: Text(_vendor['title'],
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600
+                )
+              ),
               background: Hero(
                 tag: _vendor['id'],
                 child: FadeInImage(

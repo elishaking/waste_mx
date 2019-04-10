@@ -5,13 +5,21 @@ class RatingDisplay extends StatelessWidget{
 
   RatingDisplay({this.rating});
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
+
     final Color fillColor = Theme.of(context).accentColor;
     return IconTheme(
       data: IconThemeData(
           color: Colors.grey,
-          size: 20
+          size: _getSize(20)
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
