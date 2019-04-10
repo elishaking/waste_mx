@@ -17,7 +17,7 @@ class WalletPayPage extends StatelessWidget{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('Wallet Balance'),
-                customText.TitleText(text: 'N 5,000', textColor: Theme.of(context).primaryColor,),
+                customText.HeadlineText(text: 'N 5,000', textColor: Theme.of(context).primaryColor,),
                 SizedBox(height: 25,),
                 Form(
                   child: Column(
