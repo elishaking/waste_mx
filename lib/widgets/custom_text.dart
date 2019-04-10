@@ -7,15 +7,23 @@ class TitleText extends StatelessWidget{
 
   TitleText({this.text, this.textColor = Colors.white, this.textAlign = TextAlign.left});
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: EdgeInsets.only(top: 18, bottom: 5),
       child: Text(text,
         style: TextStyle(
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.w900,
-          fontSize: 20,
+          fontSize: _getSize(20),
           color: textColor,
           letterSpacing: 2,
         ),
