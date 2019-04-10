@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         home: LoginPage('user'),
         routes: {
           // 'login': (BuildContext context) => LoginPage(),
-          // 'signup': (BuildContext context) => SignUpPage('user'),
+          'signup': (BuildContext context) => SignUpPage('user'),
           'home': (BuildContext context) => HomePage(),
           'vendor_home': (BuildContext context) => VendorHomePage(),
           'search': (BuildContext context) => SearchPage(),

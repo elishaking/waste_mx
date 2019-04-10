@@ -88,7 +88,8 @@ class _LoginPageState extends State<LoginPage>{
                           onPressed: (){
                             Navigator.of(context).pop();
                           },
-                        )
+                        ),
+                        _buildErrorDialogActionButton(data['code'])
                       ],
                     );
                   }
@@ -101,6 +102,36 @@ class _LoginPageState extends State<LoginPage>{
         // }
       },
     );
+  }
+
+  Widget _buildErrorDialogActionButton(int code){
+    if(code == 0){
+      return FlatButton(
+        child: Text('SIGN UP'),
+        onPressed: (){
+          Navigator.pop(context, (){
+            Navigator.pushReplacementNamed(context, 'signup');
+          });
+          
+        },
+      );
+    } else if(code == 1){
+      return FlatButton(
+        child: Text('RESET PASSWORD'),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
+      );
+    } else if(code == 2){
+      return FlatButton(
+        child: Text('REVIEW'),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
+      );
+    } else {
+      return Container();
+    }
   }
 
   @override
