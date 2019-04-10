@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import './track_transactions.dart';
+
 class PaymentConfirmedPage extends StatelessWidget{
   final double amount;
 
@@ -24,6 +26,18 @@ class PaymentConfirmedPage extends StatelessWidget{
               SizedBox(height: 25,),
               customText.BodyText(
                 text: '${amount.toString()} NGN has been debited from your wallet. Your money is safe in',
+                textColor: Colors.black,
+                textAlign: TextAlign.center,
+                textOverflow: TextOverflow.clip,
+              ),
+              SizedBox(height: 25,),
+              RaisedButton(
+                child: customText.BodyText(text: 'Track Payments', textColor: Colors.white),
+                onPressed: (){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) => TrackTransactionsPage()
+                  ));
+                },
               )
             ],
           )

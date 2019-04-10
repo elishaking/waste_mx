@@ -70,8 +70,9 @@ class BodyText extends StatelessWidget{
   final String text;
   final Color textColor;
   final TextAlign textAlign;
+  final TextOverflow textOverflow;
 
-  BodyText({this.text, this.textColor = Colors.white, this.textAlign = TextAlign.left});
+  BodyText({this.text, this.textColor = Colors.white, this.textAlign = TextAlign.left, this.textOverflow = TextOverflow.ellipsis});
 
   double _getTextSize(final double targetWidth){
     // at 1440px width, fontsize = 14
@@ -89,7 +90,7 @@ class BodyText extends StatelessWidget{
             color: textColor
         ),
         textAlign: textAlign,
-        overflow: TextOverflow.ellipsis,
+        overflow: textOverflow,
       ),
     );
   }

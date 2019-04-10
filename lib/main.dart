@@ -8,6 +8,7 @@ import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
 import './pages/vendor_home.dart';
+import './pages/payment_confirmed.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       color: Colors.green,
-      home: HomePage(),
+      home: PaymentConfirmedPage(100),
       routes: {
         // 'login': (BuildContext context) => LoginPage(),
         // 'signup': (BuildContext context) => SignUpPage(),
