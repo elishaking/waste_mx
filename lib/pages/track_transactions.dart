@@ -104,7 +104,24 @@ class TrackTransactionsPage extends StatelessWidget{
                     child: Image(image: AssetImage('assets/profile.png'),),
                   ),
                   title: Text(transactions[index]['type']),
-                  subtitle: Text(transactions[index]['vendor']),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(transactions[index]['vendor']),
+                      Container(
+                        margin: EdgeInsets.only(top: 7),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(100)
+                        ),
+                        child: customText.BodyText(
+                          text: 'NGN ${transactions[index]['amount'].toString()}',
+                          textColor: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 _buildActionButtons(index)
               ],
