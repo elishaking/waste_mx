@@ -6,7 +6,10 @@ import './credit_wallet.dart';
 import './wallet_pay.dart';
 
 class WalletPage extends StatelessWidget{
-  final double walletBalance = 0.0;
+  final bool payable;
+  final double walletBalance = 5000.0;
+
+  WalletPage(this.payable);
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +31,9 @@ class WalletPage extends StatelessWidget{
                 text: 'Waste MX Wallet Balance',
                 textColor: Theme.of(context).primaryColor,
               ),
-              customText.BodyText(
+              customText.HeadlineText(
                 text: walletBalance.toString(),
-                textColor: Theme.of(context).primaryColor,
+                textColor: Colors.lightGreen,
               ),
               SizedBox(height: 15,),
               Row(
@@ -55,11 +58,11 @@ class WalletPage extends StatelessWidget{
               SizedBox(height: 30,),
               RaisedButton(
                 child: customText.BodyText(text: 'Make Payment', textColor: Colors.white,),
-                onPressed: (){
+                onPressed: payable ? (){
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => WalletPayPage()
                   ));
-                },
+                } : null,
               )
             ],
           ),

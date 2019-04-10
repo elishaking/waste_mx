@@ -5,6 +5,7 @@ import '../widgets/bottom_navigation_bar.dart';
 
 import './dispose_waste.dart';
 import './recycle_waste.dart';
+import './wallet.dart';
 
 class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
@@ -324,7 +325,9 @@ class HomePage extends StatelessWidget {
               leading: Icon(Icons.account_balance_wallet),
               title: Text('Wallet'),
               onTap: (){
-                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => WalletPage(false)
+                ));
               //  Navigator.pushNamed(context, 'profile');
               },
             ),
@@ -350,6 +353,13 @@ class HomePage extends StatelessWidget {
               onTap: (){
                 Navigator.pop(context);
               //  Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.label_outline),
+              title: Text('Logout'),
+              onTap: (){
+                Navigator.pushNamed(context, 'welcome');
               },
             ),
           ],

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import './pages/welcome.dart';
 // import './pages/login.dart';
-import './pages/signup.dart';
+// import './pages/signup.dart';
 import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
 import './pages/vendor_home.dart';
-import './pages/payment_confirmed.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Waste MX',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: Colors.green,
         accentColor: Colors.amber,
         buttonColor: Colors.amber,
         fontFamily: 'Lato',
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       color: Colors.green,
-      home: PaymentConfirmedPage(100),
+      home: WelcomePage(),
       routes: {
         // 'login': (BuildContext context) => LoginPage(),
         // 'signup': (BuildContext context) => SignUpPage(),
