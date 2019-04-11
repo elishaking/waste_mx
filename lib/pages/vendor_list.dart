@@ -25,25 +25,29 @@ class VendorListPage extends StatelessWidget{
         'id': '12290ol23nn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
-        'rating': 5
+        'rating': 5,
+        'verified': true
       },
       {
         'id': '122ieo23nn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
-        'rating': 4
+        'rating': 4,
+        'verified': false
       },
       {
         'id': '12fgh23nn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
-        'rating': 3
+        'rating': 3,
+        'verified': true
       },
       {
         'id': '1222wssknn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
-        'rating': 5
+        'rating': 5,
+        'verified': true
       },
     ];
     
@@ -65,6 +69,13 @@ class VendorListPage extends StatelessWidget{
                     ),
                     title: Text(_vendors[index]['title'], style: TextStyle(fontSize: _getSize(18)),),
                     subtitle: _buildVendorRating(_vendors[index]['rating']),
+                    trailing: Chip(
+                      label: customText.BodyText(
+                        text: _vendors[index]['verified'] ? 'Verified' : 'Not Verified',
+                      ),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      backgroundColor: _vendors[index]['verified'] ? Colors.green : Colors.red,
+                    ),
                     // onTap: (){
                     //   Navigator.of(context).push(MaterialPageRoute(
                     //     builder: (BuildContext context) => VendorPage(_vendors[index])
