@@ -17,18 +17,15 @@ class HeadlineText extends StatelessWidget{
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
 
-    return Padding(
-      padding: EdgeInsets.only(top: 18, bottom: 5),
-      child: Text(text,
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.w900,
-          fontSize: _getSize(33),
-          color: textColor,
-          letterSpacing: 2,
-        ),
-        textAlign: textAlign,
+    return Text(text,
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: FontWeight.w900,
+        fontSize: _getSize(33),
+        color: textColor,
+        letterSpacing: 2,
       ),
+      textAlign: textAlign,
     );
   }
 }

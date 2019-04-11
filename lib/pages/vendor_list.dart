@@ -4,6 +4,7 @@ import '../widgets/rating.dart' as ratingWidgets;
 import '../widgets/custom_text.dart' as customText;
 
 import './vendor.dart';
+import './book_vendor.dart';
 
 class VendorListPage extends StatelessWidget{
   Widget _buildVendorRating(int rating){
@@ -100,7 +101,9 @@ class VendorListPage extends StatelessWidget{
                           ],
                         ),
                         onPressed: (){
-
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => BookVendorPage()
+                          ));
                         },
                       ),
                       FlatButton(

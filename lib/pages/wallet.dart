@@ -11,8 +11,16 @@ class WalletPage extends StatelessWidget{
 
   WalletPage(this.payable);
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Wallet'),
@@ -24,18 +32,19 @@ class WalletPage extends StatelessWidget{
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image(
-                width: 200,
+                width: _getSize(200),
                 image: AssetImage('assets/wallet-enclosed.png'),
               ),
               customText.TitleText(
                 text: 'Waste MX Wallet Balance',
                 textColor: Theme.of(context).primaryColor,
               ),
+              SizedBox(height: _getSize(15),),
               customText.HeadlineText(
                 text: walletBalance.toString(),
                 textColor: Colors.lightGreen,
               ),
-              SizedBox(height: 15,),
+              SizedBox(height: _getSize(15),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -55,7 +64,7 @@ class WalletPage extends StatelessWidget{
                   ),
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: _getSize(30),),
               RaisedButton(
                 child: customText.BodyText(text: 'Make Payment', textColor: Colors.white,),
                 onPressed: payable ? (){
