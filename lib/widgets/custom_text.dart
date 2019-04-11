@@ -81,17 +81,14 @@ class BodyText extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 1, bottom: 3),
-      child: Text(text,
-        style: TextStyle(
-            fontFamily: 'Lato',
-            fontSize: _getTextSize(MediaQuery.of(context).size.width),
-            color: textColor
-        ),
-        textAlign: textAlign,
-        overflow: textOverflow,
+    return Text(text,
+      style: TextStyle(
+          fontFamily: 'Lato',
+          fontSize: _getTextSize(MediaQuery.of(context).size.width),
+          color: textColor
       ),
+      textAlign: textAlign,
+      overflow: textOverflow,
     );
   }
 }

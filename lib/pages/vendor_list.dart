@@ -73,7 +73,7 @@ class VendorListPage extends StatelessWidget{
                       label: customText.BodyText(
                         text: _vendors[index]['verified'] ? 'Verified' : 'Not Verified',
                       ),
-                      labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      labelPadding: EdgeInsets.symmetric(horizontal: _getSize(10), vertical: 0),
                       backgroundColor: _vendors[index]['verified'] ? Colors.green : Colors.red,
                     ),
                     // onTap: (){
@@ -88,29 +88,13 @@ class VendorListPage extends StatelessWidget{
                       FlatButton(
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.chat_bubble_outline,
-                            color: Theme.of(context).primaryColor,
-                            size: _getSize(23),),
+                            Icon(Icons.add_circle_outline,
+                              color: Theme.of(context).primaryColor,
+                              size: _getSize(23),
+                            ),
                             SizedBox(width: _getSize(10),),
                             customText.BodyText(
-                              text: 'Chat',
-                              textColor: Theme.of(context).primaryColor,
-                            )
-                          ],
-                        ),
-                        onPressed: (){
-
-                        },
-                      ),
-                      FlatButton(
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.call,
-                            color: Theme.of(context).primaryColor,
-                            size: _getSize(23),),
-                            SizedBox(width: _getSize(10),),
-                            customText.BodyText(
-                              text: 'Call',
+                              text: 'PLACE ORDER',
                               textColor: Theme.of(context).primaryColor,
                             )
                           ],
@@ -127,7 +111,7 @@ class VendorListPage extends StatelessWidget{
                             size: _getSize(23),),
                             SizedBox(width: _getSize(10),),
                             customText.BodyText(
-                              text: 'Details',
+                              text: 'DETAILS',
                               textColor: Theme.of(context).primaryColor,
                             )
                           ],
