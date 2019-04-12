@@ -4,6 +4,8 @@ import '../models/dispose_offering.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import './offering_details.dart';
+
 class OfferingsPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +16,7 @@ class OfferingsPage extends StatefulWidget{
 class _OfferingsPageState extends State<OfferingsPage>{
   final List<DisposeOffering> _offerings = [
     DisposeOffering(
+      id: 'skwjwmms',
       price: '5000',
       rate: '1000',
       numberOfBins: '5',
@@ -22,6 +25,7 @@ class _OfferingsPageState extends State<OfferingsPage>{
       date: 'Feb 1'
     ),
     DisposeOffering(
+      id: 'sksnxnxn',
       price: '3000',
       rate: '1000',
       numberOfBins: '3',
@@ -40,7 +44,13 @@ class _OfferingsPageState extends State<OfferingsPage>{
             child: Column(
               children: <Widget>[
                 ListTile(
-                  leading: CircleAvatar(child: Image.asset('assets/clean_bin_angle.png'),),
+                  leading: Hero(
+                    tag: _offerings[index].id,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Image.asset('assets/clean_bin_angle.png'),
+                    ),
+                  ),
                   title: customText.TitleText(
                     text: _offerings[index].clientName,
                     textColor: Colors.black,
@@ -77,9 +87,11 @@ class _OfferingsPageState extends State<OfferingsPage>{
                   child: ButtonBar(
                     children: <Widget>[
                       FlatButton(
-                        child: Text('DETAILS'),
+                        child: Text('VIEW'),
                         onPressed: (){
-
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => OfferingDetails(_offerings[index])
+                          ));
                         },
                       )
                     ],
