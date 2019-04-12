@@ -15,7 +15,7 @@ class OfferingDetails extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text(offering.name),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -34,7 +34,7 @@ class OfferingDetails extends StatelessWidget{
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: customText.TitleText(
-                  text: 'Household Waste',
+                  text: offering.clientName,
                   textColor: Colors.black,
                 ),
               ),
@@ -63,11 +63,11 @@ class OfferingDetails extends StatelessWidget{
                   )
                 ],
               ),
-              ListTile(
-                title: Text('Client name'),
-                subtitle: Text(offering.clientName),
-              ),
-              Divider(),
+              // ListTile(
+              //   title: Text('Client name'),
+              //   subtitle: Text(offering.clientName),
+              // ),
+              // Divider(),
               ListTile(
                 title: Text('Location'),
                 subtitle: Text(offering.clientLocation),

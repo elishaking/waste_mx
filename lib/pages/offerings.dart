@@ -17,6 +17,7 @@ class _OfferingsPageState extends State<OfferingsPage>{
   final List<DisposeOffering> _offerings = [
     DisposeOffering(
       id: 'skwjwmms',
+      name: 'Household Waste',
       price: '5000',
       rate: '1000',
       numberOfBins: '5',
@@ -26,6 +27,7 @@ class _OfferingsPageState extends State<OfferingsPage>{
     ),
     DisposeOffering(
       id: 'sksnxnxn',
+      name: 'Household Waste',
       price: '3000',
       rate: '1000',
       numberOfBins: '3',
