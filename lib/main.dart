@@ -10,6 +10,7 @@ import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
+import './pages/recycle_waste.dart';
 import './pages/vendor/vendor_home.dart';
 import './pages/vendor/offerings.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         color: Colors.green,
-        home: OfferingsPage(),
+        home: RecycleWastePage(),
         routes: {
           // 'login': (BuildContext context) => LoginPage(),
           'signup': (BuildContext context) => SignUpPage('user'),

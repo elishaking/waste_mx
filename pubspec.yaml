@@ -81,6 +81,12 @@ flutter:
   - assets/wallet-enclosed.png
   - assets/wallet.png
   - assets/clean_bin_angle.png
+  - assets/eco-factory-solid.png
+  - assets/glass.png
+  - assets/incineration.png
+  - assets/stacked-print-products.png
+  - assets/plastic-bottle.png
+  - assets/thick-magnet.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
