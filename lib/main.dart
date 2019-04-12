@@ -4,15 +4,16 @@ import 'package:scoped_model/scoped_model.dart';
 import './scoped_models/main.dart';
 
 import './pages/welcome.dart';
-import './pages/login.dart';
+// import './pages/login.dart';
 import './pages/signup.dart';
 import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
-import './pages/recycle_waste.dart';
+// import './pages/recycle_waste.dart';
 import './pages/vendor/vendor_home.dart';
-import './pages/vendor/offerings.dart';
+// import './pages/vendor/offerings.dart';
+import './pages/book_vendor.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         color: Colors.green,
-        home: WelcomePage(),
+        home: BookVendorPage(),
         routes: {
           // 'login': (BuildContext context) => LoginPage(),
           'welcome': (BuildContext context) => WelcomePage(),

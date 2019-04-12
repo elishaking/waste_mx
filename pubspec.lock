@@ -91,7 +91,7 @@ packages:
     source: sdk
     version: "0.0.0"
   http:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -111,6 +111,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
+  image_picker:
+    dependency: "direct main"
+    description:
+      name: image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.3+1"
   matcher:
     dependency: transitive
     description:
@@ -154,7 +161,7 @@ packages:
     source: hosted
     version: "2.0.1"
   scoped_model:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: scoped_model
       url: "https://pub.dartlang.org"
@@ -237,3 +244,4 @@ packages:
     version: "2.1.15"
 sdks:
   dart: ">=2.1.0 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"

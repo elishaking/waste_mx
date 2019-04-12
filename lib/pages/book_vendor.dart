@@ -45,6 +45,42 @@ class _BookVendorPageState extends State<BookVendorPage>{
     super.initState();
   }
 
+  void _openImagePicker(BuildContext context){
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context){
+        return Container(
+          height: 200,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: <Widget>[
+              customText.TitleText(
+                text: 'Add Image',
+                textColor: Colors.black,
+              ),
+              SizedBox(height: 10,),
+              ListTile(
+                leading: Icon(Icons.camera),
+                title: Text('Use Camera'),
+                onTap: (){
+
+                },
+              ),
+              SizedBox(width: 5,),
+              ListTile(
+                leading: Icon(Icons.picture_in_picture),
+                title: Text('Select from Gallery'),
+                onTap: (){
+
+                },
+              )
+            ],
+          ),
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double _fieldsGap = 20;
@@ -59,7 +95,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 18),
+            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
             child: Column(
               children: <Widget>[
                 customText.TitleText(
@@ -184,17 +220,17 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('Upload Image'),
+                            Text('Add Image'),
                             IconButton(
                               icon: Icon(Icons.camera),
                               onPressed: (){
-
+                                _openImagePicker(context);
                               },
                             )
                           ],
                         ),
                         onPressed: (){
-                          
+                          _openImagePicker(context);
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
