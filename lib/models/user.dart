@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class User{
+class Client{
   final String id;
   final String phone;
   final String email;
   final String username;
   final String password;
 
-  User({
+  Client({
     @required this.id, 
     @required this.phone,
     @required this.email,

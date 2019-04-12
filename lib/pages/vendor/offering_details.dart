@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../models/dispose_offering.dart';
+import '../../models/dispose_offering.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
-import '../pages/offering_accepted.dart';
+import './offering_accepted.dart';
 
 class OfferingDetails extends StatelessWidget{
   final DisposeOffering offering;
@@ -15,26 +15,27 @@ class OfferingDetails extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text(offering.name),
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
           child: Column(
             children: <Widget>[
               Hero(
                 tag: offering.id,
                 child: Container(
                   child: Image(
-                    image: AssetImage('assets/clean_bin_angle.png'),
+                    image: AssetImage(offering.imageUrl),
                     height: 120,
+                    width: 120,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: customText.TitleText(
-                  text: 'Household Waste',
+                  text: offering.clientName,
                   textColor: Colors.black,
                 ),
               ),
@@ -57,17 +58,17 @@ class OfferingDetails extends StatelessWidget{
                     // elevation: 0,
                     onPressed: (){
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                        builder: (BuildContext context) => OfferingAcceptedPage()
+                        builder: (BuildContext context) => OfferingAcceptedPage(offering)
                       ), (Route route) => false);
                     },
                   )
                 ],
               ),
-              ListTile(
-                title: Text('Client name'),
-                subtitle: Text(offering.clientName),
-              ),
-              Divider(),
+              // ListTile(
+              //   title: Text('Client name'),
+              //   subtitle: Text(offering.clientName),
+              // ),
+              // Divider(),
               ListTile(
                 title: Text('Location'),
                 subtitle: Text(offering.clientLocation),
