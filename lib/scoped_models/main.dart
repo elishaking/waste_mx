@@ -9,7 +9,7 @@ class MainModel extends Model with UserModel{
 }
 
 class UserModel extends Model {
-  User _authenticatedUser;
+  // Client _authenticatedUser;
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
 
   bool isLoading = false;

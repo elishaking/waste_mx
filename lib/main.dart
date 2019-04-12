@@ -10,8 +10,8 @@ import './pages/home.dart';
 import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
-import './pages/vendor_home.dart';
-import './pages/offerings.dart';
+import './pages/vendor/vendor_home.dart';
+import './pages/vendor/offerings.dart';
 
 void main() => runApp(MyApp());
 

@@ -4,6 +4,8 @@ import '../../models/dispose_offering.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
+import './track_transactions.dart';
+
 class OfferingAcceptedPage extends StatelessWidget{
   final DisposeOffering offering;
 
@@ -76,7 +78,7 @@ class OfferingAcceptedPage extends StatelessWidget{
                     // elevation: 0,
                     onPressed: (){
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                        builder: (BuildContext context) => OfferingAcceptedPage(offering)
+                        builder: (BuildContext context) => TrackTransactionsPage()
                       ), (Route route) => false);
                     },
                   )
