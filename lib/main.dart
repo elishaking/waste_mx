@@ -11,6 +11,7 @@ import './pages/search.dart';
 import './pages/profile.dart';
 import './pages/dispose_waste.dart';
 import './pages/vendor_home.dart';
+import './pages/offerings.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         color: Colors.green,
-        home: VendorHomePage(),
+        home: OfferingsPage(),
         routes: {
           // 'login': (BuildContext context) => LoginPage(),
           'signup': (BuildContext context) => SignUpPage('user'),
