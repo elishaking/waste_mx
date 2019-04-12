@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         color: Colors.green,
-        home: VendorHomePage(),
+        home: WelcomePage(),
         routes: {
           // 'login': (BuildContext context) => LoginPage(),
           'signup': (BuildContext context) => SignUpPage('user'),

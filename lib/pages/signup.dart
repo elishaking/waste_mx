@@ -260,7 +260,14 @@ class _SignUpPageState extends State<SignUpPage>{
                       SizedBox(height: 25,),
                       ScopedModelDescendant<MainModel>(
                         builder: (BuildContext context, Widget child, MainModel model){
-                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
+                          // return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
+                          return  RaisedButton(
+                            textColor: Colors.white,
+                            child: Text('Sign Up'),
+                            onPressed: (){
+                              Navigator.pushReplacementNamed(context, widget.role == 'user' ? 'home' : 'vendor_home');
+                            },
+                          );
                         },
                       ),
                       FlatButton(
