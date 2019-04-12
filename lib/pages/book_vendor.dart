@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
@@ -45,6 +48,15 @@ class _BookVendorPageState extends State<BookVendorPage>{
     super.initState();
   }
 
+  void _getImage(BuildContext context, ImageSource source){
+    ImagePicker.pickImage(
+      source: source,
+      maxWidth: 400
+    ).then((File image) {
+      Navigator.pop(context);
+    });
+  }
+
   void _openImagePicker(BuildContext context){
     showModalBottomSheet(
       context: context,
@@ -63,7 +75,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                 leading: Icon(Icons.camera),
                 title: Text('Use Camera'),
                 onTap: (){
-
+                  _getImage(context, ImageSource.camera);
                 },
               ),
               SizedBox(width: 5,),
@@ -71,7 +83,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                 leading: Icon(Icons.picture_in_picture),
                 title: Text('Select from Gallery'),
                 onTap: (){
-
+                  _getImage(context, ImageSource.gallery);
                 },
               )
             ],
