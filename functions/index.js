@@ -21,7 +21,8 @@ const gcconfig = {
   keyFilename: 'waste-mx-firebase-adminsdk.json'
 }
 
-const gcs = require('@google-cloud/storage')(gcconfig);
+const {Storage} = require('@google-cloud/storage');
+const gcs = new Storage(gcconfig);
 
 fbAdmin.initializeApp({
   credential: fbAdmin.credential.cert(require('./waste-mx-firebase-adminsdk.json'))
