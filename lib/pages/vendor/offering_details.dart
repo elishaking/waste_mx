@@ -50,7 +50,7 @@ class OfferingDetails extends StatelessWidget{
                   OutlineButton(
                     child: Text('Decline'),
                     onPressed: (){
-
+                      Navigator.of(context).pop();
                     },
                   ),
                   RaisedButton(
