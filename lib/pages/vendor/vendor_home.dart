@@ -154,18 +154,21 @@ class VendorHomePage extends StatelessWidget{
 
   final List<Update> _messages = [
     Update(
+      id: '1',
       icon: Icon(Icons.account_balance_wallet),
       title: 'Earned Coins',
       message: 'You earned 50 points just for installation, check your wallet',
       action: 'WALLET',
     ),
     Update(
+      id: '2',
       icon: Icon(Icons.done_all),
       title: 'Transaction Complete',
       message: 'Household Waste disposal',
       action: 'VIEW',
     ),
     Update(
+      id: '3',
       icon: Icon(Icons.account_balance_wallet),
       title: 'Earned Coins',
       message: 'You earned 100 points just for installation, check your wallet',
@@ -177,32 +180,38 @@ class VendorHomePage extends StatelessWidget{
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10,),
       child: Column(
-        children: List.generate(_messages.length, (int index) => Card(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  leading: _messages[index].icon,
-                  title: Text(_messages[index].title),
-                  subtitle: Text(_messages[index].message),
-                ),
-                ButtonTheme.bar(
-                  child: ButtonBar(
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(_messages[index].action),
-                        onPressed: (){
-                          
-                        },
-                      )
-                    ],
+        children: List.generate(_messages.length, (int index) => Dismissible(
+          key: Key(_messages[index].id),
+          onDismissed: (DismissDirection dir){
+            _messages.removeAt(index);
+            print(_messages);
+          },
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: _messages[index].icon,
+                    title: Text(_messages[index].title),
+                    subtitle: Text(_messages[index].message),
                   ),
-                )
-              ],
+                  ButtonTheme.bar(
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text(_messages[index].action),
+                          onPressed: (){
+                            
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-
         )),
       ),
     );
