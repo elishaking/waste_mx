@@ -4,6 +4,8 @@ import '../models/dispose_offering.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import '../pages/offering_accepted.dart';
+
 class OfferingDetails extends StatelessWidget{
   final DisposeOffering offering;
 
@@ -54,7 +56,9 @@ class OfferingDetails extends StatelessWidget{
                     child: Text('Accept', style: TextStyle(color: Colors.white),),
                     // elevation: 0,
                     onPressed: (){
-
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                        builder: (BuildContext context) => OfferingAcceptedPage()
+                      ), (Route route) => false);
                     },
                   )
                 ],
