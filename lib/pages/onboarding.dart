@@ -114,6 +114,7 @@ class _OnboardingPageState extends State<OnboardingPage>{
                     child: Column(
                       children: <Widget>[
                         Image.asset(_infoList[_tabPos - 1]['imageUrl']),
+                        SizedBox(height: 10),
                         custom_text.TitleText(text: _infoList[_tabPos - 1]['title'],),
                         custom_text.BodyText(
                           text: _infoList[_tabPos - 1]['body'],
