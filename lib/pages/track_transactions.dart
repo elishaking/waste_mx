@@ -4,7 +4,14 @@ import '../widgets/custom_text.dart' as customText;
 
 import './home.dart';
 
-class TrackTransactionsPage extends StatelessWidget{
+class TrackTransactionsPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _TrackTransactionsPageState();
+  }
+}
+
+class _TrackTransactionsPageState extends State<TrackTransactionsPage>{
   final transactions = [
     {
       'pending': true,
@@ -29,20 +36,26 @@ class TrackTransactionsPage extends StatelessWidget{
     },
   ];
 
+  double _targetWidth = 0;
+
+  double _getSize(final double default_1440){
+    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  }
+
   Widget _buildStatus(int index){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: transactions[index]['pending'] ? <Widget>[
-          Icon(Icons.sync_problem, color: Colors.deepOrange,),
+          Icon(Icons.sync_problem, color: Colors.deepOrange, size: _getSize(23),),
           SizedBox(width: 10,),
           customText.BodyText(
             text: 'Pending',
             textColor: Colors.deepOrange,
           ),
         ] : <Widget>[
-          Icon(Icons.check_circle, color: Colors.green,),
+          Icon(Icons.check_circle, color: Colors.green, size: _getSize(23),),
           SizedBox(width: 10,),
           customText.BodyText(
             text: 'Complete',
@@ -53,34 +66,82 @@ class TrackTransactionsPage extends StatelessWidget{
     );
   }
 
-  Widget _buildActionButtons(int index){
+  Widget _buildActionButtons(BuildContext context, int index){
     return ButtonTheme.bar(
       child: ButtonBar(
-        children: <Widget>[
-          transactions[index]['pending'] ? FlatButton(
-            child: customText.BodyText(
-              text: 'Complete',
-              textColor: Colors.green,
+        children: transactions[index]['pending'] ? [
+          FlatButton(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.chat_bubble_outline,
+                  color: Theme.of(context).primaryColor,
+                  size: _getSize(23),
+                ),
+                SizedBox(width: _getSize(10),),
+                customText.BodyText(
+                  text: 'CHAT',
+                  textColor: Theme.of(context).primaryColor,
+                )
+              ],
             ),
             onPressed: (){
-
+              
             },
-          ) : FlatButton(
+          ),
+          FlatButton(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.call,
+                  color: Theme.of(context).primaryColor,
+                  size: _getSize(23),
+                ),
+                SizedBox(width: _getSize(10),),
+                customText.BodyText(
+                  text: 'CALL',
+                  textColor: Theme.of(context).primaryColor,
+                )
+              ],
+            ),
+            onPressed: (){
+              
+            },
+          ),
+          FlatButton(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.done_all,
+                  color: Theme.of(context).primaryColor,
+                  size: _getSize(23),
+                ),
+                SizedBox(width: _getSize(10),),
+                customText.BodyText(
+                  text: 'COMPLETE',
+                  textColor: Theme.of(context).primaryColor,
+                )
+              ],
+            ),
+            onPressed: (){
+              
+            },
+          ), 
+        ] : [
+          FlatButton(
             child: customText.BodyText(
-              text: 'Delete',
+              text: 'DELETE',
               textColor: Colors.deepOrange,
             ),
             onPressed: (){
 
             },
           )
-        ],
+        ]
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    _targetWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Track Transactions'),
@@ -123,7 +184,7 @@ class TrackTransactionsPage extends StatelessWidget{
                     ],
                   ),
                 ),
-                _buildActionButtons(index)
+                _buildActionButtons(context, index)
               ],
             ),
           )),

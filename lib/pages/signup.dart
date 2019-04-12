@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped_models/main.dart';
 
 import './login.dart';
 
@@ -24,6 +27,8 @@ class _SignUpPageState extends State<SignUpPage>{
 
   bool showPassword1 = true;
   bool showPassword2 = true;
+
+  TextEditingController _passwordController = TextEditingController();
 
   Widget _buildSocialMediaLogin(){
     return Container(
@@ -66,6 +71,44 @@ class _SignUpPageState extends State<SignUpPage>{
     );
   }
 
+  Widget _buildSubmitButton(MainModel model){
+    return RaisedButton(
+      textColor: Colors.white,
+      child: Text('Sign Up'),
+      onPressed: (){
+        // if(_formKey.currentState.validate()){
+          _formKey.currentState.save();
+          if(widget.role == 'user'){
+            model.signup(_formData['email'], _formData['password']).then((data) {
+              if(data['success']){
+                Navigator.pushReplacementNamed(context, 'home');
+              } else{
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      title: Text('An Error Ocurred'),
+                      content: Text(data['message']),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('OK'),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                );
+              }
+            });
+          } else{
+            Navigator.pushReplacementNamed(context, 'vendor_home');
+          }
+        // }
+      },
+    );
+  }
   // Widget _buildEmailField(){
   //   return 
   // }
@@ -162,6 +205,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       ),
                       SizedBox(height: 25,),
                       TextFormField(
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
                           labelText: 'password',
@@ -208,24 +252,15 @@ class _SignUpPageState extends State<SignUpPage>{
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'Re-enter your password';
-                          } else if(_formData['password'] != value){
+                          } else if(value != _passwordController.text){
                             return "Passwords don't match";
                           }
                         },
                       ),
                       SizedBox(height: 25,),
-                      RaisedButton(
-                        textColor: Colors.white,
-                        child: Text('Sign Up'),
-                        onPressed: (){
-                          if(_formKey.currentState.validate()){
-                            _formKey.currentState.save();
-                            if(widget.role == 'user'){
-                              Navigator.pushReplacementNamed(context, 'home');
-                            } else{
-                              Navigator.popAndPushNamed(context, 'vendor_home');
-                            }
-                          }
+                      ScopedModelDescendant<MainModel>(
+                        builder: (BuildContext context, Widget child, MainModel model){
+                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
                         },
                       ),
                       FlatButton(

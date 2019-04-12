@@ -17,18 +17,15 @@ class HeadlineText extends StatelessWidget{
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
 
-    return Padding(
-      padding: EdgeInsets.only(top: 18, bottom: 5),
-      child: Text(text,
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.w900,
-          fontSize: _getSize(33),
-          color: textColor,
-          letterSpacing: 2,
-        ),
-        textAlign: textAlign,
+    return Text(text,
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: FontWeight.w900,
+        fontSize: _getSize(33),
+        color: textColor,
+        letterSpacing: 2,
       ),
+      textAlign: textAlign,
     );
   }
 }
@@ -50,18 +47,15 @@ class TitleText extends StatelessWidget{
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
 
-    return Padding(
-      padding: EdgeInsets.only(top: 18, bottom: 5),
-      child: Text(text,
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.w900,
-          fontSize: _getSize(20),
-          color: textColor,
-          letterSpacing: 2,
-        ),
-        textAlign: textAlign,
+    return Text(text,
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: FontWeight.w900,
+        fontSize: _getSize(20),
+        color: textColor,
+        // letterSpacing: 2,
       ),
+      textAlign: textAlign,
     );
   }
 }
@@ -81,17 +75,14 @@ class BodyText extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 1, bottom: 3),
-      child: Text(text,
-        style: TextStyle(
-            fontFamily: 'Lato',
-            fontSize: _getTextSize(MediaQuery.of(context).size.width),
-            color: textColor
-        ),
-        textAlign: textAlign,
-        overflow: textOverflow,
+    return Text(text,
+      style: TextStyle(
+          fontFamily: 'Lato',
+          fontSize: _getTextSize(MediaQuery.of(context).size.width),
+          color: textColor
       ),
+      textAlign: textAlign,
+      overflow: textOverflow,
     );
   }
 }

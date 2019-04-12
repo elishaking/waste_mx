@@ -24,6 +24,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
     'password': ''
   };
   String _wastePrice = '0.0';
+  final int binPrice = 100;
 
   TextEditingController _controller = TextEditingController();
 
@@ -33,7 +34,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
     if(text.isNotEmpty){
       print(text);
       setState(() {
-       _wastePrice =  (double.parse(text) * 1.5).toString();
+       _wastePrice =  (double.parse(text) * binPrice).toString();
       });
     }
   }
@@ -100,35 +101,38 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-                        value: _wasteType,
-                        items: _wasteTypes.map<DropdownMenuItem<String>>((String wasteType) => DropdownMenuItem(
-                          value: wasteType,
-                          child: Text(wasteType),
-                        )).toList(),
-                        onChanged: (String newValue){
-                          setState(() {
-                            _wasteType = newValue;
-                            print(_wasteType);
-                          });
-                        },
-                      ),
-                      SizedBox(height: _fieldsGap,),
+                      // DropdownButtonFormField<String>(
+                      //   decoration: InputDecoration(
+                      //       border: OutlineInputBorder(
+                      //           borderRadius: BorderRadius.circular(10)
+                      //       )
+                      //   ),
+                      //   value: _wasteType,
+                      //   items: _wasteTypes.map<DropdownMenuItem<String>>((String wasteType) => DropdownMenuItem(
+                      //     value: wasteType,
+                      //     child: Text(wasteType),
+                      //   )).toList(),
+                      //   onChanged: (String newValue){
+                      //     setState(() {
+                      //       _wasteType = newValue;
+                      //       print(_wasteType);
+                      //     });
+                      //   },
+                      // ),
+                      // SizedBox(height: _fieldsGap,),
                       TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.line_weight),
-                            labelText: 'Estimated weight',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
+                          prefixIcon: Icon(Icons.delete),
+                          labelText: 'Number of Bins',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          )
                         ),
                         controller: _controller,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.numberWithOptions(
+                          decimal: false,
+                          signed: false
+                        ),
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'This field is required';
@@ -139,6 +143,15 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
+                      Container(
+                        padding: EdgeInsets.only(right: 5),
+                        alignment: Alignment.centerRight,
+                        child: customText.BodyText(
+                          text: 'NGN ${binPrice.toString()} per bin',
+                          textColor: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 3,),
                       OutlineButton(
                         padding: EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                         borderSide: BorderSide(width: 1),
@@ -146,7 +159,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('Price: ' + _wastePrice),
+                            Text('Price: NGN ' + _wastePrice),
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: (){
