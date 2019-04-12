@@ -36,6 +36,82 @@ class VendorHomePage extends StatelessWidget{
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
+  Widget _buildDrawer(BuildContext context){
+    return Drawer(
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 230,
+              width: _targetWidth,
+              color: Theme.of(context).primaryColor,
+            //  child: CircleAvatar(
+            //    child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
+            //  ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+              selected: true,
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: (){
+                Navigator.pop(context);
+                // Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.account_balance_wallet),
+              title: Text('Wallet'),
+              onTap: (){
+                // Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (BuildContext context) => WalletPage(false)
+                // ));
+              //  Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: Text('Shop'),
+              onTap: (){
+                Navigator.pop(context);
+              //  Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.supervised_user_circle),
+              title: Text('Vendors'),
+              onTap: (){
+                Navigator.pop(context);
+              //  Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.markunread_mailbox),
+              title: Text('Packages'),
+              onTap: (){
+                Navigator.pop(context);
+              //  Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.label_outline),
+              title: Text('Logout'),
+              onTap: (){
+                Navigator.of(context).pushNamedAndRemoveUntil('welcome', (Route route) => false);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildTopSection(BuildContext context){
     return Container(
       decoration: BoxDecoration(
@@ -222,6 +298,7 @@ class VendorHomePage extends StatelessWidget{
     _targetWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      drawer: _buildDrawer(context),
       appBar: AppBar(
         title: Text('Waste MX'),
         actions: <Widget>[

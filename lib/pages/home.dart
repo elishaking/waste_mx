@@ -359,7 +359,7 @@ class HomePage extends StatelessWidget {
               leading: Icon(Icons.label_outline),
               title: Text('Logout'),
               onTap: (){
-                Navigator.pushNamed(context, 'welcome');
+                Navigator.of(context).pushNamedAndRemoveUntil('welcome', (Route route) => false);
               },
             ),
           ],
