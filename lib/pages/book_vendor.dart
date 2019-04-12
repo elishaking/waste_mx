@@ -29,7 +29,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
   String _wastePrice = '0.0';
   final int binPrice = 100;
 
-  File _imageFile;
+  List<File> _imageFiles = List<File>();
 
   TextEditingController _controller = TextEditingController();
 
@@ -56,7 +56,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
       maxWidth: 400
     ).then((File image) {
       setState(() {
-       _imageFile = image; 
+       _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
     });
@@ -251,12 +251,17 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
-                      _imageFile == null ? Text('No Image(s)') : 
-                      Image.file(_imageFile, 
-                        fit: BoxFit.cover, 
-                        height: 300, 
-                        width: MediaQuery.of(context).size.width, 
-                        alignment: Alignment.topCenter, //! can change to center
+                      _imageFiles.length == 0 ? Text('No Image(s)') : 
+                      Column(
+                        children: List.generate(_imageFiles.length, (int index) => Container(
+                          margin: EdgeInsets.only(bottom: _fieldsGap),
+                          child: Image.file(_imageFiles[index], 
+                            fit: BoxFit.cover, 
+                            height: 300, 
+                            width: MediaQuery.of(context).size.width, 
+                            alignment: Alignment.topCenter, //! can change to center
+                          ),
+                        )),
                       ),
                       SizedBox(height: _fieldsGap,),
                       RaisedButton(
