@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/custom_text.dart' as customText;
+import '../../models/update.dart';
 
 import '../wallet.dart';
+import './offerings.dart';
 
 class VendorHomePage extends StatelessWidget{
   final double pad_vertical = 13.0;
@@ -79,14 +81,16 @@ class VendorHomePage extends StatelessWidget{
                         bottomRight: Radius.circular(0)
                       ),
                     ),
-                    child: Text('Search vendor recycler'),
+                    child: Text('View Client Offerings'),
                     onPressed: (){
-                      Navigator.pushNamed(context, 'search');
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => OfferingsPage()
+                      ));
                     },
                   ),
                 ),
                 FlatButton(
-                  child: Icon(Icons.search),
+                  child: Icon(Icons.remove_red_eye, color: Colors.white,),
                   color: Theme.of(context).accentColor,
                   padding: EdgeInsets.symmetric(vertical: 10),
                   shape: OutlineInputBorder(
@@ -98,7 +102,9 @@ class VendorHomePage extends StatelessWidget{
                     ),
                   ),
                   onPressed: (){
-                    Navigator.pushNamed(context, 'search');
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => OfferingsPage()
+                    ));
                   },
                 )
               ],
@@ -134,7 +140,7 @@ class VendorHomePage extends StatelessWidget{
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(top: 5, bottom: 18, left: 10, right: 10),
             child: Text(
-              'Get access to waste collectors, scavengers, recycling agents/centers, de-clusters, etc',
+              'Get access to clients in need of waste collectors, scavengers, recycling agents/centers, de-clusters, etc',
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.white,
@@ -146,6 +152,62 @@ class VendorHomePage extends StatelessWidget{
     );
   }
 
+  final List<Update> _messages = [
+    Update(
+      icon: Icon(Icons.account_balance_wallet),
+      title: 'Earned Coins',
+      message: 'You earned 50 points just for installation, check your wallet',
+      action: 'WALLET',
+    ),
+    Update(
+      icon: Icon(Icons.done_all),
+      title: 'Transaction Complete',
+      message: 'Household Waste disposal',
+      action: 'VIEW',
+    ),
+    Update(
+      icon: Icon(Icons.account_balance_wallet),
+      title: 'Earned Coins',
+      message: 'You earned 100 points just for installation, check your wallet',
+      action: 'WALLET',
+    ),
+  ];
+  
+  Widget _buildMessagesSection(){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10,),
+      child: Column(
+        children: List.generate(_messages.length, (int index) => Card(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: _messages[index].icon,
+                  title: Text(_messages[index].title),
+                  subtitle: Text(_messages[index].message),
+                ),
+                ButtonTheme.bar(
+                  child: ButtonBar(
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text(_messages[index].action),
+                        onPressed: (){
+                          
+                        },
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
+        )),
+      ),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
@@ -167,6 +229,8 @@ class VendorHomePage extends StatelessWidget{
           child: Column(
             children: <Widget>[
               _buildTopSection(context),
+              SizedBox(height: 20,),
+              _buildMessagesSection()
             ],
           ),
         ),
