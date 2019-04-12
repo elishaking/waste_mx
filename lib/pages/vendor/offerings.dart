@@ -18,6 +18,7 @@ class _OfferingsPageState extends State<OfferingsPage>{
     DisposeOffering(
       id: 'skwjwmms',
       name: 'Household Waste',
+      imageUrl: 'assets/house.png',
       price: '5000',
       rate: '1000',
       numberOfBins: '5',
@@ -27,7 +28,19 @@ class _OfferingsPageState extends State<OfferingsPage>{
     ),
     DisposeOffering(
       id: 'sksnxnxn',
-      name: 'Household Waste',
+      name: 'Industrial Waste',
+      imageUrl: 'assets/industrial.png',
+      price: '3000',
+      rate: '1000',
+      numberOfBins: '3',
+      clientName: 'Jane Doe',
+      clientLocation: 'Xeno avenue, Ikeja, Lagos',
+      date: 'Feb 1'
+    ),
+    DisposeOffering(
+      id: 'sksnxnwwxn',
+      name: 'Industrial Waste',
+      imageUrl: 'assets/bulk.png',
       price: '3000',
       rate: '1000',
       numberOfBins: '3',
@@ -50,7 +63,7 @@ class _OfferingsPageState extends State<OfferingsPage>{
                     tag: _offerings[index].id,
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
-                      child: Image.asset('assets/clean_bin_angle.png'),
+                      child: Image.asset(_offerings[index].imageUrl),
                     ),
                   ),
                   title: customText.TitleText(

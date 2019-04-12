@@ -19,15 +19,16 @@ class OfferingDetails extends StatelessWidget{
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
           child: Column(
             children: <Widget>[
               Hero(
                 tag: offering.id,
                 child: Container(
                   child: Image(
-                    image: AssetImage('assets/clean_bin_angle.png'),
+                    image: AssetImage(offering.imageUrl),
                     height: 120,
+                    width: 120,
                   ),
                 ),
               ),
