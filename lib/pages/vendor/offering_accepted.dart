@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/dispose_offering.dart';
+import '../../models/dispose_offering.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
 class OfferingAcceptedPage extends StatelessWidget{
   final DisposeOffering offering;
