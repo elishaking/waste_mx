@@ -57,7 +57,7 @@ class OfferingDetails extends StatelessWidget{
                     // elevation: 0,
                     onPressed: (){
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                        builder: (BuildContext context) => OfferingAcceptedPage()
+                        builder: (BuildContext context) => OfferingAcceptedPage(offering)
                       ), (Route route) => false);
                     },
                   )
