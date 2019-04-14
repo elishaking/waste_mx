@@ -24,7 +24,8 @@ class _BookVendorPageState extends State<BookVendorPage>{
     'phone': '',
     'email': '',
     'username': '',
-    'password': ''
+    'password': '',
+    'image': ''
   };
   String _wastePrice = '0.0';
   final int binPrice = 100;
@@ -48,6 +49,10 @@ class _BookVendorPageState extends State<BookVendorPage>{
   void initState() {
     _controller.addListener(_onChange);
     super.initState();
+  }
+
+  void _setImage(File image){
+    _formData['image'] = image;
   }
 
   void _getImage(BuildContext context, ImageSource source){
@@ -254,6 +259,9 @@ class _BookVendorPageState extends State<BookVendorPage>{
                       _imageFiles.length == 0 ? Text('No Image(s)') : 
                       Column(
                         children: List.generate(_imageFiles.length, (int index) => Container(
+                          // decoration: BoxDecoration(
+                          //   boxShadow: [BoxShadow()]
+                          // ),
                           margin: EdgeInsets.only(bottom: _fieldsGap),
                           child: Image.file(_imageFiles[index], 
                             fit: BoxFit.cover, 

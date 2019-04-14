@@ -1,15 +1,24 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 import '../models/user.dart';
+import '../models/dispose_offering.dart';
 
-class MainModel extends Model with UserModel{
+class MainModel extends Model with ConnectedModel, UserModel{
   
 }
 
-class UserModel extends Model {
-  // Client _authenticatedUser;
+class ConnectedModel extends Model{
+  Client _authenticatedUser;
+  
+}
+
+class UserModel extends ConnectedModel {
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
 
   bool isLoading = false;
@@ -109,5 +118,32 @@ class UserModel extends Model {
     }
 
     return {'success': success, 'message': message, 'code': code};
+  }
+}
+
+class DisposeOfferingModel extends ConnectedModel{
+  Future<Map<String, String>> uploadImage(File image, {String imagePath}) async{
+    final mimeTypeData = lookupMimeType(image.path).split('/');
+    final imageUploadRequest = http.MultipartRequest('POST', Uri.parse('uri'));
+    final file = await http.MultipartFile.fromPath('image', image.path, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+    imageUploadRequest.files.add(file);
+    if(imagePath != null){
+      imageUploadRequest.fields['imagePath'] = Uri.encodeComponent(imagePath);
+    }
+    imageUploadRequest.headers['Authorization'] = 'Bearer ${_authenticatedUser.token}';
+    try{
+      final responseStream = await imageUploadRequest.send();
+      final response = await http.Response.fromStream(responseStream);
+      if(response.statusCode != 200 && response.statusCode != 201){
+        print('Something went wrong');
+        print(json.decode(response.body));
+        return null;
+      }
+      final responseData = json.decode(response.body);
+      return responseData;
+    } catch(error){
+      print(error);
+      return null;
+    }
   }
 }
