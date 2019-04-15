@@ -26,7 +26,7 @@ class OfferingDetails extends StatelessWidget{
                 tag: offering.id,
                 child: Container(
                   child: Image(
-                    image: AssetImage(offering.image),
+                    image: AssetImage(offering.imageUrl),
                     height: 120,
                     width: 120,
                   ),

@@ -15,17 +15,16 @@ class MainModel extends Model with ConnectedModel, UserModel{
 
 class ConnectedModel extends Model{
   Client _authenticatedUser;
+  bool _isLoading = false;
   
 }
 
 class UserModel extends ConnectedModel {
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
 
-  bool isLoading = false;
-
   Future<Map<String, dynamic>> signup(String email, String password) async{
     // final Map<String, dynamic> authData = 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     final http.Response response = await http.post(
@@ -40,7 +39,7 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -69,7 +68,7 @@ class UserModel extends ConnectedModel {
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async{
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     
     final http.Response response = await http.post(
@@ -84,7 +83,7 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -122,6 +121,12 @@ class UserModel extends ConnectedModel {
 }
 
 class DisposeOfferingModel extends ConnectedModel{
+  List<DisposeOffering> _disposeOfferings = [];
+
+  List<DisposeOffering> get allDisposeOfferings{
+    return List.from(_disposeOfferings);
+  }
+
   Future<Map<String, String>> uploadImage(File image, {String imagePath}) async{
     final mimeTypeData = lookupMimeType(image.path).split('/');
     final imageUploadRequest = http.MultipartRequest('POST', Uri.parse('uri'));
@@ -144,6 +149,62 @@ class DisposeOfferingModel extends ConnectedModel{
     } catch(error){
       print(error);
       return null;
+    }
+  }
+
+  Future<bool> addOffering(DisposeOffering offering, File image) async{
+    _isLoading = true;
+    notifyListeners();
+    final uploadImageData = await uploadImage(image);
+
+    if(uploadImageData == null){
+      print('Upload Failed');
+      return false;
+    }
+
+    final Map<String, dynamic> offeringData = {
+      'name': offering.name,
+      'imageUrl': uploadImageData['imageUrl'],
+      'price': offering.price,
+      'rate': offering.rate,
+      'numberOfBins': offering.numberOfBins,
+      'clientName': offering.clientName,
+      'clientLocation': offering.clientLocation,
+      'userId': _authenticatedUser.id,
+      'imagePath': uploadImageData['imagePath'],
+    };
+
+    try{
+      final http.Response response = await http.post(
+        'url',
+        body: json.encode(offeringData)
+      );
+      if(response.statusCode != 200 && response.statusCode != 201){
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      //? save uploaded offering locally
+      final DisposeOffering newOffering = DisposeOffering(
+        id: responseData['name'],
+        name: offering.name,
+        imageUrl: uploadImageData['imageUrl'],
+        price: offering.price,
+        rate: offering.rate,
+        numberOfBins: offering.numberOfBins,
+        clientName: offering.clientName,
+        clientLocation: offering.clientLocation,
+        userId: _authenticatedUser.id,
+        imagePath: uploadImageData['imagePath'],
+      );
+      _disposeOfferings.add(newOffering);
+      _isLoading = false;
+      notifyListeners();
+    }catch(error){
+      _isLoading = false;
+      notifyListeners();
+      print(error);
     }
   }
 }
