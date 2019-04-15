@@ -201,10 +201,12 @@ class DisposeOfferingModel extends ConnectedModel{
       _disposeOfferings.add(newOffering);
       _isLoading = false;
       notifyListeners();
+      return true;
     }catch(error){
       _isLoading = false;
       notifyListeners();
       print(error);
+      return false;
     }
   }
 }
