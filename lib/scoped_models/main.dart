@@ -181,7 +181,7 @@ class DisposeOfferingModel extends ConnectedModel{
 
     try{
       final http.Response response = await http.post(
-        'url',
+        'url?auth=${_authenticatedUser.token}',
         body: json.encode(offeringData)
       );
       if(response.statusCode != 200 && response.statusCode != 201){
@@ -243,4 +243,8 @@ class DisposeOfferingModel extends ConnectedModel{
       }
     });
   }
+
+  //TODO: implement update
+  //TODO: implement delete
+  //? make sure to add ?auth=<idToken> in the urls
 }
