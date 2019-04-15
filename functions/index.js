@@ -81,7 +81,7 @@ exports.storeImage = functions.https.onRequest((req, res) => {
           metadata: {
             metadata: {
               contentType: uploadData.type, //? mimetype
-              firebaseStorageDownloadToken: id
+              firebaseStorageDownloadTokens: id
             }
           }
         });

@@ -127,7 +127,7 @@ class DisposeOfferingModel extends ConnectedModel{
     return List.from(_disposeOfferings);
   }
 
-  Future<Map<String, String>> uploadImage(File image, {String imagePath}) async{
+  Future<Map<String, dynamic>> uploadImage(File image, {String imagePath}) async{
     final mimeTypeData = lookupMimeType(image.path).split('/');
     final imageUploadRequest = http.MultipartRequest('POST', Uri.parse('uri'));
     final file = await http.MultipartFile.fromPath('image', image.path, contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
