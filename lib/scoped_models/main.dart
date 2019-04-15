@@ -5,6 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 import '../models/dispose_offering.dart';
@@ -14,13 +15,38 @@ class MainModel extends Model with ConnectedModel, UserModel{
 }
 
 class ConnectedModel extends Model{
-  Client _authenticatedUser;
+  User _authenticatedUser;
   bool _isLoading = false;
   
 }
 
 class UserModel extends ConnectedModel {
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
+
+  User get user{
+    return _authenticatedUser;
+  }
+
+  UserType _getUserType(String userTypeString){
+    return userTypeString == 'Client' ? UserType.Client : UserType.Vendor;
+  }
+
+  void autoAuthenticate() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token');
+    if(token != null){
+      final String userEmail = prefs.getString('userEmail');
+      final String userId = prefs.getString('userId');
+      final UserType userType = _getUserType(prefs.getString('userType'));
+      _authenticatedUser = User(
+        id: userId,
+        email: userEmail,
+        token: token,
+        userType: userType
+      );
+      notifyListeners();
+    }
+  }
 
   Future<Map<String, dynamic>> signup(String email, String password) async{
     // final Map<String, dynamic> authData = 
@@ -47,11 +73,17 @@ class UserModel extends ConnectedModel {
     String message = 'Authentication Success';
     if(responseData.containsKey('idToken')){
       success = true;
-      _authenticatedUser = Client(
+      _authenticatedUser = User(
         id: responseData['localId'],
         email: email,
-        token: responseData['idToken']
+        token: responseData['idToken'],
+        userType: UserType.Client
       );
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', responseData['idToken']);
+      prefs.setString('userEmail', email);
+      prefs.setString('userId', responseData['localId']);
+      prefs.setString('userType', UserType.Client.toString());
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
