@@ -47,6 +47,11 @@ class UserModel extends ConnectedModel {
     String message = 'Authentication Success';
     if(responseData.containsKey('idToken')){
       success = true;
+      _authenticatedUser = Client(
+        id: responseData['localId'],
+        email: email,
+        token: responseData['idToken']
+      );
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
@@ -208,5 +213,34 @@ class DisposeOfferingModel extends ConnectedModel{
       print(error);
       return false;
     }
+  }
+
+  Future fetchOfferings(){
+    _isLoading = true;
+    notifyListeners();
+    return http.get('url?auth=${_authenticatedUser.token}').then((http.Response response){
+      _isLoading = false;
+      notifyListeners();
+      final List<DisposeOffering> fetchedOfferings = [];
+      final Map<String, dynamic> offeringsData = json.decode(response.body);
+      if(offeringsData != null){
+        offeringsData.forEach((String offeringId, dynamic productData) {
+          final DisposeOffering offering = DisposeOffering(
+            id: offeringId,
+            name: offeringsData['title'],
+            imageUrl: offeringsData['imageUrl'],
+            price: offeringsData['price'],
+            rate: offeringsData['imageUrl'],
+            numberOfBins: offeringsData['numberOfBins'],
+            clientName: offeringsData['clientName'],
+            clientLocation: offeringsData['clientLocation'],
+            userId: _authenticatedUser.id,
+            imagePath: offeringsData['imagePath'],
+          );
+          fetchedOfferings.add(offering);
+        });
+        _disposeOfferings = fetchedOfferings;
+      }
+    });
   }
 }
