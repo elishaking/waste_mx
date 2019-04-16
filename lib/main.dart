@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
           // '/': (BuildContext context) => BookVendorPage(),
           // 'login': (BuildContext context) => LoginPage(),
           'welcome': (BuildContext context) => WelcomePage(),
-          'signup': (BuildContext context) => SignUpPage('user'),
+          // 'signup': (BuildContext context) => SignUpPage('user'),
           'home': (BuildContext context) => HomePage(),
           'vendor_home': (BuildContext context) => VendorHomePage(),
           'search': (BuildContext context) => SearchPage(),

@@ -90,7 +90,7 @@ class UserModel extends ConnectedModel {
         phone: prefs.getString('clientPhone'),
         username: prefs.getString('clientUsername'),
         address: prefs.getString('clientAddress'),
-        dateCreated: DateTime.parse(prefs.getString('clientDateCreated'))
+        dateCreated: prefs.getString('clientDateCreated')
       );
     } else{
       _vendor = Vendor(
@@ -101,7 +101,7 @@ class UserModel extends ConnectedModel {
         companyAddress: prefs.getString('companyAddress'),
         username: prefs.getString('vendorUsername'),
         address: prefs.getString('vendorAddress'),
-        dateCreated: DateTime.parse(prefs.getString('vendorDateCreated'))
+        dateCreated: prefs.getString('vendorDateCreated')
       );
     }
     return true;
@@ -187,6 +187,8 @@ class UserModel extends ConnectedModel {
       success = userAdded;
       if(!success) message = 'Failed to upload user data';
     } else{
+      isLoading = false;
+      notifyListeners();
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
           message = 'Your email already exists';

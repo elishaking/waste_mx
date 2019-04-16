@@ -28,18 +28,18 @@ class Client{
   final String phone;
   final String username;
   final String address;
-  final DateTime dateCreated;
+  final String dateCreated;
 
   Client({this.id, this.name, this.phone, this.username, this.address, this.dateCreated});
 
   Map<String, dynamic> toMap(){
     return {
-      'id': id,
-      'name': name,
-      'phone': phone,
-      'username': username,
-      'address': address,
-      'dateCreated': dateCreated,
+      'clientId': id,
+      'clientName': name,
+      'clientPhone': phone,
+      'clientUsername': username,
+      'clientAddress': address,
+      'clientDateCreated': dateCreated,
     };
   }
 }
@@ -52,20 +52,20 @@ class Vendor{
   final String phone;
   final String username;
   final String address;
-  final DateTime dateCreated;
+  final String dateCreated;
 
   Vendor({this.id, this.name, this.companyName, this.companyAddress, this.phone, this.username, this.address, this.dateCreated});
 
   Map<String, dynamic> toMap(){
     return {
-      'id': id,
-      'name': name,
-      'phone': phone,
-      'username': username,
-      'address': address,
-      'companyName': companyName,
-      'companyAddress': companyAddress,
-      'dateCreated': dateCreated,
+      'clientId': id,
+      'clientName': name,
+      'clientPhone': phone,
+      'clientUsername': username,
+      'clientAddress': address,
+      'clientCompanyName': companyName,
+      'clientCompanyAddress': companyAddress,
+      'clientDateCreated': dateCreated,
     };
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+
 import '../scoped_models/main.dart';
+import '../models/user.dart';
 
 class LoginPage extends StatefulWidget{
-  final String role;
+  final UserType userType;
 
-  LoginPage(this.role);
+  LoginPage(this.userType);
 
   @override
   State<StatefulWidget> createState() {
@@ -71,7 +73,7 @@ class _LoginPageState extends State<LoginPage>{
       onPressed: (){
         // if(_formKey.currentState.validate()){
           _formKey.currentState.save();
-          if(widget.role == 'user'){
+          if(widget.userType == UserType.Client){
             model.login(_formData['email'], _formData['password']).then((data) {
               if(data['success']){
                 Navigator.pushReplacementNamed(context, 'home');

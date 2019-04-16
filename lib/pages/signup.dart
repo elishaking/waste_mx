@@ -85,7 +85,7 @@ class _SignUpPageState extends State<SignUpPage>{
               phone: _formData['phone'],
               username: _formData['username'],
               address: _formData['address'],
-              dateCreated: DateTime.now()
+              dateCreated: DateTime.now().toIso8601String()
             );
             model.signup(_formData['email'], _formData['password'], client: _client).then((data) {
               if(data['success']){
@@ -282,7 +282,7 @@ class _SignUpPageState extends State<SignUpPage>{
                         child: Text("Already have an account, Login"),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => LoginPage(widget.role)
+                            builder: (BuildContext context) => LoginPage(widget.userType)
                           ));
                         },
                       )
