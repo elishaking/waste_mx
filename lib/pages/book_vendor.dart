@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped_models/main.dart';
+
+import '../models/dispose_offering.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
@@ -11,6 +15,9 @@ import './edit_price.dart';
 import './wallet.dart';
 
 class BookVendorPage extends StatefulWidget{
+  final String wasteType;
+  BookVendorPage({@required this.wasteType});
+
   @override
   State<StatefulWidget> createState() {
     return _BookVendorPageState();
@@ -21,14 +28,12 @@ class _BookVendorPageState extends State<BookVendorPage>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _formData = {
-    'phone': '',
-    'email': '',
-    'username': '',
-    'password': '',
+    'location': '',
+    'numberOfBins': '',
     'image': ''
   };
   String _wastePrice = '0.0';
-  final int binPrice = 100;
+  final int rate = 100; //? bin price
 
   List<File> _imageFiles = List<File>();
 
@@ -40,7 +45,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
     if(text.isNotEmpty){
       print(text);
       setState(() {
-       _wastePrice =  (double.parse(text) * binPrice).toString();
+       _wastePrice =  (double.parse(text) * rate).toString();
       });
     }
   }
@@ -197,7 +202,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                           }
                         },
                         onSaved: (String value){
-                          _formData['username'] = value;
+                          _formData['numberOfBins'] = value;
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
@@ -205,7 +210,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         padding: EdgeInsets.only(right: 5),
                         alignment: Alignment.centerRight,
                         child: customText.BodyText(
-                          text: 'NGN ${binPrice.toString()} per bin',
+                          text: 'NGN ${rate.toString()} per bin',
                           textColor: Colors.black,
                         ),
                       ),
@@ -272,12 +277,26 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         )),
                       ),
                       SizedBox(height: _fieldsGap,),
-                      RaisedButton(
-                        child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
-                        onPressed: (){
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => WalletPage(true)
-                          ));
+                      ScopedModelDescendant(
+                        builder: (BuildContext context, Widget child, MainModel model){
+                          return model.isLoading ? CircularProgressIndicator() : RaisedButton(
+                            child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
+                            onPressed: (){
+                              model.addOffering(DisposeOffering(
+                                name: widget.wasteType,
+                                imageUrl: '',
+                                price: _wastePrice,
+                                rate: rate.toString(),
+                                numberOfBins: _formData['numberOfBins'],
+                                clientName: model.user.email,
+                                clientLocation: _formData['location']
+                              ), _imageFiles[0]).then((_){
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                  builder: (BuildContext context) => WalletPage(true)
+                                ));
+                              });
+                            },
+                          );
                         },
                       )
                     ],

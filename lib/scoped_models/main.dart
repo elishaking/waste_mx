@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import '../models/dispose_offering.dart';
 
-class MainModel extends Model with ConnectedModel, UserModel{
+class MainModel extends Model with ConnectedModel, UserModel, DisposeOfferingModel{
   
 }
 
@@ -23,6 +23,7 @@ class ConnectedModel extends Model{
 
 class UserModel extends ConnectedModel {
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
+  String _dbUrl = 'https://waste-mx.firebaseio.com/';
 
   User get user{
     return _authenticatedUser;
@@ -64,7 +65,14 @@ class UserModel extends ConnectedModel {
     prefs.setString('userType', UserType.Client.toString());
   }
 
-  Future<Map<String, dynamic>> signup(String email, String password) async{
+  void _saveUserData(Map<String, dynamic> data) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    data.forEach((key, value) {
+      prefs.setString(key, value.toString());
+    });
+  }
+
+  Future<Map<String, dynamic>> signup(String email, String password, {Client client, Vendor vendor}) async{
     // final Map<String, dynamic> authData = 
     isLoading = true;
     notifyListeners();
@@ -90,6 +98,7 @@ class UserModel extends ConnectedModel {
     if(responseData.containsKey('idToken')){
       success = true;
       _saveAuthUser(responseData);
+      _saveUserData(vendor == null ? client.toMap() : vendor.toMap());
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
