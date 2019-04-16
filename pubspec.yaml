@@ -114,12 +114,12 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   fonts:
-    - family: Montserrat
-      fonts:
-      - asset: assets/fonts/Montserrat-Regular.ttf
-    - family: Lato
-      fonts:
-      - asset: assets/fonts/Lato-Regular.ttf
+  - family: Montserrat
+    fonts:
+    - asset: assets/fonts/Montserrat-Regular.ttf
+  - family: Lato
+    fonts:
+    - asset: assets/fonts/Lato-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

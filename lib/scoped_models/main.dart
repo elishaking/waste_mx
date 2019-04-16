@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +17,7 @@ class MainModel extends Model with ConnectedModel, UserModel{
 
 class ConnectedModel extends Model{
   User _authenticatedUser;
-  bool _isLoading = false;
+  bool isLoading = false;
   
 }
 
@@ -28,12 +29,13 @@ class UserModel extends ConnectedModel {
   }
 
   UserType _getUserType(String userTypeString){
-    return userTypeString == 'Client' ? UserType.Client : UserType.Vendor;
+    return userTypeString == 'UserType.Client' ? UserType.Client : UserType.Vendor;
   }
 
   void autoAuthenticate() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
+    print(token);
     if(token != null){
       final String userEmail = prefs.getString('userEmail');
       final String userId = prefs.getString('userId');
@@ -48,9 +50,23 @@ class UserModel extends ConnectedModel {
     }
   }
 
+  void _saveAuthUser(responseData) async{
+    _authenticatedUser = User(
+      id: responseData['localId'],
+      email: responseData['email'],
+      token: responseData['idToken'],
+      userType: UserType.Client
+    );
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', responseData['idToken']);
+    prefs.setString('userEmail', responseData['email']);
+    prefs.setString('userId', responseData['localId']);
+    prefs.setString('userType', UserType.Client.toString());
+  }
+
   Future<Map<String, dynamic>> signup(String email, String password) async{
     // final Map<String, dynamic> authData = 
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
 
     final http.Response response = await http.post(
@@ -65,7 +81,7 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    _isLoading = false;
+    isLoading = false;
     notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -73,17 +89,7 @@ class UserModel extends ConnectedModel {
     String message = 'Authentication Success';
     if(responseData.containsKey('idToken')){
       success = true;
-      _authenticatedUser = User(
-        id: responseData['localId'],
-        email: email,
-        token: responseData['idToken'],
-        userType: UserType.Client
-      );
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', responseData['idToken']);
-      prefs.setString('userEmail', email);
-      prefs.setString('userId', responseData['localId']);
-      prefs.setString('userType', UserType.Client.toString());
+      _saveAuthUser(responseData);
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
@@ -105,11 +111,11 @@ class UserModel extends ConnectedModel {
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async{
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
     
     final http.Response response = await http.post(
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${_apiKey}',
+      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -120,7 +126,7 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    _isLoading = false;
+    isLoading = false;
     notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -129,6 +135,8 @@ class UserModel extends ConnectedModel {
     int code = -1;
     if(responseData.containsKey('idToken')){
       success = true;
+    print(responseData.values);
+      _saveAuthUser(responseData);
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_NOT_FOUND':
@@ -190,7 +198,7 @@ class DisposeOfferingModel extends ConnectedModel{
   }
 
   Future<bool> addOffering(DisposeOffering offering, File image) async{
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
     final uploadImageData = await uploadImage(image);
 
@@ -217,7 +225,7 @@ class DisposeOfferingModel extends ConnectedModel{
         body: json.encode(offeringData)
       );
       if(response.statusCode != 200 && response.statusCode != 201){
-        _isLoading = false;
+        isLoading = false;
         notifyListeners();
         return false;
       }
@@ -236,11 +244,11 @@ class DisposeOfferingModel extends ConnectedModel{
         imagePath: uploadImageData['imagePath'],
       );
       _disposeOfferings.add(newOffering);
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
       return true;
     }catch(error){
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
       print(error);
       return false;
@@ -248,10 +256,10 @@ class DisposeOfferingModel extends ConnectedModel{
   }
 
   Future fetchOfferings(){
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
     return http.get('url?auth=${_authenticatedUser.token}').then((http.Response response){
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
       final List<DisposeOffering> fetchedOfferings = [];
       final Map<String, dynamic> offeringsData = json.decode(response.body);

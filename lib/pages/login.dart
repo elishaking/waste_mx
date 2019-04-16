@@ -216,14 +216,14 @@ class _LoginPageState extends State<LoginPage>{
                       ),
                       ScopedModelDescendant<MainModel>(
                         builder: (BuildContext context, Widget child, MainModel model){
-                          // return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
-                          return  RaisedButton(
-                            textColor: Colors.white,
-                            child: Text('Login'),
-                            onPressed: (){
-                              Navigator.pushReplacementNamed(context, widget.role == 'user' ? 'home' : 'vendor_home');
-                            },
-                          );
+                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
+                          // return  RaisedButton(
+                          //   textColor: Colors.white,
+                          //   child: Text('Login'),
+                          //   onPressed: (){
+                          //     Navigator.pushReplacementNamed(context, widget.role == 'user' ? 'home' : 'vendor_home');
+                          //   },
+                          // );
                         },
                       ),
                       FlatButton(
