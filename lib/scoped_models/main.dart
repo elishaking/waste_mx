@@ -17,8 +17,12 @@ class MainModel extends Model with ConnectedModel, UserModel, DisposeOfferingMod
 
 class ConnectedModel extends Model{
   User _authenticatedUser;
-  bool isLoading = false;
+  bool _isLoading = false;
   String _dbUrl = 'https://waste-mx.firebaseio.com/';
+
+  bool get isLoading{
+    return _isLoading;
+  }
 }
 
 class UserModel extends ConnectedModel {
@@ -114,7 +118,7 @@ class UserModel extends ConnectedModel {
         body: json.encode(userData)
       );
       if(response.statusCode != 200 && response.statusCode != 201){
-        isLoading = false;
+        _isLoading = false;
         notifyListeners();
         return false;
       }
@@ -142,11 +146,11 @@ class UserModel extends ConnectedModel {
       }
       userData['id'] = responseData['name'];
       await _saveUserData(userData);
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       return true;
     }catch(error){
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       print(error);
       return false;
@@ -155,7 +159,7 @@ class UserModel extends ConnectedModel {
 
   Future<Map<String, dynamic>> signup(String email, String password, {Client client, Vendor vendor}) async{
     // final Map<String, dynamic> authData = 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     final http.Response response = await http.post(
@@ -170,7 +174,7 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    // isLoading = false;
+    // _isLoading = false;
     // notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -187,7 +191,7 @@ class UserModel extends ConnectedModel {
       success = userAdded;
       if(!success) message = 'Failed to upload user data';
     } else{
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
@@ -209,7 +213,7 @@ class UserModel extends ConnectedModel {
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async{
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     
     final http.Response response = await http.post(
@@ -224,7 +228,7 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    // isLoading = false;
+    // _isLoading = false;
     // notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -296,7 +300,7 @@ class DisposeOfferingModel extends ConnectedModel{
   }
 
   Future<bool> addOffering(DisposeOffering offering, File image) async{
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     final uploadImageData = await uploadImage(image);
 
@@ -323,7 +327,7 @@ class DisposeOfferingModel extends ConnectedModel{
         body: json.encode(offeringData)
       );
       if(response.statusCode != 200 && response.statusCode != 201){
-        isLoading = false;
+        _isLoading = false;
         notifyListeners();
         return false;
       }
@@ -342,11 +346,11 @@ class DisposeOfferingModel extends ConnectedModel{
         imagePath: uploadImageData['imagePath'],
       );
       _disposeOfferings.add(newOffering);
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       return true;
     }catch(error){
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       print(error);
       return false;
@@ -354,10 +358,10 @@ class DisposeOfferingModel extends ConnectedModel{
   }
 
   Future fetchOfferings(){
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     return http.get('$_dbUrl?auth=${_authenticatedUser.token}').then((http.Response response){
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       final List<DisposeOffering> fetchedOfferings = [];
       final Map<String, dynamic> offeringsData = json.decode(response.body);
