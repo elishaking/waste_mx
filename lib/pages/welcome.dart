@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './onboarding.dart';
-
 import '../widgets/custom_text.dart' as customText;
+
+import './onboarding.dart';
 
 class WelcomePage extends StatelessWidget{
   @override

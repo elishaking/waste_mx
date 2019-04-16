@@ -1,6 +1,6 @@
 # waste_mx
 
-WasteMX is a waste management app
+A waste management app
 
 ## Getting Started
 

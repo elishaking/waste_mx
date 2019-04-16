@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
+
 import '../widgets/custom_text.dart' as customText;
 
 import './signup.dart';
@@ -12,7 +14,7 @@ class SelectRolePage extends StatefulWidget{
 }
 
 class _SelectRolePageState extends State<SelectRolePage>{
-  bool _userSelected = false;
+  bool _clientSelected = false;
   bool _vendorSelected = false;
 
   @override
@@ -42,10 +44,10 @@ class _SelectRolePageState extends State<SelectRolePage>{
               ListTile(
                 title: Text('Continue as User'),
                 subtitle: Text('Request for Vendor (waste collector)'),
-                selected: _userSelected,
+                selected: _clientSelected,
                 onTap: (){
                   setState(() {
-                    _userSelected = true;
+                    _clientSelected = true;
                     _vendorSelected = false;
                   });
                 },
@@ -58,7 +60,7 @@ class _SelectRolePageState extends State<SelectRolePage>{
                 onTap: (){
                   setState(() {
                     _vendorSelected = true;
-                    _userSelected = false;
+                    _clientSelected = false;
                   });
                 },
               ),
@@ -69,7 +71,7 @@ class _SelectRolePageState extends State<SelectRolePage>{
                   textColor: Colors.white,
                   onPressed: (){
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => SignUpPage(_userSelected ? 'user' : 'vendor')
+                      builder: (BuildContext context) => SignUpPage(_clientSelected ? UserType.Client : UserType.Vendor)
                     ));
                   },
                 ),

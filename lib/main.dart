@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import './models/user.dart';
 import './scoped_models/main.dart';
 
 import './pages/welcome.dart';
@@ -17,12 +18,27 @@ import './pages/book_vendor.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  final MainModel _model = MainModel();
+  bool _isAuthenticated = false;
+
+  @override
+  void initState() {
+    _model.autoAuthenticate();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModel<MainModel>(
-      model: MainModel(),
+      model: _model,
       child: MaterialApp(
         title: 'Waste MX',
         theme: ThemeData(
@@ -36,11 +52,17 @@ class MyApp extends StatelessWidget {
           ),
         ),
         color: Colors.green,
-        home: BookVendorPage(),
+        // home: WelcomePage(),
         routes: {
+          '/': (BuildContext context) => ScopedModelDescendant(
+            builder: (BuildContext context, Widget child, MainModel model){
+              return model.user == null ? WelcomePage() : (model.user.userType == UserType.Client ? HomePage() : VendorHomePage());
+            },
+          ),
+          // '/': (BuildContext context) => BookVendorPage(),
           // 'login': (BuildContext context) => LoginPage(),
           'welcome': (BuildContext context) => WelcomePage(),
-          'signup': (BuildContext context) => SignUpPage('user'),
+          // 'signup': (BuildContext context) => SignUpPage('user'),
           'home': (BuildContext context) => HomePage(),
           'vendor_home': (BuildContext context) => VendorHomePage(),
           'search': (BuildContext context) => SearchPage(),
