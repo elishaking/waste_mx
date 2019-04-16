@@ -299,10 +299,20 @@ class DisposeOfferingModel extends ConnectedModel{
     }
   }
 
-  Future<bool> addOffering(DisposeOffering offering, File image) async{
+  Future<bool> addOffering(DisposeOffering offering, List<File> imageFiles) async{
     _isLoading = true;
     notifyListeners();
-    final uploadImageData = await uploadImage(image);
+    final List uploadImageData = new List();
+    final List _uploadImageUrls = new List();
+    final List _uploadImagePaths = new List();
+    // imageFiles.forEach((File imageFile) {
+    //   uploadImageData.add(await uploadImage(imageFile));
+    // });
+    for(int i = 0; i < imageFiles.length; i++){
+      uploadImageData[i] = await uploadImage(imageFiles[i]);
+      _uploadImageUrls[i] = uploadImageData[i]['imageUrl'];
+      _uploadImagePaths[i] = uploadImageData[i]['imagePath'];
+    }
 
     if(uploadImageData == null){
       print('Upload Failed');
@@ -311,14 +321,14 @@ class DisposeOfferingModel extends ConnectedModel{
 
     final Map<String, dynamic> offeringData = {
       'name': offering.name,
-      'imageUrl': uploadImageData['imageUrl'],
+      'imageUrls': _uploadImageUrls,
       'price': offering.price,
       'rate': offering.rate,
       'numberOfBins': offering.numberOfBins,
       'clientName': offering.clientName,
       'clientLocation': offering.clientLocation,
       'userId': _authenticatedUser.id,
-      'imagePath': uploadImageData['imagePath'],
+      'imagePath': _uploadImagePaths,
     };
 
     try{
@@ -336,14 +346,14 @@ class DisposeOfferingModel extends ConnectedModel{
       final DisposeOffering newOffering = DisposeOffering(
         id: responseData['name'],
         name: offering.name,
-        imageUrl: uploadImageData['imageUrl'],
+        imageUrls: _uploadImageUrls,
         price: offering.price,
         rate: offering.rate,
         numberOfBins: offering.numberOfBins,
         clientName: offering.clientName,
         clientLocation: offering.clientLocation,
         userId: _authenticatedUser.id,
-        imagePath: uploadImageData['imagePath'],
+        imagePaths: _uploadImagePaths,
       );
       _disposeOfferings.add(newOffering);
       _isLoading = false;
@@ -370,14 +380,14 @@ class DisposeOfferingModel extends ConnectedModel{
           final DisposeOffering offering = DisposeOffering(
             id: offeringId,
             name: offeringsData['title'],
-            imageUrl: offeringsData['imageUrl'],
+            imageUrls: offeringsData['imageUrls'],
             price: offeringsData['price'],
             rate: offeringsData['imageUrl'],
             numberOfBins: offeringsData['numberOfBins'],
             clientName: offeringsData['clientName'],
             clientLocation: offeringsData['clientLocation'],
             userId: _authenticatedUser.id,
-            imagePath: offeringsData['imagePath'],
+            imagePaths: offeringsData['imagePaths'],
           );
           fetchedOfferings.add(offering);
         });

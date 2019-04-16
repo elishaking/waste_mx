@@ -292,13 +292,12 @@ class _BookVendorPageState extends State<BookVendorPage>{
                             onPressed: (){
                               model.addOffering(DisposeOffering(
                                 name: widget.wasteType,
-                                imageUrl: '',
                                 price: _wastePrice,
                                 rate: rate.toString(),
                                 numberOfBins: _formData['numberOfBins'],
                                 clientName: 'new',
                                 clientLocation: _formData['location']
-                              ), _imageFiles[0]).then((_){
+                              ), _imageFiles).then((_){
                                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                                   builder: (BuildContext context) => WalletPage(true)
                                 ));
