@@ -70,12 +70,9 @@ class VendorListPage extends StatelessWidget{
                     ),
                     title: Text(_vendors[index]['title'], style: TextStyle(fontSize: _getSize(18)),),
                     subtitle: _buildVendorRating(_vendors[index]['rating']),
-                    trailing: Chip(
-                      label: customText.BodyText(
-                        text: _vendors[index]['verified'] ? 'Verified' : 'Not Verified',
-                      ),
-                      labelPadding: EdgeInsets.symmetric(horizontal: _getSize(10), vertical: 0),
-                      backgroundColor: _vendors[index]['verified'] ? Colors.green : Colors.red,
+                    trailing: customText.BodyText(
+                      text: _vendors[index]['verified'] ? 'Verified' : 'Not Verified',
+                      textColor: _vendors[index]['verified'] ? Colors.green : Colors.red,
                     ),
                     // onTap: (){
                     //   Navigator.of(context).push(MaterialPageRoute(
@@ -86,6 +83,25 @@ class VendorListPage extends StatelessWidget{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+                      FlatButton(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.info_outline,
+                            color: Theme.of(context).primaryColor,
+                            size: _getSize(23),),
+                            SizedBox(width: _getSize(10),),
+                            customText.BodyText(
+                              text: 'DETAILS',
+                              textColor: Theme.of(context).primaryColor,
+                            )
+                          ],
+                        ),
+                        onPressed: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => VendorPage(_vendors[index])
+                          ));
+                        },
+                      ),
                       FlatButton(
                         child: Row(
                           children: <Widget>[
@@ -106,25 +122,6 @@ class VendorListPage extends StatelessWidget{
                           ));
                         },
                       ),
-                      FlatButton(
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.info_outline,
-                            color: Theme.of(context).primaryColor,
-                            size: _getSize(23),),
-                            SizedBox(width: _getSize(10),),
-                            customText.BodyText(
-                              text: 'DETAILS',
-                              textColor: Theme.of(context).primaryColor,
-                            )
-                          ],
-                        ),
-                        onPressed: (){
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => VendorPage(_vendors[index])
-                          ));
-                        },
-                      )
                     ],
                   ),
                 ],

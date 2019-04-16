@@ -74,29 +74,29 @@ class VendorPage extends StatelessWidget{
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: ratingWidget.RatingDisplay(rating: _vendor['rating']),
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              RaisedButton(
-                                child: Text('Chat'),
-                                elevation: 0,
-                                color: Colors.black12,
-                                onPressed: (){
+                        // Container(
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //     children: <Widget>[
+                        //       RaisedButton(
+                        //         child: Text('Chat'),
+                        //         elevation: 0,
+                        //         color: Colors.black12,
+                        //         onPressed: (){
 
-                                },
-                              ),
-                              RaisedButton(
-                                child: Text('Call'),
-                                elevation: 0,
-                                color: Colors.black12,
-                                onPressed: (){
+                        //         },
+                        //       ),
+                        //       RaisedButton(
+                        //         child: Text('Call'),
+                        //         elevation: 0,
+                        //         color: Colors.black12,
+                        //         onPressed: (){
                                   
-                                },
-                              )
-                            ],
-                          ),
-                        ),
+                        //         },
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
                         Row(
                           children: <Widget>[
                             Padding(
