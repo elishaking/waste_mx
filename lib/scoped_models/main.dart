@@ -268,10 +268,10 @@ class UserModel extends ConnectedModel {
 }
 
 class DisposeOfferingModel extends ConnectedModel{
-  List<DisposeOffering> _disposeOfferings = [];
+  Map<String, List> _offerings;
 
-  List<DisposeOffering> get allDisposeOfferings{
-    return List.from(_disposeOfferings);
+  Map<String, List> get allOfferings{
+    return Map.from(_offerings);
   }
 
   Future<Map<String, dynamic>> uploadImage(File image, {String imagePath}) async{
@@ -343,7 +343,7 @@ class DisposeOfferingModel extends ConnectedModel{
       }
       final Map<String, dynamic> responseData = json.decode(response.body);
       //? save uploaded offering locally
-      final DisposeOffering newOffering = DisposeOffering(
+      final DisposeOffering newDisposeOffering = DisposeOffering(
         id: responseData['name'],
         name: offering.name,
         imageUrls: _uploadImageUrls,
@@ -355,7 +355,7 @@ class DisposeOfferingModel extends ConnectedModel{
         userId: _authenticatedUser.id,
         imagePaths: _uploadImagePaths,
       );
-      _disposeOfferings.add(newOffering);
+      _offerings['Dispose Offerings'].add(newDisposeOffering);
       _isLoading = false;
       notifyListeners();
       return true;
@@ -367,13 +367,13 @@ class DisposeOfferingModel extends ConnectedModel{
     }
   }
 
-  Future fetchOfferings(){
+  Future<Map<String, List>> fetchOfferings(){
     _isLoading = true;
     notifyListeners();
     return http.get('$_dbUrl?auth=${_authenticatedUser.token}').then((http.Response response){
       _isLoading = false;
       notifyListeners();
-      final List<DisposeOffering> fetchedOfferings = [];
+      final List<DisposeOffering> disposeOfferings = [];
       final Map<String, dynamic> offeringsData = json.decode(response.body);
       if(offeringsData != null){
         offeringsData.forEach((String offeringId, dynamic productData) {
@@ -389,7 +389,7 @@ class DisposeOfferingModel extends ConnectedModel{
             userId: _authenticatedUser.id,
             imagePaths: offeringsData['imagePaths'],
           );
-          fetchedOfferings.add(offering);
+          disposeOfferings.add(offering);
         });
         _disposeOfferings = fetchedOfferings;
       }
