@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped_models/main.dart';
+import '../models/user.dart';
 
 import './login.dart';
 
 class SignUpPage extends StatefulWidget{
-  final String role;
+  final UserType userType;
 
-  SignUpPage(this.role);
+  SignUpPage(this.userType);
 
   @override
   State<StatefulWidget> createState() {
@@ -78,8 +79,15 @@ class _SignUpPageState extends State<SignUpPage>{
       onPressed: (){
         // if(_formKey.currentState.validate()){
           _formKey.currentState.save();
-          if(widget.role == 'user'){
-            model.signup(_formData['email'], _formData['password']).then((data) {
+          if(widget.userType == UserType.Client){
+            Client _client = Client(
+              name: _formData['name'],
+              phone: _formData['phone'],
+              username: _formData['username'],
+              address: _formData['address'],
+              dateCreated: DateTime.now()
+            );
+            model.signup(_formData['email'], _formData['password'], client: _client).then((data) {
               if(data['success']){
                 Navigator.pushReplacementNamed(context, 'home');
               } else{
@@ -260,14 +268,14 @@ class _SignUpPageState extends State<SignUpPage>{
                       SizedBox(height: 25,),
                       ScopedModelDescendant<MainModel>(
                         builder: (BuildContext context, Widget child, MainModel model){
-                          // return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
-                          return  RaisedButton(
-                            textColor: Colors.white,
-                            child: Text('Sign Up'),
-                            onPressed: (){
-                              Navigator.pushReplacementNamed(context, widget.role == 'user' ? 'home' : 'vendor_home');
-                            },
-                          );
+                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
+                          // return  RaisedButton(
+                          //   textColor: Colors.white,
+                          //   child: Text('Sign Up'),
+                          //   onPressed: (){
+                          //     Navigator.pushReplacementNamed(context, widget.role == 'user' ? 'home' : 'vendor_home');
+                          //   },
+                          // );
                         },
                       ),
                       FlatButton(

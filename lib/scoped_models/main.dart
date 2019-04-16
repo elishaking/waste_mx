@@ -60,7 +60,7 @@ class UserModel extends ConnectedModel {
     }
   }
 
-  void _saveAuthUser(responseData) async{
+  Future _saveAuthUser(responseData) async{
     _authenticatedUser = User(
       id: responseData['localId'],
       email: responseData['email'],
@@ -74,11 +74,37 @@ class UserModel extends ConnectedModel {
     prefs.setString('userType', UserType.Client.toString());
   }
 
-  void _saveUserData(Map<String, dynamic> data) async{
+  Future _saveUserData(Map<String, dynamic> data) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     data.forEach((key, value) {
       prefs.setString(key, value.toString());
     });
+  }
+
+  Future<bool> _getUserData() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(_authenticatedUser.userType == UserType.Client){
+      _client = Client(
+        id: prefs.getString('clientId'),
+        name: prefs.getString('clientName'),
+        phone: prefs.getString('clientPhone'),
+        username: prefs.getString('clientUsername'),
+        address: prefs.getString('clientAddress'),
+        dateCreated: DateTime.parse(prefs.getString('clientDateCreated'))
+      );
+    } else{
+      _vendor = Vendor(
+        id: prefs.getString('vendorId'),
+        name: prefs.getString('vendorName'),
+        phone: prefs.getString('vendorPhone'),
+        companyName: prefs.getString('companyName'),
+        companyAddress: prefs.getString('companyAddress'),
+        username: prefs.getString('vendorUsername'),
+        address: prefs.getString('vendorAddress'),
+        dateCreated: DateTime.parse(prefs.getString('vendorDateCreated'))
+      );
+    }
+    return true;
   }
 
   Future<bool> _addUser(Map<String, dynamic> userData, String collectionName) async{
@@ -115,7 +141,7 @@ class UserModel extends ConnectedModel {
         );
       }
       userData['id'] = responseData['name'];
-      _saveUserData(userData);
+      await _saveUserData(userData);
       isLoading = false;
       notifyListeners();
       return true;
@@ -151,7 +177,7 @@ class UserModel extends ConnectedModel {
     bool success = false;
     String message = 'Authentication Success';
     if(responseData.containsKey('idToken')){
-      _saveAuthUser(responseData);
+      await _saveAuthUser(responseData);
       bool userAdded = false;
       if(vendor == null){
         userAdded = await _addUser(client.toMap(), 'clients');
@@ -196,8 +222,8 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    isLoading = false;
-    notifyListeners();
+    // isLoading = false;
+    // notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
@@ -205,8 +231,8 @@ class UserModel extends ConnectedModel {
     int code = -1;
     if(responseData.containsKey('idToken')){
       success = true;
-    print(responseData.values);
-      _saveAuthUser(responseData);
+      await _saveAuthUser(responseData);
+      await _getUserData(); //! prevent login if data not saved locally
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_NOT_FOUND':

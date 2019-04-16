@@ -288,7 +288,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                                 price: _wastePrice,
                                 rate: rate.toString(),
                                 numberOfBins: _formData['numberOfBins'],
-                                clientName: model.user.email,
+                                clientName: model.client.name,
                                 clientLocation: _formData['location']
                               ), _imageFiles[0]).then((_){
                                 Navigator.of(context).pushReplacement(MaterialPageRoute(
