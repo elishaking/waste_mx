@@ -18,12 +18,21 @@ class MainModel extends Model with ConnectedModel, UserModel, DisposeOfferingMod
 class ConnectedModel extends Model{
   User _authenticatedUser;
   bool isLoading = false;
-  
+  String _dbUrl = 'https://waste-mx.firebaseio.com/';
 }
 
 class UserModel extends ConnectedModel {
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
-  String _dbUrl = 'https://waste-mx.firebaseio.com/';
+  Client _client;
+  Vendor _vendor;
+
+  Client get client{
+    return _client;
+  }
+
+  Vendor get vendor{
+    return _vendor;
+  }
 
   User get user{
     return _authenticatedUser;
@@ -72,6 +81,52 @@ class UserModel extends ConnectedModel {
     });
   }
 
+  Future<bool> _addUser(Map<String, dynamic> userData, String collectionName) async{
+    try{
+      final http.Response response = await http.post(
+        '$_dbUrl$collectionName.json?auth=${_authenticatedUser.token}',
+        body: json.encode(userData)
+      );
+      if(response.statusCode != 200 && response.statusCode != 201){
+        isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if(collectionName == "clients"){
+        _client = Client(
+          id: responseData['name'],
+          name: userData['name'],
+          phone: userData['phone'],
+          username: userData['username'],
+          address: userData['address'],
+          dateCreated: userData['dateCreated']
+        );
+      } else{
+        _vendor = Vendor(
+          id: responseData['name'],
+          name: userData['name'],
+          companyName: userData['companyName'],
+          companyAddress: userData['companyAddress'],
+          phone: userData['phone'],
+          username: userData['username'],
+          address: userData['address'],
+          dateCreated: userData['dateCreated']
+        );
+      }
+      userData['id'] = responseData['name'];
+      _saveUserData(userData);
+      isLoading = false;
+      notifyListeners();
+      return true;
+    }catch(error){
+      isLoading = false;
+      notifyListeners();
+      print(error);
+      return false;
+    }
+  }
+
   Future<Map<String, dynamic>> signup(String email, String password, {Client client, Vendor vendor}) async{
     // final Map<String, dynamic> authData = 
     isLoading = true;
@@ -89,16 +144,22 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    isLoading = false;
-    notifyListeners();
+    // isLoading = false;
+    // notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
     String message = 'Authentication Success';
     if(responseData.containsKey('idToken')){
-      success = true;
       _saveAuthUser(responseData);
-      _saveUserData(vendor == null ? client.toMap() : vendor.toMap());
+      bool userAdded = false;
+      if(vendor == null){
+        userAdded = await _addUser(client.toMap(), 'clients');
+      } else{
+        userAdded = await _addUser(vendor.toMap(), 'vendors');
+      }
+      success = userAdded;
+      if(!success) message = 'Failed to upload user data';
     } else{
       switch(responseData['error']['message']){
         case 'EMAIL_EXISTS':
@@ -230,7 +291,7 @@ class DisposeOfferingModel extends ConnectedModel{
 
     try{
       final http.Response response = await http.post(
-        'url?auth=${_authenticatedUser.token}',
+        '$_dbUrl?auth=${_authenticatedUser.token}',
         body: json.encode(offeringData)
       );
       if(response.statusCode != 200 && response.statusCode != 201){
@@ -267,7 +328,7 @@ class DisposeOfferingModel extends ConnectedModel{
   Future fetchOfferings(){
     isLoading = true;
     notifyListeners();
-    return http.get('url?auth=${_authenticatedUser.token}').then((http.Response response){
+    return http.get('$_dbUrl?auth=${_authenticatedUser.token}').then((http.Response response){
       isLoading = false;
       notifyListeners();
       final List<DisposeOffering> fetchedOfferings = [];
