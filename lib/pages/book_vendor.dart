@@ -247,7 +247,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('Add Image'),
+                            Text('Add Image: ${_imageFiles.length}'),
                             IconButton(
                               icon: Icon(Icons.camera),
                               onPressed: (){
@@ -268,11 +268,19 @@ class _BookVendorPageState extends State<BookVendorPage>{
                           //   boxShadow: [BoxShadow()]
                           // ),
                           margin: EdgeInsets.only(bottom: _fieldsGap),
-                          child: Image.file(_imageFiles[index], 
-                            fit: BoxFit.cover, 
-                            height: 300, 
-                            width: MediaQuery.of(context).size.width, 
-                            alignment: Alignment.topCenter, //! can change to center
+                          child: Dismissible(
+                            key: UniqueKey(),
+                            onDismissed: (dir){
+                              setState(() {
+                               _imageFiles.removeAt(index); 
+                              });
+                            },
+                            child: Image.file(_imageFiles[index], 
+                              fit: BoxFit.cover, 
+                              height: 300, 
+                              width: MediaQuery.of(context).size.width, 
+                              alignment: Alignment.topCenter, //! can change to center
+                            ),
                           ),
                         )),
                       ),
