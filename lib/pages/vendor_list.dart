@@ -26,6 +26,7 @@ class VendorListPage extends StatelessWidget{
         'id': '12290ol23nn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
+        'rate': 150,
         'rating': 5,
         'verified': true
       },
@@ -33,6 +34,7 @@ class VendorListPage extends StatelessWidget{
         'id': '122ieo23nn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
+        'rate': 100,
         'rating': 4,
         'verified': false
       },
@@ -40,6 +42,7 @@ class VendorListPage extends StatelessWidget{
         'id': '12fgh23nn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
+        'rate': 70,
         'rating': 3,
         'verified': true
       },
@@ -47,6 +50,7 @@ class VendorListPage extends StatelessWidget{
         'id': '1222wssknn',
         'imageUrl': 'assets/profile.png',
         'title': 'Json Martinz Partners',
+        'rate': 200,
         'rating': 5,
         'verified': true
       },
@@ -69,7 +73,25 @@ class VendorListPage extends StatelessWidget{
                       child: CircleAvatar(child: Image.asset(_vendors[index]['imageUrl']),),
                     ),
                     title: Text(_vendors[index]['title'], style: TextStyle(fontSize: _getSize(18)),),
-                    subtitle: _buildVendorRating(_vendors[index]['rating']),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _buildVendorRating(_vendors[index]['rating']),
+                        // SizedBox(height: 5,),
+                        Container(
+                          margin: EdgeInsets.only(top: 7),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(100)
+                          ),
+                          child: customText.BodyText(
+                            text: 'NGN ${_vendors[index]['rate'].toString()} per bin',
+                            textColor: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
                     trailing: customText.BodyText(
                       text: _vendors[index]['verified'] ? 'Verified' : 'Not Verified',
                       textColor: _vendors[index]['verified'] ? Colors.green : Colors.red,

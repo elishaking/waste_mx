@@ -53,9 +53,13 @@ class Vendor{
   final String username;
   final String address;
   final String dateCreated;
+  final String rating;
+  final String rate;
+  final bool verified;
 
-  Vendor({this.id, this.name, this.companyName, this.companyAddress, this.phone, this.username, this.address, this.dateCreated});
+  Vendor({this.id, this.name, this.companyName, this.companyAddress, this.phone, this.username, this.address, this.dateCreated, this.rating, this.rate, this.verified});
 
+  
   Map<String, dynamic> toMap(){
     return {
       'clientId': id,
@@ -66,6 +70,9 @@ class Vendor{
       'clientCompanyName': companyName,
       'clientCompanyAddress': companyAddress,
       'clientDateCreated': dateCreated,
+      'clientRating': rating,
+      'clientRate': rate,
+      'clientVerified': verified,
     };
   }
 }

@@ -173,7 +173,7 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage>{
                         margin: EdgeInsets.only(top: 7),
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).primaryColor.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(100)
                         ),
                         child: customText.BodyText(
