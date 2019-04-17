@@ -19,6 +19,7 @@ class ConnectedModel extends Model{
   User _authenticatedUser;
   bool _isLoading = false;
   String _dbUrl = 'https://waste-mx.firebaseio.com/';
+  int _httpTimeout = 5;
 
   bool get isLoading{
     return _isLoading;
@@ -306,9 +307,8 @@ class UserModel extends ConnectedModel {
   void fetchVendors(){
     _isLoading = true;
     notifyListeners();
+    
     http.get('$_dbUrl/vendors.json').then((http.Response response){
-      _isLoading = false;
-      notifyListeners();
       final List<Vendor> fetchedVendorList = [];
       final Map<String, dynamic> vendorListData = json.decode(response.body);
       if(vendorListData != null){
@@ -330,6 +330,10 @@ class UserModel extends ConnectedModel {
         });
         _vendors = fetchedVendorList;
       }
+      _isLoading = false;
+      notifyListeners();
+    }).timeout(Duration(seconds: _httpTimeout), onTimeout: (){
+      _isLoading = false;
       notifyListeners();
     });
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// import 'package:scoped_model/scoped_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
 import '../models/user.dart';
@@ -74,14 +74,14 @@ class _VendorListPageState extends State<VendorListPage> {
     return ratingWidgets.RatingDisplay(rating: rating,);
   }
 
-  Container _buildVendorList(List<Vendor> _vendors) {
+  Container _buildVendorList(List<Vendor> vendors) {
     return Container(
       padding: EdgeInsets.all(10),
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index){
-          return _buildVendor(context, _vendors[index]);
+          return _buildVendor(context, vendors[index]);
         },
-        itemCount: _vendors.length,
+        itemCount: vendors.length,
       ),
     );
   }
@@ -188,9 +188,13 @@ class _VendorListPageState extends State<VendorListPage> {
       appBar: AppBar(
         title: Text('Vendor List'),
       ),
-      body: widget.model.isLoading ? Center(
-        child: CircularProgressIndicator(),
-      ) : _buildVendorList(widget.model.vendors != null ? widget.model.vendor : _vendors),
+      body: ScopedModelDescendant<MainModel>(
+        builder: (BuildContext context, Widget child, MainModel model){
+          return model.isLoading ? Center(
+            child: CircularProgressIndicator(),
+          ) : _buildVendorList(model.vendors != null ? model.vendors : _vendors);
+        },
+      ),
     );
   }
 }
