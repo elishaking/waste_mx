@@ -1,3 +1,12 @@
+class WasteType{
+  static const String householdWaste = "Household Waste";
+  static const String industrialWaste = "Industrial Waste";
+  static const String agricWaste = "Agric Waste";
+  static const String bulkWaste = "Bulk Waste";
+  static const String nuclearWaste = "Nuclear Waste";
+  static const String otherWaste = "Other Waste";
+}
+
 class DisposeOffering{
   final String id;
   final String name;

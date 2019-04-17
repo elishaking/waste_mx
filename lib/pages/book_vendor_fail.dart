@@ -42,9 +42,9 @@ class BookVendorFailPage extends StatelessWidget{
                 textColor: Colors.white,
               ),
               onPressed: (){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => VendorListPage()
-                ));
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //   builder: (BuildContext context) => VendorListPage()
+                // ));
               },
             )
           ],

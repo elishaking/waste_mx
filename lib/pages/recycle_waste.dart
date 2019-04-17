@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped_models/main.dart';
+import '../models/dispose_offering.dart';
 
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/custom_text.dart' as customText;
@@ -12,7 +16,7 @@ class RecycleWastePage extends StatelessWidget{
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
-  Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
+  Widget _buildCategoryWidget(BuildContext context, MainModel model, String title, String imageUrl, [dynamic route]){
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -41,42 +45,50 @@ class RecycleWastePage extends StatelessWidget{
       ),
       onPressed: (){
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route != null ? route : VendorListPage()
+          builder: (BuildContext context) => route != null ? route : VendorListPage(model)
         ));
       },
     );
   }
 
   Widget _buildCategoriesSection(BuildContext context){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: _getSize(20), vertical: _getSize(30)),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Plastics', 'assets/plastic-bottle.png'),
-              _buildCategoryWidget(context, 'Metals', 'assets/thick-magnet.png')
-            ],
-          ),
-          SizedBox(height: _getSize(15),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Glass', 'assets/glass.png'),
-              _buildCategoryWidget(context, 'Paper', 'assets/stacked-print-products.png')
-            ],
-          ),
-          SizedBox(height: _getSize(15),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Nuclear', 'assets/incineration.png'),
-              _buildCategoryWidget(context, 'Other Waste', 'assets/throw-to-paper-bin.png')
-            ],
-          ),
-        ],
-      ),
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, MainModel model){
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: _getSize(20), vertical: _getSize(30)),
+          child: _buildAllCategories(context, model),
+        );
+      },
+    );
+  }
+
+  Column _buildAllCategories(BuildContext context, MainModel model) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildCategoryWidget(context, model, 'Plastics', 'assets/plastic-bottle.png'),
+            _buildCategoryWidget(context, model, 'Metals', 'assets/thick-magnet.png')
+          ],
+        ),
+        SizedBox(height: _getSize(15),),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildCategoryWidget(context, model, 'Glass', 'assets/glass.png'),
+            _buildCategoryWidget(context, model, 'Paper', 'assets/stacked-print-products.png')
+          ],
+        ),
+        SizedBox(height: _getSize(15),),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildCategoryWidget(context, model, 'Nuclear', 'assets/incineration.png'),
+            _buildCategoryWidget(context, model, 'Other Waste', 'assets/throw-to-paper-bin.png')
+          ],
+        ),
+      ],
     );
   }
 
