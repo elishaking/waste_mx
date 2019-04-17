@@ -98,6 +98,16 @@ class _VendorListPageState extends State<VendorListPage> {
     }
   }
 
+  String _getUnit(){
+    if(widget.offeringType == OfferingType.dispose){
+      return 'bin';
+    } else if(widget.offeringType == OfferingType.recycle){
+      return 'kg';
+    } else {
+      return 'unit';
+    }
+  }
+
   Card _buildVendor(BuildContext context, Vendor vendor) {
     return Card(
       child: Column(
@@ -121,7 +131,7 @@ class _VendorListPageState extends State<VendorListPage> {
                     borderRadius: BorderRadius.circular(100)
                   ),
                   child: customText.BodyText(
-                    text: 'NGN ${vendor.rate.toString()} per bin',
+                    text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
                     textColor: Colors.white,
                   ),
                 )
