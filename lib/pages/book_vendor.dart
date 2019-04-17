@@ -16,7 +16,7 @@ import './wallet.dart';
 
 class BookVendorPage extends StatefulWidget{
   final String wasteType;
-  BookVendorPage({@required this.wasteType});
+  BookVendorPage(this.wasteType);
 
   @override
   State<StatefulWidget> createState() {
@@ -134,6 +134,8 @@ class _BookVendorPageState extends State<BookVendorPage>{
                   text: 'Schedule Pickup',
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20,),
+                customText.BodyText(text: widget.wasteType, textColor: Theme.of(context).primaryColor,),
                 SizedBox(height: 20,),
                 Form(
                   key: _formKey,

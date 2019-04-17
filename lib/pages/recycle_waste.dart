@@ -16,7 +16,7 @@ class RecycleWastePage extends StatelessWidget{
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
-  Widget _buildCategoryWidget(BuildContext context, MainModel model, String title, String imageUrl, [dynamic route]){
+  Widget _buildCategoryWidget(BuildContext context, MainModel model, String wasteType, String imageUrl, [dynamic route]){
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -37,7 +37,7 @@ class RecycleWastePage extends StatelessWidget{
             ),
             SizedBox(height: _getSize(15),),
             customText.BodyText(
-              text: title,
+              text: wasteType,
               textColor: Theme.of(context).primaryColor,
             )
           ],
@@ -45,7 +45,7 @@ class RecycleWastePage extends StatelessWidget{
       ),
       onPressed: (){
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route != null ? route : VendorListPage(model)
+          builder: (BuildContext context) => route != null ? route : VendorListPage(model, wasteType)
         ));
       },
     );

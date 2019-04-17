@@ -9,8 +9,9 @@ import './book_vendor.dart';
 
 class VendorPage extends StatelessWidget{
   final Vendor _vendor;
+  final String wasteType;
 
-  VendorPage(this._vendor);
+  VendorPage(this._vendor, this.wasteType);
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +122,7 @@ class VendorPage extends StatelessWidget{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => BookVendorPage()
+          builder: (BuildContext context) => BookVendorPage(this.wasteType)
         )),
       ),
     );

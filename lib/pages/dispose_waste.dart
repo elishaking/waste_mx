@@ -80,7 +80,7 @@ class DisposeWastePage extends StatelessWidget{
   }
 */
   
-  Widget _buildCategoryWidget(BuildContext context, MainModel model, String title, String imageUrl, [dynamic route]){
+  Widget _buildCategoryWidget(BuildContext context, MainModel model, String wasteType, String imageUrl, [dynamic route]){
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -101,7 +101,7 @@ class DisposeWastePage extends StatelessWidget{
             ),
             SizedBox(height: _getSize(15),),
             customText.BodyText(
-              text: title,
+              text: wasteType,
               textColor: Theme.of(context).primaryColor,
             )
           ],
@@ -109,7 +109,7 @@ class DisposeWastePage extends StatelessWidget{
       ),
       onPressed: (){
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route != null ? route : VendorListPage(model)
+          builder: (BuildContext context) => route != null ? route : VendorListPage(model, wasteType)
         ));
       },
     );
