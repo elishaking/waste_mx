@@ -108,6 +108,8 @@ class _BookVendorPageState extends State<BookVendorPage>{
     );
   }
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final double _fieldsGap = 20;
@@ -121,6 +123,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
           title: Text('Book Vendor'),
         ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
             child: Column(
@@ -154,10 +157,8 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         ),
                         validator: (String value) {
                           if(value.isEmpty){
-                            return 'Your phone number is required';
-                          } else if(!RegExp(r'^[0-9]+$').hasMatch(value.toLowerCase())){
-                            return 'Please enter a valid phone number';
-                          }
+                            return 'Please enter a valid location';
+                          } 
                         },
                         onSaved: (String value){
                           _formData['phone'] = value;
@@ -199,6 +200,8 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         validator: (String value) {
                           if(value.isEmpty){
                             return 'This field is required';
+                          } else if(double.parse(value) <= 0){
+                            return 'Value must be greater than 0';
                           }
                         },
                         onSaved: (String value){
@@ -304,6 +307,12 @@ class _BookVendorPageState extends State<BookVendorPage>{
                                     builder: (BuildContext context) => WalletPage(true)
                                   ));
                                 });
+                              } else{
+                                _scrollController.animateTo(
+                                  0,
+                                  duration: new Duration(milliseconds: 200),
+                                  curve: Curves.easeOut,
+                                );
                               }
                             },
                           );
