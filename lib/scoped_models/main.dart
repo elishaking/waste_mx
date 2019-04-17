@@ -228,8 +228,8 @@ class UserModel extends ConnectedModel {
       })
     );
 
-    // _isLoading = false;
-    // notifyListeners();
+    _isLoading = false;
+    notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
@@ -299,12 +299,16 @@ class DisposeOfferingModel extends ConnectedModel{
     }
   }
 
+  Future<bool> addDisposeOffering(DisposeOffering offering, List<File> imageFiles) async{
+
+  }
+
   Future<bool> addOffering(DisposeOffering offering, List<File> imageFiles) async{
     _isLoading = true;
     notifyListeners();
-    final List uploadImageData = new List();
-    final List _uploadImageUrls = new List();
-    final List _uploadImagePaths = new List();
+    final List uploadImageData = new List(imageFiles.length);
+    final List _uploadImageUrls = new List(imageFiles.length);
+    final List _uploadImagePaths = new List(imageFiles.length);
     // imageFiles.forEach((File imageFile) {
     //   uploadImageData.add(await uploadImage(imageFile));
     // });
@@ -333,7 +337,7 @@ class DisposeOfferingModel extends ConnectedModel{
 
     try{
       final http.Response response = await http.post(
-        '$_dbUrl?auth=${_authenticatedUser.token}',
+        '$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}',
         body: json.encode(offeringData)
       );
       if(response.statusCode != 200 && response.statusCode != 201){
@@ -367,33 +371,34 @@ class DisposeOfferingModel extends ConnectedModel{
     }
   }
 
-  Future<Map<String, List>> fetchOfferings(){
+  Future<Map<String, List>> fetchOfferings() async{
     _isLoading = true;
     notifyListeners();
-    return http.get('$_dbUrl?auth=${_authenticatedUser.token}').then((http.Response response){
-      _isLoading = false;
-      notifyListeners();
-      final List<DisposeOffering> disposeOfferings = [];
-      final Map<String, dynamic> offeringsData = json.decode(response.body);
-      if(offeringsData != null){
-        offeringsData.forEach((String offeringId, dynamic productData) {
-          final DisposeOffering offering = DisposeOffering(
-            id: offeringId,
-            name: offeringsData['title'],
-            imageUrls: offeringsData['imageUrls'],
-            price: offeringsData['price'],
-            rate: offeringsData['imageUrl'],
-            numberOfBins: offeringsData['numberOfBins'],
-            clientName: offeringsData['clientName'],
-            clientLocation: offeringsData['clientLocation'],
-            userId: _authenticatedUser.id,
-            imagePaths: offeringsData['imagePaths'],
-          );
-          disposeOfferings.add(offering);
-        });
-        _disposeOfferings = fetchedOfferings;
-      }
-    });
+    http.Response response1 = await http.get('$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}');
+    // http.Response response2 = await http.get('$_dbUrl/recycle_offerings.json?auth=${_authenticatedUser.token}');
+    _isLoading = false;
+    notifyListeners();
+    final List<DisposeOffering> disposeOfferings = [];
+    final Map<String, dynamic> offeringsData = json.decode(response1.body);
+    if(offeringsData != null){
+      offeringsData.forEach((String offeringId, dynamic offeringData) {
+        final DisposeOffering offering = DisposeOffering(
+          id: offeringId,
+          name: offeringData['title'],
+          imageUrls: offeringData['imageUrls'],
+          price: offeringData['price'],
+          rate: offeringData['imageUrl'],
+          numberOfBins: offeringData['numberOfBins'],
+          clientName: offeringData['clientName'],
+          clientLocation: offeringData['clientLocation'],
+          userId: _authenticatedUser.id,
+          imagePaths: offeringData['imagePaths'],
+        );
+        disposeOfferings.add(offering);
+      });
+      _offerings['Dispose Offerings'] = disposeOfferings;
+    }
+    return _offerings;
   }
 
   //TODO: implement update

@@ -52,13 +52,13 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         color: Colors.green,
-        // home: WelcomePage(),
+        home: WelcomePage(),
         routes: {
-          '/': (BuildContext context) => ScopedModelDescendant(
-            builder: (BuildContext context, Widget child, MainModel model){
-              return model.user == null ? WelcomePage() : (model.user.userType == UserType.Client ? HomePage() : VendorHomePage());
-            },
-          ),
+          // '/': (BuildContext context) => ScopedModelDescendant(
+          //   builder: (BuildContext context, Widget child, MainModel model){
+          //     return model.user == null ? WelcomePage() : (model.user.userType == UserType.Client ? HomePage() : VendorHomePage());
+          //   },
+          // ),
           // '/': (BuildContext context) => BookVendorPage(),
           // 'login': (BuildContext context) => LoginPage(),
           'welcome': (BuildContext context) => WelcomePage(),

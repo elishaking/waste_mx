@@ -290,18 +290,21 @@ class _BookVendorPageState extends State<BookVendorPage>{
                           return model.isLoading ? CircularProgressIndicator() : RaisedButton(
                             child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
                             onPressed: (){
-                              model.addOffering(DisposeOffering(
-                                name: widget.wasteType,
-                                price: _wastePrice,
-                                rate: rate.toString(),
-                                numberOfBins: _formData['numberOfBins'],
-                                clientName: 'new',
-                                clientLocation: _formData['location']
-                              ), _imageFiles).then((_){
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                  builder: (BuildContext context) => WalletPage(true)
-                                ));
-                              });
+                              if(_formKey.currentState.validate()){
+                                _formKey.currentState.save();
+                                model.addOffering(DisposeOffering(
+                                  name: widget.wasteType,
+                                  price: _wastePrice,
+                                  rate: rate.toString(),
+                                  numberOfBins: _formData['numberOfBins'],
+                                  clientName: 'new',
+                                  clientLocation: _formData['location']
+                                ), _imageFiles).then((_){
+                                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                    builder: (BuildContext context) => WalletPage(true)
+                                  ));
+                                });
+                              }
                             },
                           );
                         },
