@@ -33,6 +33,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
     'image': ''
   };
   String _wastePrice = '0.0';
+  String _numOfBins = '0';
   final int rate = 100; //? bin price
 
   List<File> _imageFiles = List<File>();
@@ -41,9 +42,10 @@ class _BookVendorPageState extends State<BookVendorPage>{
 
   void _onChange(){
     String text = _controller.text;
-
-    if(text.isNotEmpty){
-      print(text);
+    print(text + ' ' + _numOfBins);
+    if(text.isNotEmpty && (text != _numOfBins)){
+      // print(text);
+      _numOfBins = text;
       setState(() {
        _wastePrice =  (double.parse(text) * rate).toString();
       });
@@ -230,15 +232,19 @@ class _BookVendorPageState extends State<BookVendorPage>{
                               icon: Icon(Icons.edit),
                               onPressed: (){
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => EditPricePage()
-                                ));
+                                  builder: (BuildContext context) => EditPricePage(_wastePrice)
+                                )).then((price){
+                                  setState(() {
+                                   _wastePrice = price;
+                                  });
+                                });
                               },
                             )
                           ],
                         ),
                         onPressed: (){
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => EditPricePage()
+                            builder: (BuildContext context) => EditPricePage(_wastePrice)
                           ));
                         },
                       ),
