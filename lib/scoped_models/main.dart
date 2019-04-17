@@ -49,8 +49,33 @@ class UserModel extends ConnectedModel {
   void autoAuthenticate() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
+    final String expiryTimeString = prefs.getString('expiryTime');
     print(token);
     if(token != null){
+      final DateTime now = DateTime.now();
+      final parsedExpiryTime = DateTime.parse(expiryTimeString);
+      if (parsedExpiryTime.isBefore(now)) {
+        final http.Response response = await http.post(
+          'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: json.encode({
+            'token': token,
+            'returnSecureToken': true
+          })
+        );
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        if(responseData.containsKey('idToken')){
+          await _saveAuthUser(responseData);
+          await _getUserData();
+        } else{
+          _authenticatedUser = null;
+          notifyListeners();
+          return;
+        }
+      }
+
       final String userEmail = prefs.getString('userEmail');
       final String userId = prefs.getString('userId');
       final UserType userType = _getUserType(prefs.getString('userType'));
@@ -76,6 +101,11 @@ class UserModel extends ConnectedModel {
     prefs.setString('userEmail', responseData['email']);
     prefs.setString('userId', responseData['localId']);
     prefs.setString('userType', UserType.Client.toString());
+
+    final DateTime now = DateTime.now();
+    final DateTime expiryTime =
+        now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
+    prefs.setString('expiryTime', expiryTime.toIso8601String());
   }
 
   Future _saveUserData(Map<String, dynamic> data) async{
