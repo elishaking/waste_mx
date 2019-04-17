@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 import '../models/dispose_offering.dart';
+import '../models/recycle_offering.dart';
 
 class MainModel extends Model with ConnectedModel, UserModel, DisposeOfferingModel{
   
@@ -371,8 +372,72 @@ class DisposeOfferingModel extends ConnectedModel{
     }
   }
 
-  Future<bool> addDisposeOffering(DisposeOffering offering, List<File> imageFiles) async{
+  Future<bool> addRecycleOffering(RecycleOffering offering, List<File> imageFiles) async{
+    _isLoading = true;
+    notifyListeners();
+    final List uploadImageData = new List(imageFiles.length);
+    final List _uploadImageUrls = new List(imageFiles.length);
+    final List _uploadImagePaths = new List(imageFiles.length);
+    // imageFiles.forEach((File imageFile) {
+    //   uploadImageData.add(await uploadImage(imageFile));
+    // });
+    for(int i = 0; i < imageFiles.length; i++){
+      uploadImageData[i] = await uploadImage(imageFiles[i]);
+      _uploadImageUrls[i] = uploadImageData[i]['imageUrl'];
+      _uploadImagePaths[i] = uploadImageData[i]['imagePath'];
+    }
 
+    if(uploadImageData == null){
+      print('Upload Failed');
+      return false;
+    }
+
+    final Map<String, dynamic> offeringData = {
+      'name': offering.name,
+      'imageUrls': _uploadImageUrls,
+      'price': offering.price,
+      'rate': offering.rate,
+      'weight': offering.weight,
+      'clientName': offering.clientName,
+      'clientLocation': offering.clientLocation,
+      'userId': _authenticatedUser.id,
+      'imagePath': _uploadImagePaths,
+    };
+
+    try{
+      final http.Response response = await http.post(
+        '$_dbUrl/recycle_offerings.json?auth=${_authenticatedUser.token}',
+        body: json.encode(offeringData)
+      );
+      if(response.statusCode != 200 && response.statusCode != 201){
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      //? save uploaded offering locally
+      final RecycleOffering newDisposeOffering = RecycleOffering(
+        id: responseData['name'],
+        name: offering.name,
+        imageUrls: _uploadImageUrls,
+        price: offering.price,
+        rate: offering.rate,
+        weight: offering.weight,
+        clientName: offering.clientName,
+        clientLocation: offering.clientLocation,
+        userId: _authenticatedUser.id,
+        imagePaths: _uploadImagePaths,
+      );
+      _offerings['Recycle Offerings'].add(newDisposeOffering);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    }catch(error){
+      _isLoading = false;
+      notifyListeners();
+      print(error);
+      return false;
+    }
   }
 
   Future<bool> addOffering(DisposeOffering offering, List<File> imageFiles) async{
