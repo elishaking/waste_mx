@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped_models/main.dart';
 import '../models/recycle_offering.dart';
+import '../models/offering.dart';
 
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/custom_text.dart' as customText;
@@ -45,7 +46,7 @@ class RecycleWastePage extends StatelessWidget{
       ),
       onPressed: (){
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route != null ? route : VendorListPage(model, wasteType)
+          builder: (BuildContext context) => route != null ? route : VendorListPage(model, wasteType, OfferingType.recycle)
         ));
       },
     );

@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
+import '../models/offering.dart';
 
 import '../widgets/custom_text.dart' as customText;
 import '../widgets/rating.dart' as ratingWidget;
 
 import './book_vendor.dart';
+import './book_recycler.dart';
 
 class VendorPage extends StatelessWidget{
   final Vendor _vendor;
   final String wasteType;
+  final String offeringType;
 
-  VendorPage(this._vendor, this.wasteType);
+  VendorPage(this._vendor, this.wasteType, this.offeringType);
+
+  dynamic _getOfferingType(){
+    if(offeringType == OfferingType.dispose){
+      return BookVendorPage(wasteType);
+    } else if(offeringType == OfferingType.recycle){
+      return BookRecyclerPage(wasteType);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +133,7 @@ class VendorPage extends StatelessWidget{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => BookVendorPage(this.wasteType)
+          builder: (BuildContext context) => _getOfferingType()
         )),
       ),
     );

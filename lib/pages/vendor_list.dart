@@ -4,18 +4,21 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
 import '../models/user.dart';
+import '../models/offering.dart';
 
 import '../widgets/rating.dart' as ratingWidgets;
 import '../widgets/custom_text.dart' as customText;
 
 import './vendor.dart';
 import './book_vendor.dart';
+import './book_recycler.dart';
 
 class VendorListPage extends StatefulWidget{
   final MainModel model;
   final String wasteType;
+  final String offeringType;
 
-  VendorListPage(this.model, this.wasteType);
+  VendorListPage(this.model, this.wasteType, this.offeringType);
 
   @override
   _VendorListPageState createState() => _VendorListPageState();
@@ -87,6 +90,14 @@ class _VendorListPageState extends State<VendorListPage> {
     );
   }
 
+  dynamic _getOfferingType(){
+    if(widget.offeringType == OfferingType.dispose){
+      return BookVendorPage(widget.wasteType);
+    } else if(widget.offeringType == OfferingType.recycle){
+      return BookRecyclerPage(widget.wasteType);
+    }
+  }
+
   Card _buildVendor(BuildContext context, Vendor vendor) {
     return Card(
       child: Column(
@@ -144,7 +155,7 @@ class _VendorListPageState extends State<VendorListPage> {
                 ),
                 onPressed: (){
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => VendorPage(vendor, widget.wasteType)
+                    builder: (BuildContext context) => VendorPage(vendor, widget.wasteType, widget.offeringType)
                   ));
                 },
               ),
@@ -164,7 +175,7 @@ class _VendorListPageState extends State<VendorListPage> {
                 ),
                 onPressed: (){
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => BookVendorPage(widget.wasteType)
+                    builder: (BuildContext context) => _getOfferingType()
                   ));
                 },
               ),
