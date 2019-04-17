@@ -56,10 +56,11 @@ class UserModel extends ConnectedModel {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
     final String expiryTimeString = prefs.getString('expiryTime');
-    print(token);
+    print(expiryTimeString);
     if(token != null){
       final DateTime now = DateTime.now();
-      final parsedExpiryTime = DateTime.parse(expiryTimeString);
+      final parsedExpiryTime = expiryTimeString == null ? DateTime.now()
+      .subtract(Duration(days: 1)) : DateTime.parse(expiryTimeString);
       if (parsedExpiryTime.isBefore(now)) {
         final http.Response response = await http.post(
           'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
