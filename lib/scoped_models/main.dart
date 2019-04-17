@@ -30,6 +30,8 @@ class UserModel extends ConnectedModel {
   Client _client;
   Vendor _vendor;
 
+  List<Vendor> _vendors;
+
   Client get client{
     return _client;
   }
@@ -40,6 +42,10 @@ class UserModel extends ConnectedModel {
 
   User get user{
     return _authenticatedUser;
+  }
+
+  List<Vendor> get vendors{
+    return _vendors;
   }
 
   UserType _getUserType(String userTypeString){
@@ -294,6 +300,37 @@ class UserModel extends ConnectedModel {
     }
 
     return {'success': success, 'message': message, 'code': code};
+  }
+
+  void fetchVendors(){
+    _isLoading = true;
+    notifyListeners();
+    http.get('$_dbUrl/vendors.json').then((http.Response response){
+      _isLoading = false;
+      notifyListeners();
+      final List<Vendor> fetchedVendorList = [];
+      final Map<String, dynamic> vendorListData = json.decode(response.body);
+      if(vendorListData != null){
+        vendorListData.forEach((String vendorId, dynamic vendorData) {
+          final Vendor product = Vendor(
+            id: vendorId,
+            name: vendorData['name'],
+            companyName: vendorData['companyName'],
+            companyAddress: vendorData['companyAddress'],
+            phone: vendorData['phone'],
+            username: vendorData['username'],
+            address: vendorData['address'],
+            dateCreated: vendorData['dateCreated'],
+            rating: vendorData['rating'],
+            rate: vendorData['rate'],
+            verified: vendorData['verified'],
+          );
+          fetchedVendorList.add(product);
+        });
+        _vendors = fetchedVendorList;
+      }
+      notifyListeners();
+    });
   }
 }
 
