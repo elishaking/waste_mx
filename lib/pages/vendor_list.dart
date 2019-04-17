@@ -79,95 +79,99 @@ class _VendorListPageState extends State<VendorListPage> {
       padding: EdgeInsets.all(10),
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index){
-          return Card(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  leading: Hero(
-                    tag: _vendors[index]['id'],
-                    child: CircleAvatar(child: Image.asset(_vendors[index]['imageUrl']),),
-                  ),
-                  title: Text(_vendors[index]['title'], style: TextStyle(fontSize: _getSize(18)),),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildVendorRating(_vendors[index]['rating']),
-                      // SizedBox(height: 5,),
-                      Container(
-                        margin: EdgeInsets.only(top: 7),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(100)
-                        ),
-                        child: customText.BodyText(
-                          text: 'NGN ${_vendors[index]['rate'].toString()} per bin',
-                          textColor: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                  trailing: customText.BodyText(
-                    text: _vendors[index]['verified'] ? 'Verified' : 'Not Verified',
-                    textColor: _vendors[index]['verified'] ? Colors.green : Colors.red,
-                  ),
-                  // onTap: (){
-                  //   Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (BuildContext context) => VendorPage(_vendors[index])
-                  //   ));
-                  // },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    FlatButton(
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.info_outline,
-                          color: Theme.of(context).primaryColor,
-                          size: _getSize(23),),
-                          SizedBox(width: _getSize(10),),
-                          customText.BodyText(
-                            text: 'DETAILS',
-                            textColor: Theme.of(context).primaryColor,
-                          )
-                        ],
-                      ),
-                      onPressed: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => VendorPage(_vendors[index])
-                        ));
-                      },
-                    ),
-                    FlatButton(
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.add_circle_outline,
-                            color: Theme.of(context).primaryColor,
-                            size: _getSize(23),
-                          ),
-                          SizedBox(width: _getSize(10),),
-                          customText.BodyText(
-                            text: 'PLACE ORDER',
-                            textColor: Theme.of(context).primaryColor,
-                          )
-                        ],
-                      ),
-                      onPressed: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => BookVendorPage()
-                        ));
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
+          return _buildVendor(context, _vendors[index]);
         },
         itemCount: _vendors.length,
       ),
     );
+  }
+
+  Card _buildVendor(BuildContext context, Vendor vendor) {
+    return Card(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: Hero(
+                  tag: vendor.id,
+                  child: CircleAvatar(child: Image.asset(vendor.imageUrl),),
+                ),
+                title: Text(vendor.name, style: TextStyle(fontSize: _getSize(18)),),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildVendorRating(vendor.rating),
+                    // SizedBox(height: 5,),
+                    Container(
+                      margin: EdgeInsets.only(top: 7),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(100)
+                      ),
+                      child: customText.BodyText(
+                        text: 'NGN ${vendor.rate.toString()} per bin',
+                        textColor: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+                trailing: customText.BodyText(
+                  text: vendor.verified ? 'Verified' : 'Not Verified',
+                  textColor: vendor.verified ? Colors.green : Colors.red,
+                ),
+                // onTap: (){
+                //   Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (BuildContext context) => VendorPage(vendor)
+                //   ));
+                // },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FlatButton(
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.info_outline,
+                        color: Theme.of(context).primaryColor,
+                        size: _getSize(23),),
+                        SizedBox(width: _getSize(10),),
+                        customText.BodyText(
+                          text: 'DETAILS',
+                          textColor: Theme.of(context).primaryColor,
+                        )
+                      ],
+                    ),
+                    onPressed: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => VendorPage(vendor)
+                      ));
+                    },
+                  ),
+                  FlatButton(
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.add_circle_outline,
+                          color: Theme.of(context).primaryColor,
+                          size: _getSize(23),
+                        ),
+                        SizedBox(width: _getSize(10),),
+                        customText.BodyText(
+                          text: 'PLACE ORDER',
+                          textColor: Theme.of(context).primaryColor,
+                        )
+                      ],
+                    ),
+                    onPressed: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => BookVendorPage()
+                      ));
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
   }
 
   double _targetWidth = 0;

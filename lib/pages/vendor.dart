@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
+
 import '../widgets/custom_text.dart' as customText;
 import '../widgets/rating.dart' as ratingWidget;
 
 import './book_vendor.dart';
 
 class VendorPage extends StatelessWidget{
-  final Map<String, dynamic> _vendor;
+  final Vendor _vendor;
 
   VendorPage(this._vendor);
 
@@ -22,17 +24,17 @@ class VendorPage extends StatelessWidget{
             expandedHeight: 200,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(_vendor['title'],
+              title: Text(_vendor.name,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600
                 )
               ),
               background: Hero(
-                tag: _vendor['id'],
+                tag: _vendor.id,
                 child: FadeInImage(
                   placeholder: AssetImage('assets/profile.png'), //! some placeholder
-                  image: AssetImage(_vendor['imageUrl']),
+                  image: AssetImage(_vendor.imageUrl),
                   fit: BoxFit.cover
 
                   ,
@@ -72,7 +74,7 @@ class VendorPage extends StatelessWidget{
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
-                          child: ratingWidget.RatingDisplay(rating: _vendor['rating']),
+                          child: ratingWidget.RatingDisplay(rating: _vendor.rating),
                         ),
                         // Container(
                         //   child: Row(
