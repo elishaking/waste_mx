@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './profile_edit.dart';
+import './profile_pic_view.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -35,9 +36,19 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(bottom: 18),
-                  child: CircleAvatar(
-                    child: Image(image: AssetImage('assets/profile.png')),
-                    radius: 50,
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ProfilePicViewPage()
+                      ));
+                    },
+                    child: Hero(
+                      tag: 'profile_pic',
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage('assets/profile.png'),
+                        radius: 70,
+                      ),
+                    ),
                   ),
                 ),
                 Container(
