@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
   Widget _setPage(MainModel model) {
     if(model.isLoading){
       return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.green,
         body: Center(
           child: CircularProgressIndicator(),
         ),

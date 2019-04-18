@@ -76,11 +76,16 @@ class UserModel extends ConnectedModel {
         final http.Response response = await http.post(
             'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
             headers: {'Content-Type': 'application/json'},
-            body: json.encode({'token': token, 'returnSecureToken': true}));
+            body: json.encode({'token': token, 'returnSecureToken': true})).timeout(Duration(seconds: _httpTimeout), 
+            onTimeout: (){
+              _authenticatedUser = null;
+              _isLoading = false;
+              notifyListeners();
+            });
+        if(response == null) return;
         final Map<String, dynamic> responseData = json.decode(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData);
-          await _getUserData();
         } else {
           _authenticatedUser = null;
           _isLoading = false;
@@ -94,6 +99,8 @@ class UserModel extends ConnectedModel {
       final UserType userType = _getUserType(prefs.getString('userType'));
       _authenticatedUser =
           User(id: userId, email: userEmail, token: token, userType: userType);
+      
+      await _getUserData();
       _isLoading = false;
       notifyListeners();
     }
@@ -150,6 +157,8 @@ class UserModel extends ConnectedModel {
 
   Future<bool> _addUser(
       Map<String, dynamic> userData, String collectionName) async {
+    _isLoading = true;
+    notifyListeners();
     try {
       final http.Response response = await http.post(
           '$_dbUrl$collectionName.json?auth=${_authenticatedUser.token}',
@@ -163,21 +172,22 @@ class UserModel extends ConnectedModel {
       if (collectionName == "clients") {
         _client = Client(
             id: responseData['name'],
-            name: userData['name'],
-            phone: userData['phone'],
-            username: userData['username'],
-            address: userData['address'],
-            dateCreated: userData['dateCreated']);
+            name: userData['clientName'],
+            phone: userData['clientPhone'],
+            username: userData['clientUsername'],
+            address: userData['clientAddress'],
+            dateCreated: userData['clientDateCreated']);
+        print(json.encode(_client.toMap()));
       } else {
         _vendor = Vendor(
             id: responseData['name'],
-            name: userData['name'],
-            companyName: userData['companyName'],
-            companyAddress: userData['companyAddress'],
-            phone: userData['phone'],
-            username: userData['username'],
-            address: userData['address'],
-            dateCreated: userData['dateCreated']);
+            name: userData['vendorName'],
+            companyName: userData['vendorCompanyName'],
+            companyAddress: userData['vendorCompanyAddress'],
+            phone: userData['vendorPhone'],
+            username: userData['vendorUsername'],
+            address: userData['vendorAddress'],
+            dateCreated: userData['vendorDateCreated']);
       }
       userData['id'] = responseData['name'];
       await _saveUserData(userData);
@@ -192,6 +202,50 @@ class UserModel extends ConnectedModel {
     }
   }
 
+  Future<bool> updateUser(Map<String, dynamic> userData, String collectionName) async{
+    try {
+      final http.Response response = await http.post(
+          "$_dbUrl$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
+          body: json.encode(userData));
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (collectionName == "clients") {
+        _client = Client(
+            id: responseData['name'],
+            name: userData['clientName'],
+            phone: userData['clientPhone'],
+            username: userData['clientUsername'],
+            address: userData['clientAddress'],
+            dateCreated: userData['clientDateCreated']);
+        print(json.encode(_client.toMap()));
+      } else {
+        _vendor = Vendor(
+            id: responseData['name'],
+            name: userData['vendorName'],
+            companyName: userData['vendorCompanyName'],
+            companyAddress: userData['vendorCompanyAddress'],
+            phone: userData['vendorPhone'],
+            username: userData['vendorUsername'],
+            address: userData['vendorAddress'],
+            dateCreated: userData['vendorDateCreated']);
+      }
+      userData['id'] = responseData['name'];
+      await _saveUserData(userData);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+      print(error);
+      return false;
+    }
+  }
+  
   Future<Map<String, dynamic>> signup(String email, String password,
       {Client client, Vendor vendor}) async {
     // final Map<String, dynamic> authData =
@@ -337,9 +391,10 @@ class OfferingModel extends ConnectedModel {
     notifyListeners();
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .timeout(Duration(seconds: 5), onTimeout: (){
+        .timeout(Duration(seconds: 10), onTimeout: (){
           print('get location timeout');
         });
+    if(position == null) return '';
     List<Placemark> placemark = await Geolocator()
         .placemarkFromCoordinates(position.latitude, position.longitude)
         .timeout(Duration(seconds: 5), onTimeout: (){

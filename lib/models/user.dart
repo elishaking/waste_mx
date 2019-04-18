@@ -18,6 +18,15 @@ class User {
     // @required this.username,
     @required this.userType,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': id,
+      'userEmail': email,
+      'userUserType': userType.toString(),
+      'userToken': token,
+    };
+  }
 }
 
 class Client {
