@@ -151,6 +151,8 @@ class UserModel extends ConnectedModel {
 
   Future<bool> _addUser(
       Map<String, dynamic> userData, String collectionName) async {
+    _isLoading = true;
+    notifyListeners();
     try {
       final http.Response response = await http.post(
           '$_dbUrl$collectionName.json?auth=${_authenticatedUser.token}',

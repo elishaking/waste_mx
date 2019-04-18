@@ -136,7 +136,19 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (BuildContext context) {
                 return ProfileEditPage();
-              }));
+              })).then((done) {
+                final SnackBar snackBar = SnackBar(
+                  content: Text(done ? 'Profile updated' : 'Could not update Profile'),
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                );
+                Scaffold.of(context)
+                    .showSnackBar(snackBar);
+              });
             },
           )
         ],

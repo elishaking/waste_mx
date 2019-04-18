@@ -28,6 +28,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       child: Column(
         children: <Widget>[
           TextFormField(
+            initialValue: model.client.name,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.person_outline),
               labelText: 'full name',
@@ -45,6 +46,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
           SizedBox(height: 20,),
           TextFormField(
+            initialValue: model.client.phone,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.person_outline),
               labelText: 'phone',
@@ -65,6 +67,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
           SizedBox(height: 20,),
           TextFormField(
+            initialValue: model.client.address == 'null' ? '' : model.client.address,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.person_outline),
               labelText: 'location',
@@ -79,21 +82,25 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             },
           ),
           SizedBox(height: 20,),
-          model.isLoading ? CircularProgressIndicator() : RaisedButton(
-            child: customText.BodyText(text: 'SAVE', textColor: Colors.white,),
-            onPressed: (){
-              if(_formKey.currentState.validate()){
-                _formKey.currentState.save();
-                model.updateUser(Client(
-                  name: _formData['name'],
-                  phone: _formData['phone'],
-                  address: _formData['location'],
-                  username: model.client.username,
-                  dateCreated: model.client.dateCreated
-                ).toMap(), 'clients').then((done){
-                  Navigator.of(context).pop(done);
-                });
-              }
+          ScopedModelDescendant<MainModel>(
+            builder: (BuildContext context, Widget child, MainModel model){
+              return model.isLoading ? CircularProgressIndicator() : RaisedButton(
+                child: customText.BodyText(text: 'SAVE', textColor: Colors.white,),
+                onPressed: (){
+                  if(_formKey.currentState.validate()){
+                    _formKey.currentState.save();
+                    model.updateUser(Client(
+                      name: _formData['name'],
+                      phone: _formData['phone'],
+                      address: _formData['location'],
+                      username: model.client.username,
+                      dateCreated: model.client.dateCreated
+                    ).toMap(), 'clients').then((done){
+                      Navigator.of(context).pop(done);
+                    });
+                  }
+                },
+              );
             },
           )
         ],
