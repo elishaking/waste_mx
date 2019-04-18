@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Bilikiss Adebiyi, Abiola',
+                  model.client.name,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.bold,

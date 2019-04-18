@@ -20,6 +20,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _formData = {
+    'name': '',
     'phone': '',
     'email': '',
     'username': '',
@@ -80,23 +81,22 @@ class _SignUpPageState extends State<SignUpPage> {
       textColor: Colors.white,
       child: Text('Sign Up'),
       onPressed: () {
-        // if(_formKey.currentState.validate()){
-        _formKey.currentState.save();
-        if (widget.userType == UserType.Client) {
-          Client _client = Client(
-              name: _formData['name'],
-              phone: _formData['phone'],
-              username: _formData['username'],
-              address: _formData['address'],
-              dateCreated: DateTime.now().toIso8601String());
-          model
-              .signup(_formData['email'], _formData['password'],
-                  client: _client)
-              .then((data) {
-            if (data['success']) {
-              Navigator.pushReplacementNamed(context, 'home');
-            } else {
-              showDialog(
+        if(_formKey.currentState.validate()){
+          _formKey.currentState.save();
+          if (widget.userType == UserType.Client) {
+            Client _client = Client(
+                name: _formData['name'],
+                phone: _formData['phone'],
+                username: _formData['username'],
+                dateCreated: DateTime.now().toIso8601String());
+            model
+                .signup(_formData['email'], _formData['password'],
+                    client: _client)
+                .then((data) {
+              if (data['success']) {
+                Navigator.pushReplacementNamed(context, 'home');
+              } else {
+                showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
@@ -111,13 +111,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         )
                       ],
                     );
-                  });
-            }
-          });
-        } else {
-          Navigator.pushReplacementNamed(context, 'vendor_home');
+                  }
+                );
+              }
+            });
+          } else {
+            Navigator.pushReplacementNamed(context, 'vendor_home');
+          }
         }
-        // }
       },
     );
   }
@@ -154,6 +155,25 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Container(
                   child: Column(
                     children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person_outline),
+                          labelText: 'full name',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return 'Your full name is required';
+                          }
+                        },
+                        onSaved: (String value) {
+                          _formData['name'] = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
                       TextFormField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.phone),
