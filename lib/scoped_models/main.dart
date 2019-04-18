@@ -334,14 +334,13 @@ class OfferingModel extends ConnectedModel {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .timeout(Duration(seconds: 5), onTimeout: (){
-          print('timedout');
+          print('get location timeout');
         });
     List<Placemark> placemark = await Geolocator()
         .placemarkFromCoordinates(position.latitude, position.longitude)
         .timeout(Duration(seconds: 5), onTimeout: (){
-          print('timedout 2');
+          print('get location placement timeout');
         });
-
     _gettingLocation = false;
     notifyListeners();
     print('position: ' + position.latitude.toString());
@@ -349,7 +348,7 @@ class OfferingModel extends ConnectedModel {
     Placemark p = placemark[0];
 //    print('${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}');
 
-     return '${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}';
+     return '${p.thoroughfare}, ${p.postalCode}, ${p.locality}, ${p.administrativeArea}, ${p.country}';
   }
 
   Future<Map<String, dynamic>> uploadImage(File image,
