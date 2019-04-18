@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'dart:convert';
 
 import '../scoped_models/main.dart';
 import '../models/user.dart';
+
+import '../widgets/custom_text.dart' as customText;
 
 import './profile_edit.dart';
 import './profile_pic_view.dart';
 
 class ProfilePage extends StatelessWidget {
   Container _buildProfile(BuildContext context, MainModel model) {
+    print(json.encode(model.client.toMap()));
     return Container(
       margin: EdgeInsets.symmetric(vertical: 36, horizontal: 18),
       child: Column(
@@ -34,29 +38,25 @@ class ProfilePage extends StatelessWidget {
             margin: EdgeInsets.only(bottom: 18),
             child: Column(
               children: <Widget>[
-                Text(
-                  model.client.name,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                customText.HeadlineText(
+                  text: model.client.name,
+                  textColor: Theme.of(context).primaryColor,
                 ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 3, horizontal: 9),
-                  margin: EdgeInsets.symmetric(
-                    vertical: 7,
-                  ),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    'Verified',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                Text('Last Login: 1min'),
+                // Container(
+                //   padding:
+                //       EdgeInsets.symmetric(vertical: 3, horizontal: 9),
+                //   margin: EdgeInsets.symmetric(
+                //     vertical: 7,
+                //   ),
+                //   decoration: BoxDecoration(
+                //       color: Theme.of(context).primaryColor,
+                //       borderRadius: BorderRadius.circular(10)),
+                //   child: Text(
+                //     'Verified',
+                //     style: TextStyle(color: Colors.white),
+                //   ),
+                // ),
+                // Text('Last Login: 1min'),
                 /*Row(
                 children: <Widget>[
                   Text('250,000')

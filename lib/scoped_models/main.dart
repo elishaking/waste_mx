@@ -80,7 +80,6 @@ class UserModel extends ConnectedModel {
         final Map<String, dynamic> responseData = json.decode(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData);
-          await _getUserData();
         } else {
           _authenticatedUser = null;
           _isLoading = false;
@@ -94,6 +93,8 @@ class UserModel extends ConnectedModel {
       final UserType userType = _getUserType(prefs.getString('userType'));
       _authenticatedUser =
           User(id: userId, email: userEmail, token: token, userType: userType);
+      
+      await _getUserData();
       _isLoading = false;
       notifyListeners();
     }
@@ -163,21 +164,22 @@ class UserModel extends ConnectedModel {
       if (collectionName == "clients") {
         _client = Client(
             id: responseData['name'],
-            name: userData['name'],
-            phone: userData['phone'],
-            username: userData['username'],
-            address: userData['address'],
-            dateCreated: userData['dateCreated']);
+            name: userData['clientName'],
+            phone: userData['clientPhone'],
+            username: userData['clientUsername'],
+            address: userData['clientAddress'],
+            dateCreated: userData['clientDateCreated']);
+        print(json.encode(_client.toMap()));
       } else {
         _vendor = Vendor(
             id: responseData['name'],
-            name: userData['name'],
-            companyName: userData['companyName'],
-            companyAddress: userData['companyAddress'],
-            phone: userData['phone'],
-            username: userData['username'],
-            address: userData['address'],
-            dateCreated: userData['dateCreated']);
+            name: userData['vendorName'],
+            companyName: userData['vendorCompanyName'],
+            companyAddress: userData['vendorCompanyAddress'],
+            phone: userData['vendorPhone'],
+            username: userData['vendorUsername'],
+            address: userData['vendorAddress'],
+            dateCreated: userData['vendorDateCreated']);
       }
       userData['id'] = responseData['name'];
       await _saveUserData(userData);

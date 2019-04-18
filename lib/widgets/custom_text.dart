@@ -27,7 +27,7 @@ class HeadlineText extends StatelessWidget {
         fontWeight: FontWeight.w900,
         fontSize: _getSize(33),
         color: textColor,
-        letterSpacing: 2,
+        letterSpacing: 1.3,
       ),
       textAlign: textAlign,
     );
