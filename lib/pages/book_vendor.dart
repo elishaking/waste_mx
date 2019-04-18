@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:async';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -71,6 +72,13 @@ class _BookVendorPageState extends State<BookVendorPage>{
        _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
+      Timer(Duration(seconds: 1), (){
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: new Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      });
     });
   }
 
@@ -251,28 +259,7 @@ class _BookVendorPageState extends State<BookVendorPage>{
                         },
                       ),
                       SizedBox(height: _fieldsGap,),
-                      OutlineButton(
-                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-                        borderSide: BorderSide(width: 1),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Add Image: ${_imageFiles.length}'),
-                            IconButton(
-                              icon: Icon(Icons.camera),
-                              onPressed: (){
-                                _openImagePicker(context);
-                              },
-                            )
-                          ],
-                        ),
-                        onPressed: (){
-                          _openImagePicker(context);
-                        },
-                      ),
-                      SizedBox(height: _fieldsGap,),
-                      _imageFiles.length == 0 ? Text('No Image(s)') : 
+                      _imageFiles.length == 0 ? Text('No Image(s)', style: TextStyle(color: Theme.of(context).primaryColor),) : 
                       Column(
                         children: List.generate(_imageFiles.length, (int index) => Container(
                           // decoration: BoxDecoration(
@@ -294,6 +281,27 @@ class _BookVendorPageState extends State<BookVendorPage>{
                             ),
                           ),
                         )),
+                      ),
+                      SizedBox(height: _fieldsGap,),
+                      OutlineButton(
+                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                        borderSide: BorderSide(width: 1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('Add Image: ${_imageFiles.length}'),
+                            IconButton(
+                              icon: Icon(Icons.camera),
+                              onPressed: (){
+                                _openImagePicker(context);
+                              },
+                            )
+                          ],
+                        ),
+                        onPressed: (){
+                          _openImagePicker(context);
+                        },
                       ),
                       SizedBox(height: _fieldsGap,),
                       ScopedModelDescendant(
