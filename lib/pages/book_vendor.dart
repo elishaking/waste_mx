@@ -70,7 +70,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
         _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
-      Timer(Duration(seconds: 1), () {
+      Timer(Duration(milliseconds: 500), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           duration: new Duration(milliseconds: 200),
@@ -82,41 +82,54 @@ class _BookVendorPageState extends State<BookVendorPage> {
 
   void _openImagePicker(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            height: 200,
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Column(
-              children: <Widget>[
-                customText.TitleText(
-                  text: 'Add Image',
-                  textColor: Colors.black,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ListTile(
-                  leading: Icon(Icons.camera),
-                  title: Text('Use Camera'),
-                  onTap: () {
-                    _getImage(context, ImageSource.camera);
-                  },
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                ListTile(
-                  leading: Icon(Icons.picture_in_picture),
-                  title: Text('Select from Gallery'),
-                  onTap: () {
-                    _getImage(context, ImageSource.gallery);
-                  },
-                )
-              ],
-            ),
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: <Widget>[
+              customText.TitleText(
+                text: 'Add Image',
+                textColor: Colors.black,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ListTile(
+                leading: Icon(Icons.camera),
+                title: Text('Use Camera'),
+                onTap: () {
+                  _getImage(context, ImageSource.camera);
+                },
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              ListTile(
+                leading: Icon(Icons.picture_in_picture),
+                title: Text('Select from Gallery'),
+                onTap: () {
+                  _getImage(context, ImageSource.gallery);
+                },
+              )
+            ],
+          ),
+        );
+      }
+    );
+  }
+
+  void _editPrice(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                EditPricePage(_wastePrice)))
+        .then((price) {
+      setState(() {
+        _wastePrice = price;
+      });
+    });
   }
 
   ScrollController _scrollController = ScrollController();
@@ -173,8 +186,11 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             suffixIcon: ScopedModelDescendant<MainModel>(
                               builder: (BuildContext context, Widget child,
                                   MainModel model) {
-                                return model.isLoading
-                                    ? SizedBox(child: CircularProgressIndicator(), width: 20, height: 20,)
+                                return model.gettingLocation
+                                    ? Container(
+                                      padding: EdgeInsets.all(10),
+                                        child: CircularProgressIndicator(),
+                                      )
                                     : GestureDetector(
                                         child: Icon(Icons.my_location),
                                         onTap: () {
@@ -271,23 +287,13 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            EditPricePage(_wastePrice)))
-                                    .then((price) {
-                                  setState(() {
-                                    _wastePrice = price;
-                                  });
-                                });
+                                _editPrice(context);
                               },
                             )
                           ],
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  EditPricePage(_wastePrice)));
+                          _editPrice(context);
                         },
                       ),
                       SizedBox(
