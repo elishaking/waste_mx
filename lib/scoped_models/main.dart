@@ -76,7 +76,13 @@ class UserModel extends ConnectedModel {
         final http.Response response = await http.post(
             'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
             headers: {'Content-Type': 'application/json'},
-            body: json.encode({'token': token, 'returnSecureToken': true}));
+            body: json.encode({'token': token, 'returnSecureToken': true})).timeout(Duration(seconds: _httpTimeout), 
+            onTimeout: (){
+              _authenticatedUser = null;
+              _isLoading = false;
+              notifyListeners();
+            });
+        if(response == null) return;
         final Map<String, dynamic> responseData = json.decode(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData);
