@@ -4,7 +4,7 @@ import '../widgets/custom_text.dart' as customText;
 
 import './vendor_list.dart';
 
-class BookVendorFailPage extends StatelessWidget{
+class BookVendorFailPage extends StatelessWidget {
   final String vendorName;
 
   BookVendorFailPage(this.vendorName);
@@ -26,25 +26,25 @@ class BookVendorFailPage extends StatelessWidget{
         child: Column(
           children: <Widget>[
             Image.asset('assets/fail.png'),
-            customText.TitleText(
-              text: 'Oh Snap!',
-              textColor: Colors.red
-            ),
+            customText.TitleText(text: 'Oh Snap!', textColor: Colors.red),
             customText.BodyText(
-              text: 'Looks like something went wrong while working on your request.',
+              text:
+                  'Looks like something went wrong while working on your request.',
               textColor: Colors.black,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             RaisedButton(
               child: customText.BodyText(
                 text: 'Retry',
                 textColor: Colors.white,
               ),
-              onPressed: (){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => VendorListPage()
-                ));
+              onPressed: () {
+                // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                //   builder: (BuildContext context) => VendorListPage()
+                // ));
               },
             )
           ],

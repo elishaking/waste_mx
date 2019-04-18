@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Update{
+class Update {
   final String id;
   final Icon icon;
   final String title;

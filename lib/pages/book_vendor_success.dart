@@ -4,7 +4,7 @@ import '../widgets/custom_text.dart' as customText;
 
 import './view_offer.dart';
 
-class BookVendorSuccessPage extends StatelessWidget{
+class BookVendorSuccessPage extends StatelessWidget {
   final String vendorName;
 
   BookVendorSuccessPage(this.vendorName);
@@ -27,24 +27,24 @@ class BookVendorSuccessPage extends StatelessWidget{
           children: <Widget>[
             Image.asset('assets/success.png'),
             customText.TitleText(
-              text: 'Success!',
-              textColor: Theme.of(context).primaryColor
-            ),
+                text: 'Success!', textColor: Theme.of(context).primaryColor),
             customText.BodyText(
-              text: 'Your offer has been placed and you will get a call soon from a vendor.',
+              text:
+                  'Your offer has been placed and you will get a call soon from a vendor.',
               textColor: Colors.black,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             RaisedButton(
               child: customText.BodyText(
                 text: 'View Offer',
                 textColor: Colors.white,
               ),
-              onPressed: (){
+              onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => ViewOfferPage()
-                ));
+                    builder: (BuildContext context) => ViewOfferPage()));
               },
             )
           ],

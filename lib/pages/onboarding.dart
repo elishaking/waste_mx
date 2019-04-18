@@ -4,14 +4,14 @@ import '../widgets/custom_text.dart' as custom_text;
 
 import './select_role.dart';
 
-class OnboardingPage extends StatefulWidget{
+class OnboardingPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _OnboardingPageState();
   }
 }
 
-class _OnboardingPageState extends State<OnboardingPage>{
+class _OnboardingPageState extends State<OnboardingPage> {
   int _tabPos = 1;
   List<Map<String, String>> _infoList = [
     {
@@ -22,17 +22,20 @@ class _OnboardingPageState extends State<OnboardingPage>{
     {
       'imageUrl': 'assets/obd-1.png',
       'title': 'User',
-      'body': 'User can initiate waste pickup by publishing waste bags to waste collectors',
+      'body':
+          'User can initiate waste pickup by publishing waste bags to waste collectors',
     },
     {
       'imageUrl': 'assets/obd-2.png',
       'title': 'Waste Collector',
-      'body': 'Waste collector accept users offer for pickup. Can post rate and location of pickup',
+      'body':
+          'Waste collector accept users offer for pickup. Can post rate and location of pickup',
     },
     {
       'imageUrl': 'assets/obd-3.png',
       'title': 'Recycling',
-      'body': 'User can either call/request recycling collectors. User can make/accept offer for pickup',
+      'body':
+          'User can either call/request recycling collectors. User can make/accept offer for pickup',
     },
     {
       'imageUrl': 'assets/obd-4.png',
@@ -41,7 +44,7 @@ class _OnboardingPageState extends State<OnboardingPage>{
     },
   ];
 
-  Widget _buildOnboardingTab({int pos}){
+  Widget _buildOnboardingTab({int pos}) {
     return Expanded(
       child: Container(
         height: 5,
@@ -51,10 +54,9 @@ class _OnboardingPageState extends State<OnboardingPage>{
     );
   }
 
-  void _navPush(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext context) => SelectRolePage()
-    ));
+  void _navPush(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => SelectRolePage()));
   }
 
   @override
@@ -62,12 +64,12 @@ class _OnboardingPageState extends State<OnboardingPage>{
     final int _maxTabs = 5;
     return Scaffold(
       body: GestureDetector(
-        onTap: (){
-          if(_tabPos < 5){
+        onTap: () {
+          if (_tabPos < 5) {
             setState(() {
               _tabPos++;
             });
-          } else if(_tabPos == 5){
+          } else if (_tabPos == 5) {
             _navPush(context);
           }
         },
@@ -90,9 +92,12 @@ class _OnboardingPageState extends State<OnboardingPage>{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white,),
-                      onPressed: (){
-                        if(_tabPos > 1){
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        if (_tabPos > 1) {
                           setState(() {
                             _tabPos--;
                           });
@@ -115,18 +120,22 @@ class _OnboardingPageState extends State<OnboardingPage>{
                       children: <Widget>[
                         Image.asset(_infoList[_tabPos - 1]['imageUrl']),
                         SizedBox(height: 10),
-                        custom_text.TitleText(text: _infoList[_tabPos - 1]['title'],),
+                        custom_text.TitleText(
+                          text: _infoList[_tabPos - 1]['title'],
+                        ),
                         custom_text.BodyText(
                           text: _infoList[_tabPos - 1]['body'],
                           textAlign: TextAlign.center,
                         ),
-
                       ],
                     ),
                   ),
                 ),
               ),
-              Text('TAP ANYWHERE TO CONTINUE', style: TextStyle(color: Colors.white),)
+              Text(
+                'TAP ANYWHERE TO CONTINUE',
+                style: TextStyle(color: Colors.white),
+              )
             ],
           ),
         ),

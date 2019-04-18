@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 
 import './profile_edit.dart';
 
-class ProfilePage extends StatelessWidget{
+class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
 
-    void _pushRoute(route){
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) {
-            return route;
-          }
-      ));
+    void _pushRoute(route) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (BuildContext context) {
+        return route;
+      }));
     }
 
     return Scaffold(
@@ -21,7 +20,7 @@ class ProfilePage extends StatelessWidget{
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: (){
+            onPressed: () {
               _pushRoute(ProfileEditPage());
             },
           )
@@ -45,21 +44,27 @@ class ProfilePage extends StatelessWidget{
                   margin: EdgeInsets.only(bottom: 18),
                   child: Column(
                     children: <Widget>[
-                      Text('Bilikiss Adebiyi, Abiola', style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 9),
-                        margin: EdgeInsets.symmetric(vertical: 7,),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10)
+                      Text(
+                        'Bilikiss Adebiyi, Abiola',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
-                        child: Text('Verified', style: TextStyle(
-                          color: Colors.white
-                        ),),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 9),
+                        margin: EdgeInsets.symmetric(
+                          vertical: 7,
+                        ),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          'Verified',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                       Text('Last Login: 1min'),
                       /*Row(
@@ -124,11 +129,8 @@ class ProfilePage extends StatelessWidget{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         foregroundColor: Colors.white,
-        onPressed: (){
-
-        },
+        onPressed: () {},
       ),
     );
   }
-
 }

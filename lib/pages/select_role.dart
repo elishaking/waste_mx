@@ -6,14 +6,14 @@ import '../widgets/custom_text.dart' as customText;
 
 import './signup.dart';
 
-class SelectRolePage extends StatefulWidget{
+class SelectRolePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _SelectRolePageState();
   }
 }
 
-class _SelectRolePageState extends State<SelectRolePage>{
+class _SelectRolePageState extends State<SelectRolePage> {
   bool _clientSelected = false;
   bool _vendorSelected = false;
 
@@ -22,7 +22,9 @@ class _SelectRolePageState extends State<SelectRolePage>{
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10,),
+          padding: EdgeInsets.symmetric(
+            vertical: 10,
+          ),
           child: Image(image: AssetImage('assets/logo.png')),
         ),
         title: Text('Waste MX'),
@@ -45,7 +47,7 @@ class _SelectRolePageState extends State<SelectRolePage>{
                 title: Text('Continue as User'),
                 subtitle: Text('Request for Vendor (waste collector)'),
                 selected: _clientSelected,
-                onTap: (){
+                onTap: () {
                   setState(() {
                     _clientSelected = true;
                     _vendorSelected = false;
@@ -57,7 +59,7 @@ class _SelectRolePageState extends State<SelectRolePage>{
                 title: Text('Continue as Vendor'),
                 subtitle: Text('Collect and recycle waste'),
                 selected: _vendorSelected,
-                onTap: (){
+                onTap: () {
                   setState(() {
                     _vendorSelected = true;
                     _clientSelected = false;
@@ -69,10 +71,12 @@ class _SelectRolePageState extends State<SelectRolePage>{
                 child: RaisedButton(
                   child: Text('Next'),
                   textColor: Colors.white,
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => SignUpPage(_clientSelected ? UserType.Client : UserType.Vendor)
-                    ));
+                        builder: (BuildContext context) => SignUpPage(
+                            _clientSelected
+                                ? UserType.Client
+                                : UserType.Vendor)));
                   },
                 ),
               )

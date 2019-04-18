@@ -35,28 +35,25 @@ class HomePage extends StatelessWidget {
     {
       'icon': Icons.account_balance_wallet,
       'title': 'Earned Coins',
-      'message': 'You earned 50 points just for installation, check your wallet',
+      'message':
+          'You earned 50 points just for installation, check your wallet',
       'action': 'WALLET'
     },
   ];
 
   double _targetWidth = 0;
 
-  double _getSize(final double default_1440){
+  double _getSize(final double default_1440) {
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
-  Widget _buildTopSection(BuildContext context){
+  Widget _buildTopSection(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/waste_home.jpg'),
-          colorFilter: ColorFilter.mode(
-            Colors.black54,
-            BlendMode.darken
-          ),
-          fit: BoxFit.cover
-        ),
+            image: AssetImage('assets/waste_home.jpg'),
+            colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
+            fit: BoxFit.cover),
       ),
       child: Column(
         children: <Widget>[
@@ -74,9 +71,12 @@ class HomePage extends StatelessWidget {
           // OutlineButton(
           //   child: Text('Search vendor recycler'),
           // ),
-          SizedBox(height: 30,),
+          SizedBox(
+            height: 30,
+          ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
+            padding:
+                EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -85,14 +85,13 @@ class HomePage extends StatelessWidget {
                     color: Colors.white,
                     shape: OutlineInputBorder(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(100),
-                        bottomLeft: Radius.circular(100),
-                        topRight: Radius.circular(0),
-                        bottomRight: Radius.circular(0)
-                      ),
+                          topLeft: Radius.circular(100),
+                          bottomLeft: Radius.circular(100),
+                          topRight: Radius.circular(0),
+                          bottomRight: Radius.circular(0)),
                     ),
                     child: Text('Search vendor recycler'),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pushNamed(context, 'search');
                     },
                   ),
@@ -106,10 +105,9 @@ class HomePage extends StatelessWidget {
                         topLeft: Radius.circular(0),
                         bottomLeft: Radius.circular(0),
                         topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100)
-                    ),
+                        bottomRight: Radius.circular(100)),
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushNamed(context, 'search');
                   },
                 )
@@ -130,7 +128,8 @@ class HomePage extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(top: pad_vertical, bottom: 0, left: 10, right: 10),
+            padding: EdgeInsets.only(
+                top: pad_vertical, bottom: 0, left: 10, right: 10),
             child: Text(
               'Make money with waste',
               textAlign: TextAlign.left,
@@ -157,44 +156,46 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  
-  Widget _buildSlidingSection(BuildContext context){
+
+  Widget _buildSlidingSection(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: pad_vertical, horizontal: 10),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: List.generate(_wasteMXUserOptions.length, (int index) => Card(
-              child: Column(
-                children: <Widget>[
-                  Image(
-                    width: 130,
-                    image: AssetImage(_wasteMXUserOptions[index]['imageUrl']),
-                  ),
-                  ButtonTheme.bar(
-                    child: ButtonBar(
+            children: List.generate(
+                _wasteMXUserOptions.length,
+                (int index) => Card(
+                        child: Column(
                       children: <Widget>[
-                        FlatButton(
-                          child: Text(_wasteMXUserOptions[index]['name']),
-                          onPressed: (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => _wasteMXUserOptions[index]['page']
-                            ));
-                          },
+                        Image(
+                          width: 130,
+                          image: AssetImage(
+                              _wasteMXUserOptions[index]['imageUrl']),
+                        ),
+                        ButtonTheme.bar(
+                          child: ButtonBar(
+                            children: <Widget>[
+                              FlatButton(
+                                child: Text(_wasteMXUserOptions[index]['name']),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          _wasteMXUserOptions[index]['page']));
+                                },
+                              )
+                            ],
+                          ),
                         )
                       ],
-                    ),
-                  )
-                ],
-              )
-            )
-          )
-        ),
+                    )))),
       ),
     );
   }
 
-  Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
+  Widget _buildCategoryWidget(
+      BuildContext context, String title, String imageUrl,
+      [dynamic route]) {
     return OutlineButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
@@ -208,23 +209,24 @@ class HomePage extends StatelessWidget {
             height: _getSize(110),
             image: AssetImage(imageUrl),
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           customText.BodyText(
             text: title,
             textColor: Theme.of(context).primaryColor,
           )
         ],
       ),
-      onPressed: (){
-        if(route == null) return;
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route
-        ));
+      onPressed: () {
+        if (route == null) return;
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (BuildContext context) => route));
       },
     );
   }
-  
-  Widget _buildCategoriesSection(BuildContext context){
+
+  Widget _buildCategoriesSection(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       child: Column(
@@ -232,67 +234,77 @@ class HomePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildCategoryWidget(context, 'Dispose Waste', 'assets/recycling-bin.png', DisposeWastePage()),
-              _buildCategoryWidget(context, 'Recycle Waste', 'assets/eco-factory.png', RecycleWastePage())
+              _buildCategoryWidget(context, 'Dispose Waste',
+                  'assets/recycling-bin.png', DisposeWastePage()),
+              _buildCategoryWidget(context, 'Recycle Waste',
+                  'assets/eco-factory.png', RecycleWastePage())
             ],
           ),
-          SizedBox(height: 30,),
+          SizedBox(
+            height: 30,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildCategoryWidget(context, 'De-clustering', 'assets/target.png'),
+              _buildCategoryWidget(
+                  context, 'De-clustering', 'assets/target.png'),
               _buildCategoryWidget(context, 'Sewage', 'assets/sewage.png')
             ],
           ),
-          SizedBox(height: 30,),
+          SizedBox(
+            height: 30,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buildCategoryWidget(context, 'Upcycling', 'assets/creative.png'),
-              _buildCategoryWidget(context, 'Info Center', 'assets/analysis.png')
+              _buildCategoryWidget(
+                  context, 'Info Center', 'assets/analysis.png')
             ],
           ),
         ],
       ),
     );
   }
-  
-  Widget _buildMessagesSection(){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10,),
-      child: Column(
-        children: List.generate(_messages.length, (int index) => Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(_messages[index]['icon']),
-                  title: Text(_messages[index]['title']),
-                  subtitle: Text(_messages[index]['message']),
-                ),
-                ButtonTheme.bar(
-                  child: ButtonBar(
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(_messages[index]['action']),
-                        onPressed: (){
-                          
-                        },
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
 
-        )),
+  Widget _buildMessagesSection() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      child: Column(
+        children: List.generate(
+            _messages.length,
+            (int index) => Card(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(_messages[index]['icon']),
+                          title: Text(_messages[index]['title']),
+                          subtitle: Text(_messages[index]['message']),
+                        ),
+                        ButtonTheme.bar(
+                          child: ButtonBar(
+                            children: <Widget>[
+                              FlatButton(
+                                child: Text(_messages[index]['action']),
+                                onPressed: () {},
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
       ),
     );
   }
-  
-  Widget _buildDrawer(BuildContext context){
+
+  Widget _buildDrawer(BuildContext context) {
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -301,14 +313,14 @@ class HomePage extends StatelessWidget {
               height: 230,
               width: _targetWidth,
               color: Theme.of(context).primaryColor,
-            //  child: CircleAvatar(
-            //    child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
-            //  ),
+              //  child: CircleAvatar(
+              //    child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
+              //  ),
             ),
             ListTile(
               leading: Icon(Icons.home),
               title: Text('Home'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
               selected: true,
@@ -316,7 +328,7 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, 'profile');
               },
@@ -324,42 +336,42 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.account_balance_wallet),
               title: Text('Wallet'),
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => WalletPage(false)
-                ));
-              //  Navigator.pushNamed(context, 'profile');
+                    builder: (BuildContext context) => WalletPage(false)));
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.shopping_cart),
               title: Text('Shop'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.supervised_user_circle),
               title: Text('Vendors'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.markunread_mailbox),
               title: Text('Packages'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.label_outline),
               title: Text('Logout'),
-              onTap: (){
-                Navigator.of(context).pushNamedAndRemoveUntil('welcome', (Route route) => false);
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('welcome', (Route route) => false);
               },
             ),
           ],
@@ -367,7 +379,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import '../../models/update.dart';
 import '../wallet.dart';
 import './offerings.dart';
 
-class VendorHomePage extends StatelessWidget{
+class VendorHomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
 
   //* Get data from server
@@ -28,15 +28,13 @@ class VendorHomePage extends StatelessWidget{
   //   ]
   // };
 
-  
-
   double _targetWidth = 0;
 
-  double _getSize(final double default_1440){
+  double _getSize(final double default_1440) {
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
-  Widget _buildDrawer(BuildContext context){
+  Widget _buildDrawer(BuildContext context) {
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -45,14 +43,14 @@ class VendorHomePage extends StatelessWidget{
               height: 230,
               width: _targetWidth,
               color: Theme.of(context).primaryColor,
-            //  child: CircleAvatar(
-            //    child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
-            //  ),
+              //  child: CircleAvatar(
+              //    child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
+              //  ),
             ),
             ListTile(
               leading: Icon(Icons.home),
               title: Text('Home'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
               selected: true,
@@ -60,7 +58,7 @@ class VendorHomePage extends StatelessWidget{
             ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
                 // Navigator.pushNamed(context, 'profile');
               },
@@ -68,42 +66,43 @@ class VendorHomePage extends StatelessWidget{
             ListTile(
               leading: Icon(Icons.account_balance_wallet),
               title: Text('Wallet'),
-              onTap: (){
+              onTap: () {
                 // Navigator.of(context).push(MaterialPageRoute(
                 //   builder: (BuildContext context) => WalletPage(false)
                 // ));
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.shopping_cart),
               title: Text('Shop'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.supervised_user_circle),
               title: Text('Vendors'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.markunread_mailbox),
               title: Text('Packages'),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
-              //  Navigator.pushNamed(context, 'profile');
+                //  Navigator.pushNamed(context, 'profile');
               },
             ),
             ListTile(
               leading: Icon(Icons.label_outline),
               title: Text('Logout'),
-              onTap: (){
-                Navigator.of(context).pushNamedAndRemoveUntil('welcome', (Route route) => false);
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('welcome', (Route route) => false);
               },
             ),
           ],
@@ -112,17 +111,13 @@ class VendorHomePage extends StatelessWidget{
     );
   }
 
-  Widget _buildTopSection(BuildContext context){
+  Widget _buildTopSection(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/waste_home.jpg'),
-          colorFilter: ColorFilter.mode(
-            Colors.black54,
-            BlendMode.darken
-          ),
-          fit: BoxFit.cover
-        ),
+            image: AssetImage('assets/waste_home.jpg'),
+            colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
+            fit: BoxFit.cover),
       ),
       child: Column(
         children: <Widget>[
@@ -140,9 +135,12 @@ class VendorHomePage extends StatelessWidget{
           // OutlineButton(
           //   child: Text('Search vendor recycler'),
           // ),
-          SizedBox(height: 30,),
+          SizedBox(
+            height: 30,
+          ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
+            padding:
+                EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -151,22 +149,23 @@ class VendorHomePage extends StatelessWidget{
                     color: Colors.white,
                     shape: OutlineInputBorder(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(100),
-                        bottomLeft: Radius.circular(100),
-                        topRight: Radius.circular(0),
-                        bottomRight: Radius.circular(0)
-                      ),
+                          topLeft: Radius.circular(100),
+                          bottomLeft: Radius.circular(100),
+                          topRight: Radius.circular(0),
+                          bottomRight: Radius.circular(0)),
                     ),
                     child: Text('View Client Offerings'),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => OfferingsPage()
-                      ));
+                          builder: (BuildContext context) => OfferingsPage()));
                     },
                   ),
                 ),
                 FlatButton(
-                  child: Icon(Icons.remove_red_eye, color: Colors.white,),
+                  child: Icon(
+                    Icons.remove_red_eye,
+                    color: Colors.white,
+                  ),
                   color: Theme.of(context).accentColor,
                   padding: EdgeInsets.symmetric(vertical: 10),
                   shape: OutlineInputBorder(
@@ -174,13 +173,11 @@ class VendorHomePage extends StatelessWidget{
                         topLeft: Radius.circular(0),
                         bottomLeft: Radius.circular(0),
                         topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100)
-                    ),
+                        bottomRight: Radius.circular(100)),
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => OfferingsPage()
-                    ));
+                        builder: (BuildContext context) => OfferingsPage()));
                   },
                 )
               ],
@@ -200,7 +197,8 @@ class VendorHomePage extends StatelessWidget{
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(top: pad_vertical, bottom: 0, left: 10, right: 10),
+            padding: EdgeInsets.only(
+                top: pad_vertical, bottom: 0, left: 10, right: 10),
             child: Text(
               'Make money with waste',
               textAlign: TextAlign.left,
@@ -251,48 +249,50 @@ class VendorHomePage extends StatelessWidget{
       action: 'WALLET',
     ),
   ];
-  
-  Widget _buildMessagesSection(){
+
+  Widget _buildMessagesSection() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10,),
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
       child: Column(
-        children: List.generate(_messages.length, (int index) => Dismissible(
-          key: Key(_messages[index].id),
-          onDismissed: (DismissDirection dir){
-            _messages.removeAt(index);
-            print(_messages);
-          },
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: _messages[index].icon,
-                    title: Text(_messages[index].title),
-                    subtitle: Text(_messages[index].message),
-                  ),
-                  ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text(_messages[index].action),
-                          onPressed: (){
-                            
-                          },
-                        )
-                      ],
+        children: List.generate(
+            _messages.length,
+            (int index) => Dismissible(
+                  key: Key(_messages[index].id),
+                  onDismissed: (DismissDirection dir) {
+                    _messages.removeAt(index);
+                    print(_messages);
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: <Widget>[
+                          ListTile(
+                            leading: _messages[index].icon,
+                            title: Text(_messages[index].title),
+                            subtitle: Text(_messages[index].message),
+                          ),
+                          ButtonTheme.bar(
+                            child: ButtonBar(
+                              children: <Widget>[
+                                FlatButton(
+                                  child: Text(_messages[index].action),
+                                  onPressed: () {},
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        )),
+                  ),
+                )),
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
@@ -304,9 +304,7 @@ class VendorHomePage extends StatelessWidget{
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: (){
-
-            },
+            onPressed: () {},
           )
         ],
       ),
@@ -315,7 +313,9 @@ class VendorHomePage extends StatelessWidget{
           child: Column(
             children: <Widget>[
               _buildTopSection(context),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               _buildMessagesSection()
             ],
           ),

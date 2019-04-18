@@ -4,17 +4,16 @@ import '../widgets/custom_text.dart' as customText;
 
 import './onboarding.dart';
 
-class WelcomePage extends StatelessWidget{
+class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context){
-              return OnboardingPage();
-            }
-          ));
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (BuildContext context) {
+            return OnboardingPage();
+          }));
         },
         child: Container(
           color: Theme.of(context).primaryColor,
@@ -26,10 +25,8 @@ class WelcomePage extends StatelessWidget{
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18),
-                    child: Image(
-                        height: 70,
-                        image: AssetImage('assets/logo.png')
-                    ),
+                    child:
+                        Image(height: 70, image: AssetImage('assets/logo.png')),
                   ),
                   customText.TitleText(
                     text: 'Waste MX',

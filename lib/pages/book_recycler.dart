@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:async';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
-import '../models/dispose_offering.dart';
+import '../models/recycle_offering.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
-// import './book_vendor_success.dart';
-// import './book_vendor_fail.dart';
 import './edit_price.dart';
 import './wallet.dart';
 
-class BookVendorPage extends StatefulWidget {
+class BookRecyclerPage extends StatefulWidget {
   final String wasteType;
-  BookVendorPage(this.wasteType);
+  BookRecyclerPage(this.wasteType);
 
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +22,7 @@ class BookVendorPage extends StatefulWidget {
   }
 }
 
-class _BookVendorPageState extends State<BookVendorPage> {
+class _BookVendorPageState extends State<BookRecyclerPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _formData = {
@@ -34,20 +31,19 @@ class _BookVendorPageState extends State<BookVendorPage> {
     'image': ''
   };
   String _wastePrice = '0.0';
-  String _numOfBins = '0';
+  String _weight = '0';
   final int rate = 100; //? bin price
 
   List<File> _imageFiles = List<File>();
 
   TextEditingController _controller = TextEditingController();
-  TextEditingController _locationFieldController = TextEditingController();
 
   void _onChange() {
     String text = _controller.text;
-    print(text + ' ' + _numOfBins);
-    if (text.isNotEmpty && (text != _numOfBins)) {
+    print(text + ' ' + _weight);
+    if (text.isNotEmpty && (text != _weight)) {
       // print(text);
-      _numOfBins = text;
+      _weight = text;
       setState(() {
         _wastePrice = (double.parse(text) * rate).toString();
       });
@@ -60,76 +56,52 @@ class _BookVendorPageState extends State<BookVendorPage> {
     super.initState();
   }
 
-  void _setImage(File image) {
-    _formData['image'] = image;
-  }
-
   void _getImage(BuildContext context, ImageSource source) {
     ImagePicker.pickImage(source: source, maxWidth: 400).then((File image) {
       setState(() {
         _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
-      Timer(Duration(milliseconds: 500), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: new Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        );
-      });
     });
   }
 
   void _openImagePicker(BuildContext context) {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            children: <Widget>[
-              customText.TitleText(
-                text: 'Add Image',
-                textColor: Colors.black,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              ListTile(
-                leading: Icon(Icons.camera),
-                title: Text('Use Camera'),
-                onTap: () {
-                  _getImage(context, ImageSource.camera);
-                },
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              ListTile(
-                leading: Icon(Icons.picture_in_picture),
-                title: Text('Select from Gallery'),
-                onTap: () {
-                  _getImage(context, ImageSource.gallery);
-                },
-              )
-            ],
-          ),
-        );
-      }
-    );
-  }
-
-  void _editPrice(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                EditPricePage(_wastePrice)))
-        .then((price) {
-      setState(() {
-        _wastePrice = price;
-      });
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 200,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              children: <Widget>[
+                customText.TitleText(
+                  text: 'Add Image',
+                  textColor: Colors.black,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ListTile(
+                  leading: Icon(Icons.camera),
+                  title: Text('Use Camera'),
+                  onTap: () {
+                    _getImage(context, ImageSource.camera);
+                  },
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                ListTile(
+                  leading: Icon(Icons.picture_in_picture),
+                  title: Text('Select from Gallery'),
+                  onTap: () {
+                    _getImage(context, ImageSource.gallery);
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 
   ScrollController _scrollController = ScrollController();
@@ -177,35 +149,18 @@ class _BookVendorPageState extends State<BookVendorPage> {
 //                crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextFormField(
-                        controller: _locationFieldController,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.location_on),
                             labelText: 'Waste location',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            suffixIcon: ScopedModelDescendant<MainModel>(
-                              builder: (BuildContext context, Widget child,
-                                  MainModel model) {
-                                return model.gettingLocation
-                                    ? Container(
-                                      padding: EdgeInsets.all(10),
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : GestureDetector(
-                                        child: Icon(Icons.my_location),
-                                        onTap: () {
-                                          model.getLocation().then((String location){
-                                            setState(() {
-                                              _locationFieldController.text = location;
-                                            });
-                                          });
-//                                          final SnackBar snackBar = SnackBar(
-//                                            content: Text('Getting Location'),
-//                                          );
-//                                          Scaffold.of(context)
-//                                              .showSnackBar(snackBar);
-                                        },
-                                      );
+                            suffixIcon: GestureDetector(
+                              child: Icon(Icons.my_location),
+                              onTap: () {
+                                final SnackBar snackBar = SnackBar(
+                                  content: Text('Getting Location'),
+                                );
+                                Scaffold.of(context).showSnackBar(snackBar);
                               },
                             )),
                         validator: (String value) {
@@ -214,35 +169,17 @@ class _BookVendorPageState extends State<BookVendorPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['location'] = value;
+                          _formData['phone'] = value;
                         },
                       ),
                       SizedBox(
                         height: _fieldsGap,
                       ),
-                      // DropdownButtonFormField<String>(
-                      //   decoration: InputDecoration(
-                      //       border: OutlineInputBorder(
-                      //           borderRadius: BorderRadius.circular(10)
-                      //       )
-                      //   ),
-                      //   value: _wasteType,
-                      //   items: _wasteTypes.map<DropdownMenuItem<String>>((String wasteType) => DropdownMenuItem(
-                      //     value: wasteType,
-                      //     child: Text(wasteType),
-                      //   )).toList(),
-                      //   onChanged: (String newValue){
-                      //     setState(() {
-                      //       _wasteType = newValue;
-                      //       print(_wasteType);
-                      //     });
-                      //   },
-                      // ),
-                      // SizedBox(height: _fieldsGap,),
                       TextFormField(
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.delete),
-                            labelText: 'Number of Bins',
+                            suffix: Text('Kg'),
+                            labelText: 'Weight',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         controller: _controller,
@@ -256,7 +193,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                           }
                         },
                         onSaved: (String value) {
-                          _formData['numberOfBins'] = value;
+                          _formData['weight'] = value;
                         },
                       ),
                       SizedBox(
@@ -266,7 +203,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                         padding: EdgeInsets.only(right: 5),
                         alignment: Alignment.centerRight,
                         child: customText.BodyText(
-                          text: 'NGN ${rate.toString()} per bin',
+                          text: 'NGN ${rate.toString()} per kg',
                           textColor: Colors.black,
                         ),
                       ),
@@ -287,24 +224,56 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                _editPrice(context);
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            EditPricePage(_wastePrice)))
+                                    .then((price) {
+                                  setState(() {
+                                    _wastePrice = price;
+                                  });
+                                });
                               },
                             )
                           ],
                         ),
                         onPressed: () {
-                          _editPrice(context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  EditPricePage(_wastePrice)));
+                        },
+                      ),
+                      SizedBox(
+                        height: _fieldsGap,
+                      ),
+                      OutlineButton(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                        borderSide: BorderSide(width: 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('Add Image: ${_imageFiles.length}'),
+                            IconButton(
+                              icon: Icon(Icons.camera),
+                              onPressed: () {
+                                _openImagePicker(context);
+                              },
+                            )
+                          ],
+                        ),
+                        onPressed: () {
+                          _openImagePicker(context);
                         },
                       ),
                       SizedBox(
                         height: _fieldsGap,
                       ),
                       _imageFiles.length == 0
-                          ? Text(
-                              'No Image(s)',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                            )
+                          ? Text('No Image(s)')
                           : Column(
                               children: List.generate(
                                   _imageFiles.length,
@@ -337,32 +306,6 @@ class _BookVendorPageState extends State<BookVendorPage> {
                       SizedBox(
                         height: _fieldsGap,
                       ),
-                      OutlineButton(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-                        borderSide: BorderSide(width: 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Add Image: ${_imageFiles.length}'),
-                            IconButton(
-                              icon: Icon(Icons.camera),
-                              onPressed: () {
-                                _openImagePicker(context);
-                              },
-                            )
-                          ],
-                        ),
-                        onPressed: () {
-                          _openImagePicker(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: _fieldsGap,
-                      ),
                       ScopedModelDescendant(
                         builder: (BuildContext context, Widget child,
                             MainModel model) {
@@ -377,13 +320,12 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
                                       model
-                                          .addOffering(
-                                              DisposeOffering(
+                                          .addRecycleOffering(
+                                              RecycleOffering(
                                                   name: widget.wasteType,
                                                   price: _wastePrice,
                                                   rate: rate.toString(),
-                                                  numberOfBins:
-                                                      _formData['numberOfBins'],
+                                                  weight: _formData['weight'],
                                                   clientName: 'new',
                                                   clientLocation:
                                                       _formData['location']),

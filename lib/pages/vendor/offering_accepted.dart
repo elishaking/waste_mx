@@ -6,7 +6,7 @@ import '../../widgets/custom_text.dart' as customText;
 
 import './track_transactions.dart';
 
-class OfferingAcceptedPage extends StatelessWidget{
+class OfferingAcceptedPage extends StatelessWidget {
   final DisposeOffering offering;
 
   OfferingAcceptedPage(this.offering);
@@ -19,7 +19,8 @@ class OfferingAcceptedPage extends StatelessWidget{
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.home),
-            onPressed: () => Navigator.of(context).pushReplacementNamed('vendor_home'),
+            onPressed: () =>
+                Navigator.of(context).pushReplacementNamed('vendor_home'),
           )
         ],
       ),
@@ -48,38 +49,46 @@ class OfferingAcceptedPage extends StatelessWidget{
                 text: offering.date,
                 textColor: Colors.blueGrey,
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Theme.of(context).primaryColor),
-                  borderRadius: BorderRadius.circular(100)
-                ),
+                    border: Border.all(
+                        width: 1, color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(100)),
                 child: customText.BodyText(
-                  text: 'Your transaction is in Escrow. Your wallet will be credited once the client confirms completion of waste pickup',
+                  text:
+                      'Your transaction is in Escrow. Your wallet will be credited once the client confirms completion of waste pickup',
                   textColor: Theme.of(context).primaryColor,
                   textOverflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               // Expanded(child: Container(),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   OutlineButton(
                     child: Text('View Offerings'),
-                    onPressed: (){
-
-                    },
+                    onPressed: () {},
                   ),
                   RaisedButton(
-                    child: Text('Track Transactions', style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      'Track Transactions',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     // elevation: 0,
-                    onPressed: (){
-                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                        builder: (BuildContext context) => TrackTransactionsPage()
-                      ), (Route route) => false);
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  TrackTransactionsPage()),
+                          (Route route) => false);
                     },
                   )
                 ],

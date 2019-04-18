@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped_models/main.dart';
+import '../models/dispose_offering.dart';
+import '../models/offering.dart';
 
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/custom_text.dart' as customText;
 
 import './vendor_list.dart';
 
-class DisposeWastePage extends StatelessWidget{
+class DisposeWastePage extends StatelessWidget {
+  /*
   final List<Map<String, dynamic>> _categories = [
     {
       'name': 'household_waste',
@@ -32,13 +38,15 @@ class DisposeWastePage extends StatelessWidget{
       'icon': Icons.local_hospital,
     },
   ];
+  */
 
   double _targetWidth = 0;
 
-  double _getSize(final double default_1440){
+  double _getSize(final double default_1440) {
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
+/*
   List<Widget> _buildCategories(BuildContext context){
     return List.generate(_categories.length, (int index) => Card(
         child: Container(
@@ -71,16 +79,19 @@ class DisposeWastePage extends StatelessWidget{
       )
     );
   }
-  
-  Widget _buildCategoryWidget(BuildContext context, String title, String imageUrl, [dynamic route]){
+*/
+
+  Widget _buildCategoryWidget(
+      BuildContext context, MainModel model, String wasteType, String imageUrl,
+      [dynamic route]) {
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-        side: BorderSide(color: Theme.of(context).primaryColor)
-      ),
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(color: Theme.of(context).primaryColor)),
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: _getSize(18), vertical: _getSize(18)),
+      padding: EdgeInsets.symmetric(
+          horizontal: _getSize(18), vertical: _getSize(18)),
       child: SizedBox(
         width: _getSize(120),
         height: _getSize(120),
@@ -91,52 +102,74 @@ class DisposeWastePage extends StatelessWidget{
               height: _getSize(70),
               image: AssetImage(imageUrl),
             ),
-            SizedBox(height: _getSize(15),),
+            SizedBox(
+              height: _getSize(15),
+            ),
             customText.BodyText(
-              text: title,
+              text: wasteType,
               textColor: Theme.of(context).primaryColor,
             )
           ],
         ),
       ),
-      onPressed: (){
+      onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route != null ? route : VendorListPage()
-        ));
+            builder: (BuildContext context) => route != null
+                ? route
+                : VendorListPage(model, wasteType, OfferingType.dispose)));
       },
     );
   }
 
-  Widget _buildCategoriesSection(BuildContext context){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: _getSize(20), vertical: _getSize(30)),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Household Waste', 'assets/house.png'),
-              _buildCategoryWidget(context, 'Industrial Waste', 'assets/industrial.png')
-            ],
-          ),
-          SizedBox(height: _getSize(15),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Agric Waste', 'assets/harvest.png'),
-              _buildCategoryWidget(context, 'Bulk Waste', 'assets/bulk.png')
-            ],
-          ),
-          SizedBox(height: _getSize(15),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Nuclear Waste', 'assets/nuclear-plant.png'),
-              _buildCategoryWidget(context, 'Other Waste', 'assets/throw-to-paper-bin.png')
-            ],
-          ),
-        ],
-      ),
+  Widget _buildCategoriesSection(BuildContext context) {
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: _getSize(20), vertical: _getSize(30)),
+          child: _buildAllCategories(context, model),
+        );
+      },
+    );
+  }
+
+  Column _buildAllCategories(BuildContext context, MainModel model) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildCategoryWidget(
+                context, model, WasteType.householdWaste, 'assets/house.png'),
+            _buildCategoryWidget(context, model, WasteType.industrialWaste,
+                'assets/industrial.png')
+          ],
+        ),
+        SizedBox(
+          height: _getSize(15),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildCategoryWidget(
+                context, model, WasteType.agricWaste, 'assets/harvest.png'),
+            _buildCategoryWidget(
+                context, model, WasteType.bulkWaste, 'assets/bulk.png')
+          ],
+        ),
+        SizedBox(
+          height: _getSize(15),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildCategoryWidget(context, model, WasteType.nuclearWaste,
+                'assets/nuclear-plant.png'),
+            _buildCategoryWidget(context, model, WasteType.otherWaste,
+                'assets/throw-to-paper-bin.png')
+          ],
+        ),
+      ],
     );
   }
 
@@ -151,7 +184,10 @@ class DisposeWastePage extends StatelessWidget{
       ),
       body: Stack(
         children: <Widget>[
-          Container(height: _getSize(200), color: Theme.of(context).primaryColor,),
+          Container(
+            height: _getSize(200),
+            color: Theme.of(context).primaryColor,
+          ),
           SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(_getSize(18)),

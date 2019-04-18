@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ViewOfferPage extends StatelessWidget{
+class ViewOfferPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +14,9 @@ class ViewOfferPage extends StatelessWidget{
         ],
       ),
       body: Container(
-        child: Center(child: Text('Offer Details/Status'),),
+        child: Center(
+          child: Text('Offer Details/Status'),
+        ),
       ),
     );
   }

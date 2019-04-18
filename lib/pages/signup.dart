@@ -6,7 +6,7 @@ import '../models/user.dart';
 
 import './login.dart';
 
-class SignUpPage extends StatefulWidget{
+class SignUpPage extends StatefulWidget {
   final UserType userType;
 
   SignUpPage(this.userType);
@@ -17,7 +17,7 @@ class SignUpPage extends StatefulWidget{
   }
 }
 
-class _SignUpPageState extends State<SignUpPage>{
+class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _formData = {
     'phone': '',
@@ -31,7 +31,7 @@ class _SignUpPageState extends State<SignUpPage>{
 
   TextEditingController _passwordController = TextEditingController();
 
-  Widget _buildSocialMediaLogin(){
+  Widget _buildSocialMediaLogin() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.0),
       child: Row(
@@ -42,83 +42,87 @@ class _SignUpPageState extends State<SignUpPage>{
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(1000),
             ),
-            child: Image.asset('assets/facebook.png', scale: 1.7,),
-            onPressed: () {
-
-            },
+            child: Image.asset(
+              'assets/facebook.png',
+              scale: 1.7,
+            ),
+            onPressed: () {},
           ),
           OutlineButton(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(1000),
             ),
-            child: Image.asset('assets/google.png', scale: 1.7,),
-            onPressed: () {
-
-            },
+            child: Image.asset(
+              'assets/google.png',
+              scale: 1.7,
+            ),
+            onPressed: () {},
           ),
           OutlineButton(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(1000),
             ),
-            child: Image.asset('assets/twitter.png', scale: 1.7,),
-            onPressed: () {
-
-            },
+            child: Image.asset(
+              'assets/twitter.png',
+              scale: 1.7,
+            ),
+            onPressed: () {},
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSubmitButton(MainModel model){
+  Widget _buildSubmitButton(MainModel model) {
     return RaisedButton(
       textColor: Colors.white,
       child: Text('Sign Up'),
-      onPressed: (){
+      onPressed: () {
         // if(_formKey.currentState.validate()){
-          _formKey.currentState.save();
-          if(widget.userType == UserType.Client){
-            Client _client = Client(
+        _formKey.currentState.save();
+        if (widget.userType == UserType.Client) {
+          Client _client = Client(
               name: _formData['name'],
               phone: _formData['phone'],
               username: _formData['username'],
               address: _formData['address'],
-              dateCreated: DateTime.now().toIso8601String()
-            );
-            model.signup(_formData['email'], _formData['password'], client: _client).then((data) {
-              if(data['success']){
-                Navigator.pushReplacementNamed(context, 'home');
-              } else{
-                showDialog(
+              dateCreated: DateTime.now().toIso8601String());
+          model
+              .signup(_formData['email'], _formData['password'],
+                  client: _client)
+              .then((data) {
+            if (data['success']) {
+              Navigator.pushReplacementNamed(context, 'home');
+            } else {
+              showDialog(
                   context: context,
-                  builder: (BuildContext context){
+                  builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text('An Error Ocurred'),
                       content: Text(data['message']),
                       actions: <Widget>[
                         FlatButton(
                           child: Text('OK'),
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.of(context).pop();
                           },
                         )
                       ],
                     );
-                  }
-                );
-              }
-            });
-          } else{
-            Navigator.pushReplacementNamed(context, 'vendor_home');
-          }
+                  });
+            }
+          });
+        } else {
+          Navigator.pushReplacementNamed(context, 'vendor_home');
+        }
         // }
       },
     );
   }
   // Widget _buildEmailField(){
-  //   return 
+  //   return
   // }
 
   @override
@@ -141,8 +145,7 @@ class _SignUpPageState extends State<SignUpPage>{
                   style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.bold,
-                      fontSize: 16
-                  ),
+                      fontSize: 16),
                 ),
               ),
               _buildSocialMediaLogin(),
@@ -156,73 +159,75 @@ class _SignUpPageState extends State<SignUpPage>{
                           prefixIcon: Icon(Icons.phone),
                           labelText: 'phone',
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          ),
+                              borderRadius: BorderRadius.circular(10)),
                         ),
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Your phone number is required';
-                          } else if(!RegExp(r'^[0-9]+$').hasMatch(value.toLowerCase())){
+                          } else if (!RegExp(r'^[0-9]+$')
+                              .hasMatch(value.toLowerCase())) {
                             return 'Please enter a valid phone number';
                           }
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['phone'] = value;
                         },
                       ),
-                      SizedBox(height: 25,),
+                      SizedBox(
+                        height: 25,
+                      ),
                       TextFormField(
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email),
                             labelText: 'email',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
+                                borderRadius: BorderRadius.circular(10))),
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
+                          } else if (!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$')
+                              .hasMatch(value.toLowerCase())) {
                             return 'Please enter a valid email';
                           }
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['email'] = value;
                         },
                       ),
-                      SizedBox(height: 25,),
+                      SizedBox(
+                        height: 25,
+                      ),
                       TextFormField(
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.person),
                             labelText: 'username',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
+                                borderRadius: BorderRadius.circular(10))),
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Your username is required';
                           }
                           /*else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
                             return 'Please enter a valid username';
                           }*/
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['username'] = value;
                         },
                       ),
-                      SizedBox(height: 25,),
+                      SizedBox(
+                        height: 25,
+                      ),
                       TextFormField(
                         controller: _passwordController,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
                           labelText: 'password',
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          ),
+                              borderRadius: BorderRadius.circular(10)),
                           suffixIcon: GestureDetector(
                             child: Icon(Icons.remove_red_eye),
-                            onTap: (){
+                            onTap: () {
                               setState(() {
                                 showPassword1 = !showPassword1;
                               });
@@ -231,25 +236,26 @@ class _SignUpPageState extends State<SignUpPage>{
                         ),
                         obscureText: showPassword1,
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Your password is required';
                           }
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['password'] = value;
                         },
                       ),
-                      SizedBox(height: 25,),
+                      SizedBox(
+                        height: 25,
+                      ),
                       TextFormField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
                           labelText: 'confirm password',
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          ),
+                              borderRadius: BorderRadius.circular(10)),
                           suffixIcon: GestureDetector(
                             child: Icon(Icons.remove_red_eye),
-                            onTap: (){
+                            onTap: () {
                               setState(() {
                                 showPassword2 = !showPassword2;
                               });
@@ -258,17 +264,22 @@ class _SignUpPageState extends State<SignUpPage>{
                         ),
                         obscureText: showPassword2,
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Re-enter your password';
-                          } else if(value != _passwordController.text){
+                          } else if (value != _passwordController.text) {
                             return "Passwords don't match";
                           }
                         },
                       ),
-                      SizedBox(height: 25,),
+                      SizedBox(
+                        height: 25,
+                      ),
                       ScopedModelDescendant<MainModel>(
-                        builder: (BuildContext context, Widget child, MainModel model){
-                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
+                        builder: (BuildContext context, Widget child,
+                            MainModel model) {
+                          return model.isLoading
+                              ? CircularProgressIndicator()
+                              : _buildSubmitButton(model);
                           // return  RaisedButton(
                           //   textColor: Colors.white,
                           //   child: Text('Sign Up'),
@@ -282,8 +293,8 @@ class _SignUpPageState extends State<SignUpPage>{
                         child: Text("Already have an account, Login"),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => LoginPage(widget.userType)
-                          ));
+                              builder: (BuildContext context) =>
+                                  LoginPage(widget.userType)));
                         },
                       )
                     ],
