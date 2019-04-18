@@ -71,12 +71,12 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   title: Text('email'),
-                  subtitle: Text('bilikiss@gmail.com'),
+                  subtitle: Text(model.user.email),
                 ),
                 Divider(),
                 ListTile(
                   title: Text('phone number'),
-                  subtitle: Text('08037849123'),
+                  subtitle: Text(model.client.phone),
                 ),
                 Divider(),
                 ListTile(
@@ -86,14 +86,15 @@ class ProfilePage extends StatelessWidget {
                 Divider(),
                 ListTile(
                   title: Text('location'),
-                  subtitle: Text('Allen Avenue, Ikeja Lagos'),
+                  subtitle: model.client.address == 'null' ? Text('No Address',
+                  style: TextStyle(color: Colors.red),) : Text(model.client.address),
                 ),
                 Divider(),
-                ListTile(
-                  title: Text('Simple Ads'),
-                  subtitle: Text('Unlimited'),
-                ),
-                Divider(),
+                // ListTile(
+                //   title: Text('Simple Ads'),
+                //   subtitle: Text('Unlimited'),
+                // ),
+                // Divider(),
                 ListTile(
                   title: Text('Featured Ads'),
                   subtitle: Text('Unlimited'),
@@ -101,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                 Divider(),
                 ListTile(
                   title: Text('Expiration Date'),
-                  subtitle: Text('12/03/2020 2.30PM'),
+                  subtitle: Text('None'),
                 ),
                 Divider(),
                 ListTile(
