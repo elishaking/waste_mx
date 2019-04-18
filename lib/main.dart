@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import './models/user.dart';
 import './scoped_models/main.dart';
+import './models/user.dart';
+import './models/http.dart';
+
+import './widgets/custom_text.dart' as customText;
 
 import './pages/welcome.dart';
 // import './pages/login.dart';
@@ -27,11 +30,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _model = MainModel();
+  ResponseInfo _authResponseInfo;
   bool _isAuthenticated = false;
 
   @override
   void initState() {
-    _model.autoAuthenticate();
+    _model.autoAuthenticate().then((ResponseInfo responseInfo){
+      _authResponseInfo = responseInfo;
+    });
     super.initState();
   }
 
@@ -79,10 +85,41 @@ class _MyAppState extends State<MyApp> {
       return Scaffold(
         backgroundColor: Colors.green,
         body: Center(
-          child: CircularProgressIndicator(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Image(
+                image: AssetImage('assets/logo.png'),
+              ),
+              SizedBox(height: 20,),
+              customText.HeadlineText(text: 'Waste MX', textColor: Colors.white,),
+              SizedBox(height: 30,),
+              CircularProgressIndicator()
+            ],
+          ),
         ),
       );
-    } else if(model.user == null){
+    } else if(!_authResponseInfo.success){
+      return Scaffold(
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Image(image: AssetImage('no-network.png'),),
+              SizedBox(height: 20),
+              customText.BodyText(text: 'No Connection',),
+              SizedBox(height: 20),
+              RaisedButton(
+                child: Text('Retry'),
+                onPressed: (){
+
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    }
+    else if(model.user == null){
       return WelcomePage();
     } else if(model.user.userType == UserType.Client){
       return HomePage();

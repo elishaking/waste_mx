@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import '../models/user.dart';
 import '../models/dispose_offering.dart';
 import '../models/recycle_offering.dart';
+import '../models/http.dart';
 
 class MainModel extends Model with ConnectedModel, UserModel, OfferingModel {}
 
@@ -60,13 +61,14 @@ class UserModel extends ConnectedModel {
         : UserType.Vendor;
   }
 
-  void autoAuthenticate() async {
+  Future<ResponseInfo> autoAuthenticate() async {
     _isLoading = true;
     notifyListeners();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
     final String expiryTimeString = prefs.getString('expiryTime');
-    print(expiryTimeString);
+    ResponseInfo responseInfo = ResponseInfo(false, 'User not Saved', -1);
+
     if (token != null) {
       final DateTime now = DateTime.now();
       final parsedExpiryTime = expiryTimeString == null
@@ -76,21 +78,27 @@ class UserModel extends ConnectedModel {
         final http.Response response = await http.post(
             'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
             headers: {'Content-Type': 'application/json'},
-            body: json.encode({'token': token, 'returnSecureToken': true})).timeout(Duration(seconds: _httpTimeout), 
-            onTimeout: (){
-              _authenticatedUser = null;
-              _isLoading = false;
-              notifyListeners();
+            body: json.encode({'token': token, 'returnSecureToken': true}))
+            .catchError((error) {
+              print(error);
+              responseInfo = ResponseInfo(false, error, -1);
             });
-        if(response == null) return;
+            // .timeout(Duration(seconds: _httpTimeout), 
+            // onTimeout: (){
+            //   _authenticatedUser = null;
+            //   _isLoading = false;
+            //   notifyListeners();
+            // });
+        if(response == null) return responseInfo;
         final Map<String, dynamic> responseData = json.decode(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData);
         } else {
+          responseInfo = ResponseInfo(false, 'Could not save User info', -1);
           _authenticatedUser = null;
           _isLoading = false;
           notifyListeners();
-          return;
+          return responseInfo;
         }
       }
 
@@ -101,9 +109,11 @@ class UserModel extends ConnectedModel {
           User(id: userId, email: userEmail, token: token, userType: userType);
       
       await _getUserData();
+      responseInfo = ResponseInfo(true, 'Successful Authentication', -1);
       _isLoading = false;
       notifyListeners();
     }
+    return responseInfo;
   }
 
   Future _saveAuthUser(responseData) async {
