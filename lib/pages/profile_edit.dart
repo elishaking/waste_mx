@@ -3,6 +3,8 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped_models/main.dart';
 
+import '../models/user.dart';
+
 import '../widgets/custom_text.dart' as customText;
 
 class ProfileEditPage extends StatefulWidget {
@@ -77,13 +79,19 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             },
           ),
           SizedBox(height: 20,),
-          RaisedButton(
+          model.isLoading ? CircularProgressIndicator() : RaisedButton(
             child: customText.BodyText(text: 'SAVE', textColor: Colors.white,),
             onPressed: (){
               if(_formKey.currentState.validate()){
                 _formKey.currentState.save();
-                model.updateUser(_formData, 'clients').then((done){
-                  Navigator.pop(context);
+                model.updateUser(Client(
+                  name: _formData['name'],
+                  phone: _formData['phone'],
+                  address: _formData['location'],
+                  username: model.client.username,
+                  dateCreated: model.client.dateCreated
+                ).toMap(), 'clients').then((done){
+                  Navigator.of(context).pop(done);
                 });
               }
             },
@@ -105,7 +113,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         child: SingleChildScrollView(
           child: ScopedModelDescendant(
             builder: (BuildContext context, Widget child, MainModel model){
-              return model.isLoading ? CircularProgressIndicator() : _buildForm(context, model);
+              return _buildForm(context, model);
             },
           ),
         )

@@ -195,7 +195,47 @@ class UserModel extends ConnectedModel {
   }
 
   Future<bool> updateUser(Map<String, dynamic> userData, String collectionName) async{
-
+    try {
+      final http.Response response = await http.post(
+          "$_dbUrl$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
+          body: json.encode(userData));
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (collectionName == "clients") {
+        _client = Client(
+            id: responseData['name'],
+            name: userData['clientName'],
+            phone: userData['clientPhone'],
+            username: userData['clientUsername'],
+            address: userData['clientAddress'],
+            dateCreated: userData['clientDateCreated']);
+        print(json.encode(_client.toMap()));
+      } else {
+        _vendor = Vendor(
+            id: responseData['name'],
+            name: userData['vendorName'],
+            companyName: userData['vendorCompanyName'],
+            companyAddress: userData['vendorCompanyAddress'],
+            phone: userData['vendorPhone'],
+            username: userData['vendorUsername'],
+            address: userData['vendorAddress'],
+            dateCreated: userData['vendorDateCreated']);
+      }
+      userData['id'] = responseData['name'];
+      await _saveUserData(userData);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+      print(error);
+      return false;
+    }
   }
   
   Future<Map<String, dynamic>> signup(String email, String password,
