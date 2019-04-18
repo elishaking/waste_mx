@@ -61,6 +61,8 @@ class UserModel extends ConnectedModel {
   }
 
   void autoAuthenticate() async {
+    _isLoading = true;
+    notifyListeners();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
     final String expiryTimeString = prefs.getString('expiryTime');
@@ -81,6 +83,7 @@ class UserModel extends ConnectedModel {
           await _getUserData();
         } else {
           _authenticatedUser = null;
+          _isLoading = false;
           notifyListeners();
           return;
         }
@@ -91,6 +94,7 @@ class UserModel extends ConnectedModel {
       final UserType userType = _getUserType(prefs.getString('userType'));
       _authenticatedUser =
           User(id: userId, email: userEmail, token: token, userType: userType);
+      _isLoading = false;
       notifyListeners();
     }
   }

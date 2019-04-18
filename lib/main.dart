@@ -55,14 +55,10 @@ class _MyAppState extends State<MyApp> {
           color: Colors.green,
           // home: WelcomePage(),
           routes: {
-            '/': (BuildContext context) => ScopedModelDescendant(
+            '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
                   builder:
                       (BuildContext context, Widget child, MainModel model) {
-                    return model.user == null
-                        ? WelcomePage()
-                        : (model.user.userType == UserType.Client
-                            ? HomePage()
-                            : VendorHomePage());
+                    return _setPage(model);
                   },
                 ),
             // '/': (BuildContext context) => BookVendorPage(),
@@ -76,5 +72,22 @@ class _MyAppState extends State<MyApp> {
             'dispose_waste': (BuildContext context) => DisposeWastePage(),
           }),
     );
+  }
+
+  Widget _setPage(MainModel model) {
+    if(model.isLoading){
+      return Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else if(model.user == null){
+      return WelcomePage();
+    } else if(model.user.userType == UserType.Client){
+      return HomePage();
+    } else{
+      return VendorHomePage();
+    }
   }
 }
