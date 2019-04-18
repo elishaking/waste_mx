@@ -22,6 +22,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     'location': ''
   };
 
+  TextEditingController _locationFieldController = TextEditingController();
+
   Form _buildForm(BuildContext context, MainModel model) {
     return Form(
       key: _formKey,
@@ -67,9 +69,29 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
           SizedBox(height: 20,),
           TextFormField(
+            controller: _locationFieldController,
             initialValue: model.client.address == 'null' ? '' : model.client.address,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.person_outline),
+              suffixIcon: ScopedModelDescendant<MainModel>(
+                builder: (BuildContext context, Widget child, MainModel model) {
+                  return model.gettingLocation
+                      ? Container(
+                        padding: EdgeInsets.all(10),
+                          child: CircularProgressIndicator(),
+                        )
+                      : GestureDetector(
+                          child: Icon(Icons.my_location),
+                          onTap: () {
+                            model.getLocation().then((String location){
+                              setState(() {
+                                _locationFieldController.text = location;
+                              });
+                            });
+                          },
+                        );
+                },
+              ),
               labelText: 'location',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(_textInputBorderRadius)),
