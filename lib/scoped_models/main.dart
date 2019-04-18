@@ -194,6 +194,10 @@ class UserModel extends ConnectedModel {
     }
   }
 
+  Future<bool> updateUser(Map<String, dynamic> userData, String collectionName) async{
+
+  }
+  
   Future<Map<String, dynamic>> signup(String email, String password,
       {Client client, Vendor vendor}) async {
     // final Map<String, dynamic> authData =

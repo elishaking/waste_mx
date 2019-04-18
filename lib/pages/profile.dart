@@ -10,7 +10,12 @@ import '../widgets/custom_text.dart' as customText;
 import './profile_edit.dart';
 import './profile_pic_view.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   Container _buildProfile(BuildContext context, MainModel model) {
     print(json.encode(model.client.toMap()));
     return Container(
@@ -121,13 +126,6 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
 
-    void _pushRoute(route) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (BuildContext context) {
-        return route;
-      }));
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -135,7 +133,10 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              _pushRoute(ProfileEditPage());
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return ProfileEditPage();
+              }));
             },
           )
         ],

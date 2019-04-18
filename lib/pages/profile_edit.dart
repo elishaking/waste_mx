@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped_models/main.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
@@ -17,6 +20,79 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     'location': ''
   };
 
+  Form _buildForm(BuildContext context, MainModel model) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.person_outline),
+              labelText: 'full name',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(_textInputBorderRadius)),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Your full name is required';
+              }
+            },
+            onSaved: (String value) {
+              _formData['name'] = value;
+            },
+          ),
+          SizedBox(height: 20,),
+          TextFormField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.person_outline),
+              labelText: 'phone',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(_textInputBorderRadius)),
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Your phone number is required';
+              } else if (!RegExp(r'^[0-9]+$')
+                  .hasMatch(value.toLowerCase())) {
+                return 'Please enter a valid phone number';
+              }
+            },
+            onSaved: (String value) {
+              _formData['phone'] = value;
+            },
+          ),
+          SizedBox(height: 20,),
+          TextFormField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.person_outline),
+              labelText: 'location',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(_textInputBorderRadius)),
+            ),
+            validator: (String value) {
+              
+            },
+            onSaved: (String value) {
+              _formData['location'] = value;
+            },
+          ),
+          SizedBox(height: 20,),
+          RaisedButton(
+            child: customText.BodyText(text: 'SAVE', textColor: Colors.white,),
+            onPressed: (){
+              if(_formKey.currentState.validate()){
+                _formKey.currentState.save();
+                model.updateUser(_formData, 'clients').then((done){
+                  Navigator.pop(context);
+                });
+              }
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,93 +103,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 0),
         child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person_outline),
-                    labelText: 'full name',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(_textInputBorderRadius)),
-                  ),
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'Your full name is required';
-                    }
-                  },
-                  onSaved: (String value) {
-                    _formData['name'] = value;
-                  },
-                ),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person_outline),
-                    labelText: 'email',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(_textInputBorderRadius)),
-                  ),
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'Your email is required';
-                    } else if (!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$')
-                        .hasMatch(value.toLowerCase())) {
-                      return 'Please enter a valid email';
-                    }
-                  },
-                  onSaved: (String value) {
-                    _formData['email'] = value;
-                  },
-                ),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person_outline),
-                    labelText: 'phone',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(_textInputBorderRadius)),
-                  ),
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'Your phone number is required';
-                    } else if (!RegExp(r'^[0-9]+$')
-                        .hasMatch(value.toLowerCase())) {
-                      return 'Please enter a valid phone number';
-                    }
-                  },
-                  onSaved: (String value) {
-                    _formData['phone'] = value;
-                  },
-                ),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person_outline),
-                    labelText: 'location',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(_textInputBorderRadius)),
-                  ),
-                  validator: (String value) {
-                    
-                  },
-                  onSaved: (String value) {
-                    _formData['location'] = value;
-                  },
-                ),
-                SizedBox(height: 20,),
-                RaisedButton(
-                  child: customText.BodyText(text: 'SAVE', textColor: Colors.white,),
-                  onPressed: (){
-                    if(_formKey.currentState.validate()){
-                      _formKey.currentState.save();
-                      Navigator.of(context).pop(_formData);
-                    }
-                  },
-                )
-              ],
-            ),
+          child: ScopedModelDescendant(
+            builder: (BuildContext context, Widget child, MainModel model){
+              return model.isLoading ? CircularProgressIndicator() : _buildForm(context, model);
+            },
           ),
         )
       ),
