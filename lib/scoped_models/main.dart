@@ -391,9 +391,10 @@ class OfferingModel extends ConnectedModel {
     notifyListeners();
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .timeout(Duration(seconds: 5), onTimeout: (){
+        .timeout(Duration(seconds: 10), onTimeout: (){
           print('get location timeout');
         });
+    if(position == null) return '';
     List<Placemark> placemark = await Geolocator()
         .placemarkFromCoordinates(position.latitude, position.longitude)
         .timeout(Duration(seconds: 5), onTimeout: (){
