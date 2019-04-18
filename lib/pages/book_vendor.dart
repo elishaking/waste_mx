@@ -40,6 +40,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
   List<File> _imageFiles = List<File>();
 
   TextEditingController _controller = TextEditingController();
+  TextEditingController _locationFieldController = TextEditingController();
 
   void _onChange() {
     String text = _controller.text;
@@ -163,6 +164,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
 //                crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextFormField(
+                        controller: _locationFieldController,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.location_on),
                             labelText: 'Waste location',
@@ -172,16 +174,20 @@ class _BookVendorPageState extends State<BookVendorPage> {
                               builder: (BuildContext context, Widget child,
                                   MainModel model) {
                                 return model.isLoading
-                                    ? CircularProgressIndicator()
+                                    ? SizedBox(child: CircularProgressIndicator(), width: 20, height: 20,)
                                     : GestureDetector(
                                         child: Icon(Icons.my_location),
                                         onTap: () {
-                                          model.getLocation();
-                                          final SnackBar snackBar = SnackBar(
-                                            content: Text('Getting Location'),
-                                          );
-                                          Scaffold.of(context)
-                                              .showSnackBar(snackBar);
+                                          model.getLocation().then((String location){
+                                            setState(() {
+                                              _locationFieldController.text = location;
+                                            });
+                                          });
+//                                          final SnackBar snackBar = SnackBar(
+//                                            content: Text('Getting Location'),
+//                                          );
+//                                          Scaffold.of(context)
+//                                              .showSnackBar(snackBar);
                                         },
                                       );
                               },

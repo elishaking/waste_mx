@@ -18,11 +18,16 @@ class MainModel extends Model with ConnectedModel, UserModel, OfferingModel {}
 class ConnectedModel extends Model {
   User _authenticatedUser;
   bool _isLoading = false;
+  bool _gettingLocation = false;
   String _dbUrl = 'https://waste-mx.firebaseio.com/';
   int _httpTimeout = 5;
 
   bool get isLoading {
     return _isLoading;
+  }
+
+  bool get gettingLocation{
+    return _gettingLocation;
   }
 }
 
@@ -323,15 +328,28 @@ class OfferingModel extends ConnectedModel {
     return Map.from(_offerings);
   }
 
-  getLocation() async {
+  Future<String> getLocation() async {
+    _gettingLocation = true;
+    notifyListeners();
     Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .timeout(Duration(seconds: 5), onTimeout: (){
+          print('timedout');
+        });
     List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    placemark.forEach((Placemark placemark) {
-      print(placemark.toString());
-    });
-    // return placemark;
+        .placemarkFromCoordinates(position.latitude, position.longitude)
+        .timeout(Duration(seconds: 5), onTimeout: (){
+          print('timedout 2');
+        });
+
+    _gettingLocation = false;
+    notifyListeners();
+    print('position: ' + position.latitude.toString());
+
+    Placemark p = placemark[0];
+//    print('${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}');
+
+     return '${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}';
   }
 
   Future<Map<String, dynamic>> uploadImage(File image,
