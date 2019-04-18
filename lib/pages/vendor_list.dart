@@ -13,7 +13,7 @@ import './vendor.dart';
 import './book_vendor.dart';
 import './book_recycler.dart';
 
-class VendorListPage extends StatefulWidget{
+class VendorListPage extends StatefulWidget {
   final MainModel model;
   final String wasteType;
   final String offeringType;
@@ -27,62 +27,59 @@ class VendorListPage extends StatefulWidget{
 class _VendorListPageState extends State<VendorListPage> {
   List<Vendor> _vendors = [
     Vendor(
-      id: '12290olmu3nn',
-      name: 'Json Martinz Partners',
-      imageUrl: 'assets/profile.png',
-      rate: 150,
-      rating: 5,
-      verified: true
-    ),
+        id: '12290olmu3nn',
+        name: 'Json Martinz Partners',
+        imageUrl: 'assets/profile.png',
+        rate: 150,
+        rating: 5,
+        verified: true),
     Vendor(
-      id: '12290olldnn',
-      name: 'Json Doe Partners',
-      imageUrl: 'assets/profile.png',
-      rate: 70,
-      rating: 3,
-      verified: false
-    ),
+        id: '12290olldnn',
+        name: 'Json Doe Partners',
+        imageUrl: 'assets/profile.png',
+        rate: 70,
+        rating: 3,
+        verified: false),
     Vendor(
-      id: '12kk0ol23nn',
-      name: 'John Ket An',
-      imageUrl: 'assets/profile.png',
-      rate: 150,
-      rating: 5,
-      verified: true
-    ),
+        id: '12kk0ol23nn',
+        name: 'John Ket An',
+        imageUrl: 'assets/profile.png',
+        rate: 150,
+        rating: 5,
+        verified: true),
     Vendor(
-      id: '12290osdd3nn',
-      name: 'Json Martinz Chris',
-      imageUrl: 'assets/profile.png',
-      rate: 200,
-      rating: 5,
-      verified: true
-    ),
+        id: '12290osdd3nn',
+        name: 'Json Martinz Chris',
+        imageUrl: 'assets/profile.png',
+        rate: 200,
+        rating: 5,
+        verified: true),
     Vendor(
-      id: '122ffol23nn',
-      name: 'Json Jane Menk',
-      imageUrl: 'assets/profile.png',
-      rate: 100,
-      rating: 4,
-      verified: true
-    ),
+        id: '122ffol23nn',
+        name: 'Json Jane Menk',
+        imageUrl: 'assets/profile.png',
+        rate: 100,
+        rating: 4,
+        verified: true),
   ];
 
   @override
-  initState(){
+  initState() {
     widget.model.fetchVendors();
     super.initState();
   }
 
-  Widget _buildVendorRating(int rating){
-    return ratingWidgets.RatingDisplay(rating: rating,);
+  Widget _buildVendorRating(int rating) {
+    return ratingWidgets.RatingDisplay(
+      rating: rating,
+    );
   }
 
   Container _buildVendorList(List<Vendor> vendors) {
     return Container(
       padding: EdgeInsets.all(10),
       child: ListView.builder(
-        itemBuilder: (BuildContext context, int index){
+        itemBuilder: (BuildContext context, int index) {
           return _buildVendor(context, vendors[index]);
         },
         itemCount: vendors.length,
@@ -90,18 +87,18 @@ class _VendorListPageState extends State<VendorListPage> {
     );
   }
 
-  dynamic _getOfferingType(){
-    if(widget.offeringType == OfferingType.dispose){
+  dynamic _getOfferingType() {
+    if (widget.offeringType == OfferingType.dispose) {
       return BookVendorPage(widget.wasteType);
-    } else if(widget.offeringType == OfferingType.recycle){
+    } else if (widget.offeringType == OfferingType.recycle) {
       return BookRecyclerPage(widget.wasteType);
     }
   }
 
-  String _getUnit(){
-    if(widget.offeringType == OfferingType.dispose){
+  String _getUnit() {
+    if (widget.offeringType == OfferingType.dispose) {
       return 'bin';
-    } else if(widget.offeringType == OfferingType.recycle){
+    } else if (widget.offeringType == OfferingType.recycle) {
       return 'kg';
     } else {
       return 'unit';
@@ -115,9 +112,14 @@ class _VendorListPageState extends State<VendorListPage> {
           ListTile(
             leading: Hero(
               tag: vendor.id,
-              child: CircleAvatar(child: Image.asset(vendor.imageUrl),),
+              child: CircleAvatar(
+                child: Image.asset(vendor.imageUrl),
+              ),
             ),
-            title: Text(vendor.name, style: TextStyle(fontSize: _getSize(18)),),
+            title: Text(
+              vendor.name,
+              style: TextStyle(fontSize: _getSize(18)),
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -125,11 +127,11 @@ class _VendorListPageState extends State<VendorListPage> {
                 // SizedBox(height: 5,),
                 Container(
                   margin: EdgeInsets.only(top: 7),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(100)
-                  ),
+                      color: Theme.of(context).primaryColor.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(100)),
                   child: customText.BodyText(
                     text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
                     textColor: Colors.white,
@@ -153,40 +155,46 @@ class _VendorListPageState extends State<VendorListPage> {
               FlatButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.info_outline,
-                    color: Theme.of(context).primaryColor,
-                    size: _getSize(23),),
-                    SizedBox(width: _getSize(10),),
+                    Icon(
+                      Icons.info_outline,
+                      color: Theme.of(context).primaryColor,
+                      size: _getSize(23),
+                    ),
+                    SizedBox(
+                      width: _getSize(10),
+                    ),
                     customText.BodyText(
                       text: 'DETAILS',
                       textColor: Theme.of(context).primaryColor,
                     )
                   ],
                 ),
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => VendorPage(vendor, widget.wasteType, widget.offeringType)
-                  ));
+                      builder: (BuildContext context) => VendorPage(
+                          vendor, widget.wasteType, widget.offeringType)));
                 },
               ),
               FlatButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.add_circle_outline,
+                    Icon(
+                      Icons.add_circle_outline,
                       color: Theme.of(context).primaryColor,
                       size: _getSize(23),
                     ),
-                    SizedBox(width: _getSize(10),),
+                    SizedBox(
+                      width: _getSize(10),
+                    ),
                     customText.BodyText(
                       text: 'PLACE ORDER',
                       textColor: Theme.of(context).primaryColor,
                     )
                   ],
                 ),
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => _getOfferingType()
-                  ));
+                      builder: (BuildContext context) => _getOfferingType()));
                 },
               ),
             ],
@@ -198,23 +206,26 @@ class _VendorListPageState extends State<VendorListPage> {
 
   double _targetWidth = 0;
 
-  double _getSize(final double default_1440){
+  double _getSize(final double default_1440) {
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
   @override
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Vendor List'),
       ),
       body: ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget child, MainModel model){
-          return model.isLoading ? Center(
-            child: CircularProgressIndicator(),
-          ) : _buildVendorList(model.vendors != null ? model.vendors : _vendors);
+        builder: (BuildContext context, Widget child, MainModel model) {
+          return model.isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : _buildVendorList(
+                  model.vendors != null ? model.vendors : _vendors);
         },
       ),
     );

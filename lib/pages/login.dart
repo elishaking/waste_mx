@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 import '../models/user.dart';
 
-class LoginPage extends StatefulWidget{
+class LoginPage extends StatefulWidget {
   final UserType userType;
 
   LoginPage(this.userType);
@@ -15,17 +15,14 @@ class LoginPage extends StatefulWidget{
   }
 }
 
-class _LoginPageState extends State<LoginPage>{
-  final Map<String, dynamic> _formData = {
-    'email': '',
-    'password': ''
-  };
+class _LoginPageState extends State<LoginPage> {
+  final Map<String, dynamic> _formData = {'email': '', 'password': ''};
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool showPassword = true;
 
-  Widget _buildSocialMediaLogin(){
+  Widget _buildSocialMediaLogin() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.0),
       child: Row(
@@ -36,98 +33,99 @@ class _LoginPageState extends State<LoginPage>{
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(1000),
             ),
-            child: Image.asset('assets/facebook.png', scale: 1.7,),
-            onPressed: () {
-
-            },
+            child: Image.asset(
+              'assets/facebook.png',
+              scale: 1.7,
+            ),
+            onPressed: () {},
           ),
           OutlineButton(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(1000),
             ),
-            child: Image.asset('assets/google.png', scale: 1.7,),
-            onPressed: () {
-
-            },
+            child: Image.asset(
+              'assets/google.png',
+              scale: 1.7,
+            ),
+            onPressed: () {},
           ),
           OutlineButton(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(1000),
             ),
-            child: Image.asset('assets/twitter.png', scale: 1.7,),
-            onPressed: () {
-
-            },
+            child: Image.asset(
+              'assets/twitter.png',
+              scale: 1.7,
+            ),
+            onPressed: () {},
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSubmitButton(MainModel model){
+  Widget _buildSubmitButton(MainModel model) {
     return RaisedButton(
       textColor: Colors.white,
       child: Text('Login'),
-      onPressed: (){
+      onPressed: () {
         // if(_formKey.currentState.validate()){
-          _formKey.currentState.save();
-          if(widget.userType == UserType.Client){
-            model.login(_formData['email'], _formData['password']).then((data) {
-              if(data['success']){
-                Navigator.pushReplacementNamed(context, 'home');
-              } else{
-                showDialog(
+        _formKey.currentState.save();
+        if (widget.userType == UserType.Client) {
+          model.login(_formData['email'], _formData['password']).then((data) {
+            if (data['success']) {
+              Navigator.pushReplacementNamed(context, 'home');
+            } else {
+              showDialog(
                   context: context,
-                  builder: (BuildContext context){
+                  builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text('An Error Ocurred'),
                       content: Text(data['message']),
                       actions: <Widget>[
                         FlatButton(
                           child: Text('OK'),
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         _buildErrorDialogActionButton(data['code'])
                       ],
                     );
-                  }
-                );
-              }
-            });
-          } else{
-            Navigator.pushReplacementNamed(context, 'vendor_home');
-          }
+                  });
+            }
+          });
+        } else {
+          Navigator.pushReplacementNamed(context, 'vendor_home');
+        }
         // }
       },
     );
   }
 
-  Widget _buildErrorDialogActionButton(int code){
-    if(code == 0){
+  Widget _buildErrorDialogActionButton(int code) {
+    if (code == 0) {
       return FlatButton(
         child: Text('SIGN UP'),
-        onPressed: (){
-          Navigator.pop(context, (){
+        onPressed: () {
+          Navigator.pop(context, () {
             Navigator.pushReplacementNamed(context, 'signup');
           });
-          
         },
       );
-    } else if(code == 1){
+    } else if (code == 1) {
       return FlatButton(
         child: Text('RESET PASSWORD'),
-        onPressed: (){
+        onPressed: () {
           Navigator.of(context).pop();
         },
       );
-    } else if(code == 2){
+    } else if (code == 2) {
       return FlatButton(
         child: Text('REVIEW'),
-        onPressed: (){
+        onPressed: () {
           Navigator.of(context).pop();
         },
       );
@@ -149,11 +147,13 @@ class _LoginPageState extends State<LoginPage>{
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text('Login With', style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16
-              ),),
+              Text(
+                'Login With',
+                style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
               _buildSocialMediaLogin(),
               Form(
                 key: _formKey,
@@ -165,45 +165,45 @@ class _LoginPageState extends State<LoginPage>{
                             prefixIcon: Icon(Icons.email),
                             labelText: 'email',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
+                                borderRadius: BorderRadius.circular(10))),
                         keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Your email is required';
-                          } else if(!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$').hasMatch(value.toLowerCase())){
+                          } else if (!RegExp(r'^[a-z]+@[a-z]+\.[a-z]+$')
+                              .hasMatch(value.toLowerCase())) {
                             return 'Please enter a valid email';
                           }
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['email'] = value;
                         },
                       ),
-                      SizedBox(height: 25,),
+                      SizedBox(
+                        height: 25,
+                      ),
                       TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.lock),
-                            labelText: 'password',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            suffixIcon: GestureDetector(
-                              child: Icon(Icons.remove_red_eye),
-                              onTap: (){
-                                setState(() {
-                                  showPassword = !showPassword;
-                                });
-                              },
-                            ),
+                          prefixIcon: Icon(Icons.lock),
+                          labelText: 'password',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          suffixIcon: GestureDetector(
+                            child: Icon(Icons.remove_red_eye),
+                            onTap: () {
+                              setState(() {
+                                showPassword = !showPassword;
+                              });
+                            },
+                          ),
                         ),
                         obscureText: showPassword,
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Your password is required';
                           }
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['password'] = value;
                         },
                       ),
@@ -211,14 +211,15 @@ class _LoginPageState extends State<LoginPage>{
                         alignment: Alignment.centerRight,
                         child: FlatButton(
                           child: Text('Forgot Password'),
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                         ),
                       ),
                       ScopedModelDescendant<MainModel>(
-                        builder: (BuildContext context, Widget child, MainModel model){
-                          return model.isLoading ? CircularProgressIndicator() : _buildSubmitButton(model);
+                        builder: (BuildContext context, Widget child,
+                            MainModel model) {
+                          return model.isLoading
+                              ? CircularProgressIndicator()
+                              : _buildSubmitButton(model);
                           // return  RaisedButton(
                           //   textColor: Colors.white,
                           //   child: Text('Login'),

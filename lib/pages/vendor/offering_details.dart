@@ -6,7 +6,7 @@ import '../../widgets/custom_text.dart' as customText;
 
 import './offering_accepted.dart';
 
-class OfferingDetails extends StatelessWidget{
+class OfferingDetails extends StatelessWidget {
   final DisposeOffering offering;
 
   OfferingDetails(this.offering);
@@ -43,23 +43,30 @@ class OfferingDetails extends StatelessWidget{
                 text: offering.date,
                 textColor: Colors.blueGrey,
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   OutlineButton(
                     child: Text('Decline'),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
                   RaisedButton(
-                    child: Text('Accept', style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      'Accept',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     // elevation: 0,
-                    onPressed: (){
-                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                        builder: (BuildContext context) => OfferingAcceptedPage(offering)
-                      ), (Route route) => false);
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  OfferingAcceptedPage(offering)),
+                          (Route route) => false);
                     },
                   )
                 ],

@@ -1,4 +1,4 @@
-class RecycleWasteType{
+class RecycleWasteType {
   static const String plastics = "Plastics";
   static const String metals = "Metals";
   static const String glass = "Glass";
@@ -7,7 +7,7 @@ class RecycleWasteType{
   static const String otherWaste = "Other Waste";
 }
 
-class RecycleOffering{
+class RecycleOffering {
   final String id;
   final String name;
   final String iconUrl;
@@ -21,5 +21,17 @@ class RecycleOffering{
   final String userId;
   final List<String> imagePaths;
 
-  RecycleOffering({this.id, this.name, this.iconUrl, this.imageUrls, this.price, this.rate, this.weight, this.clientName, this.clientLocation, this.date, this.userId, this.imagePaths});
+  RecycleOffering(
+      {this.id,
+      this.name,
+      this.iconUrl,
+      this.imageUrls,
+      this.price,
+      this.rate,
+      this.weight,
+      this.clientName,
+      this.clientLocation,
+      this.date,
+      this.userId,
+      this.imagePaths});
 }

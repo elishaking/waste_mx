@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
-class EditPricePage extends StatefulWidget{
+class EditPricePage extends StatefulWidget {
   final defaultPrice;
 
   EditPricePage(this.defaultPrice);
@@ -13,7 +13,7 @@ class EditPricePage extends StatefulWidget{
   }
 }
 
-class _EditPricePageState extends State<EditPricePage>{
+class _EditPricePageState extends State<EditPricePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _formData = {
@@ -32,11 +32,14 @@ class _EditPricePageState extends State<EditPricePage>{
           child: Column(
             children: <Widget>[
               customText.TitleText(
-                text: 'Vendors are more likely to accept offers within their set rate',
+                text:
+                    'Vendors are more likely to accept offers within their set rate',
                 textColor: Theme.of(context).accentColor,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Form(
                 key: _formKey,
                 child: Column(
@@ -46,28 +49,30 @@ class _EditPricePageState extends State<EditPricePage>{
                         prefixIcon: Icon(Icons.account_balance_wallet),
                         labelText: 'Price',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                       initialValue: widget.defaultPrice,
                       keyboardType: TextInputType.numberWithOptions(
-                        decimal: false,
-                        signed: false
-                      ),
-                      validator: (String value){
-                        if(value.isEmpty){
+                          decimal: false, signed: false),
+                      validator: (String value) {
+                        if (value.isEmpty) {
                           return 'Please enter a price';
                         }
                       },
-                      onSaved: (String value){
+                      onSaved: (String value) {
                         _formData['price'] = value;
                       },
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     RaisedButton(
-                      child: customText.BodyText(text: 'Set', textColor: Colors.white,),
-                      onPressed: (){
-                        if(_formKey.currentState.validate()){
+                      child: customText.BodyText(
+                        text: 'Set',
+                        textColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
                           Navigator.pop(context, _formData['price']);
                         }

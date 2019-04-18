@@ -4,7 +4,7 @@ import '../widgets/custom_text.dart' as customText;
 
 import './payment_confirmed.dart';
 
-class WalletPayPage extends StatelessWidget{
+class WalletPayPage extends StatelessWidget {
   final double walletBalance = 5000;
   final double transactionFee = 50;
 
@@ -22,13 +22,21 @@ class WalletPayPage extends StatelessWidget{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('Wallet Balance'),
-                customText.HeadlineText(text: 'N ${walletBalance.toString()}', textColor: Theme.of(context).primaryColor,),
-                SizedBox(height: 25,),
+                customText.HeadlineText(
+                  text: 'N ${walletBalance.toString()}',
+                  textColor: Theme.of(context).primaryColor,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
                 Container(
                   alignment: Alignment.centerRight,
-                  child: Text('${transactionFee.toString()} NGN transaction fee'),
+                  child:
+                      Text('${transactionFee.toString()} NGN transaction fee'),
                 ),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 TextFormField(
                   enabled: false,
                   initialValue: '1000',
@@ -36,25 +44,31 @@ class WalletPayPage extends StatelessWidget{
                     prefixIcon: Icon(Icons.account_balance_wallet),
                     labelText: 'amount',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
-                SizedBox(height: 10,),
-                Center(child: FlatButton(
-                  child: Text('Payment Terms'),
-                  onPressed: (){
-                    
-                  },
-                ),),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: FlatButton(
+                    child: Text('Payment Terms'),
+                    onPressed: () {},
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Center(
                   child: RaisedButton(
-                    child: customText.BodyText(text: 'Pay Securely', textColor: Colors.white,),
-                    onPressed: (){
+                    child: customText.BodyText(
+                      text: 'Pay Securely',
+                      textColor: Colors.white,
+                    ),
+                    onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => PaymentConfirmedPage(1000)
-                      ));
+                          builder: (BuildContext context) =>
+                              PaymentConfirmedPage(1000)));
                     },
                   ),
                 )

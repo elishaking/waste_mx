@@ -40,36 +40,41 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
-        title: 'Waste MX',
-        theme: ThemeData(
-          primaryColor: Colors.green,
-          accentColor: Colors.amber,
-          buttonColor: Colors.amber,
-          fontFamily: 'Lato',
-          buttonTheme: ButtonThemeData(
+          title: 'Waste MX',
+          theme: ThemeData(
+            primaryColor: Colors.green,
+            accentColor: Colors.amber,
             buttonColor: Colors.amber,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+            fontFamily: 'Lato',
+            buttonTheme: ButtonThemeData(
+              buttonColor: Colors.amber,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100)),
+            ),
           ),
-        ),
-        color: Colors.green,
-        // home: WelcomePage(),
-        routes: {
-          '/': (BuildContext context) => ScopedModelDescendant(
-            builder: (BuildContext context, Widget child, MainModel model){
-              return model.user == null ? WelcomePage() : (model.user.userType == UserType.Client ? HomePage() : VendorHomePage());
-            },
-          ),
-          // '/': (BuildContext context) => BookVendorPage(),
-          // 'login': (BuildContext context) => LoginPage(),
-          'welcome': (BuildContext context) => WelcomePage(),
-          // 'signup': (BuildContext context) => SignUpPage('user'),
-          'home': (BuildContext context) => HomePage(),
-          'vendor_home': (BuildContext context) => VendorHomePage(),
-          'search': (BuildContext context) => SearchPage(),
-          'profile': (BuildContext context) => ProfilePage(),
-          'dispose_waste': (BuildContext context) => DisposeWastePage(),
-        }
-      ),
+          color: Colors.green,
+          // home: WelcomePage(),
+          routes: {
+            '/': (BuildContext context) => ScopedModelDescendant(
+                  builder:
+                      (BuildContext context, Widget child, MainModel model) {
+                    return model.user == null
+                        ? WelcomePage()
+                        : (model.user.userType == UserType.Client
+                            ? HomePage()
+                            : VendorHomePage());
+                  },
+                ),
+            // '/': (BuildContext context) => BookVendorPage(),
+            // 'login': (BuildContext context) => LoginPage(),
+            'welcome': (BuildContext context) => WelcomePage(),
+            // 'signup': (BuildContext context) => SignUpPage('user'),
+            'home': (BuildContext context) => HomePage(),
+            'vendor_home': (BuildContext context) => VendorHomePage(),
+            'search': (BuildContext context) => SearchPage(),
+            'profile': (BuildContext context) => ProfilePage(),
+            'dispose_waste': (BuildContext context) => DisposeWastePage(),
+          }),
     );
   }
 }

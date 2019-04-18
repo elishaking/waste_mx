@@ -15,7 +15,7 @@ import '../widgets/custom_text.dart' as customText;
 import './edit_price.dart';
 import './wallet.dart';
 
-class BookVendorPage extends StatefulWidget{
+class BookVendorPage extends StatefulWidget {
   final String wasteType;
   BookVendorPage(this.wasteType);
 
@@ -25,7 +25,7 @@ class BookVendorPage extends StatefulWidget{
   }
 }
 
-class _BookVendorPageState extends State<BookVendorPage>{
+class _BookVendorPageState extends State<BookVendorPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _formData = {
@@ -41,14 +41,14 @@ class _BookVendorPageState extends State<BookVendorPage>{
 
   TextEditingController _controller = TextEditingController();
 
-  void _onChange(){
+  void _onChange() {
     String text = _controller.text;
     print(text + ' ' + _numOfBins);
-    if(text.isNotEmpty && (text != _numOfBins)){
+    if (text.isNotEmpty && (text != _numOfBins)) {
       // print(text);
       _numOfBins = text;
       setState(() {
-       _wastePrice =  (double.parse(text) * rate).toString();
+        _wastePrice = (double.parse(text) * rate).toString();
       });
     }
   }
@@ -59,20 +59,17 @@ class _BookVendorPageState extends State<BookVendorPage>{
     super.initState();
   }
 
-  void _setImage(File image){
+  void _setImage(File image) {
     _formData['image'] = image;
   }
 
-  void _getImage(BuildContext context, ImageSource source){
-    ImagePicker.pickImage(
-      source: source,
-      maxWidth: 400
-    ).then((File image) {
+  void _getImage(BuildContext context, ImageSource source) {
+    ImagePicker.pickImage(source: source, maxWidth: 400).then((File image) {
       setState(() {
-       _imageFiles.insert(0, image);
+        _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
-      Timer(Duration(seconds: 1), (){
+      Timer(Duration(seconds: 1), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           duration: new Duration(milliseconds: 200),
@@ -82,40 +79,43 @@ class _BookVendorPageState extends State<BookVendorPage>{
     });
   }
 
-  void _openImagePicker(BuildContext context){
+  void _openImagePicker(BuildContext context) {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context){
-        return Container(
-          height: 200,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            children: <Widget>[
-              customText.TitleText(
-                text: 'Add Image',
-                textColor: Colors.black,
-              ),
-              SizedBox(height: 10,),
-              ListTile(
-                leading: Icon(Icons.camera),
-                title: Text('Use Camera'),
-                onTap: (){
-                  _getImage(context, ImageSource.camera);
-                },
-              ),
-              SizedBox(width: 5,),
-              ListTile(
-                leading: Icon(Icons.picture_in_picture),
-                title: Text('Select from Gallery'),
-                onTap: (){
-                  _getImage(context, ImageSource.gallery);
-                },
-              )
-            ],
-          ),
-        );
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 200,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              children: <Widget>[
+                customText.TitleText(
+                  text: 'Add Image',
+                  textColor: Colors.black,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ListTile(
+                  leading: Icon(Icons.camera),
+                  title: Text('Use Camera'),
+                  onTap: () {
+                    _getImage(context, ImageSource.camera);
+                  },
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                ListTile(
+                  leading: Icon(Icons.picture_in_picture),
+                  title: Text('Select from Gallery'),
+                  onTap: () {
+                    _getImage(context, ImageSource.gallery);
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 
   ScrollController _scrollController = ScrollController();
@@ -123,7 +123,12 @@ class _BookVendorPageState extends State<BookVendorPage>{
   @override
   Widget build(BuildContext context) {
     final double _fieldsGap = 20;
-    final List<String> _wasteTypes = ['Household waste', 'Office waste', 'Sewage', 'Liquid Waste'];
+    final List<String> _wasteTypes = [
+      'Household waste',
+      'Office waste',
+      'Sewage',
+      'Liquid Waste'
+    ];
     String _wasteType = _wasteTypes[0];
 
     return GestureDetector(
@@ -142,9 +147,16 @@ class _BookVendorPageState extends State<BookVendorPage>{
                   text: 'Schedule Pickup',
                   textColor: Colors.black,
                 ),
-                SizedBox(height: 20,),
-                customText.BodyText(text: widget.wasteType, textColor: Theme.of(context).primaryColor,),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
+                customText.BodyText(
+                  text: widget.wasteType,
+                  textColor: Theme.of(context).primaryColor,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -155,28 +167,37 @@ class _BookVendorPageState extends State<BookVendorPage>{
                             prefixIcon: Icon(Icons.location_on),
                             labelText: 'Waste location',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            suffixIcon: GestureDetector(
-                              child: Icon(Icons.my_location),
-                              onTap: (){
-                                final SnackBar snackBar = SnackBar(
-                                  content: Text('Getting Location'),
-                                );
-                                Scaffold.of(context).showSnackBar(snackBar);
+                                borderRadius: BorderRadius.circular(10)),
+                            suffixIcon: ScopedModelDescendant<MainModel>(
+                              builder: (BuildContext context, Widget child,
+                                  MainModel model) {
+                                return model.isLoading
+                                    ? CircularProgressIndicator()
+                                    : GestureDetector(
+                                        child: Icon(Icons.my_location),
+                                        onTap: () {
+                                          model.getLocation();
+                                          final SnackBar snackBar = SnackBar(
+                                            content: Text('Getting Location'),
+                                          );
+                                          Scaffold.of(context)
+                                              .showSnackBar(snackBar);
+                                        },
+                                      );
                               },
-                            )
-                        ),
+                            )),
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'Please enter a valid location';
-                          } 
+                          }
                         },
-                        onSaved: (String value){
-                          _formData['phone'] = value;
+                        onSaved: (String value) {
+                          _formData['location'] = value;
                         },
                       ),
-                      SizedBox(height: _fieldsGap,),
+                      SizedBox(
+                        height: _fieldsGap,
+                      ),
                       // DropdownButtonFormField<String>(
                       //   decoration: InputDecoration(
                       //       border: OutlineInputBorder(
@@ -198,29 +219,27 @@ class _BookVendorPageState extends State<BookVendorPage>{
                       // SizedBox(height: _fieldsGap,),
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.delete),
-                          labelText: 'Number of Bins',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                          )
-                        ),
+                            prefixIcon: Icon(Icons.delete),
+                            labelText: 'Number of Bins',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
                         controller: _controller,
                         keyboardType: TextInputType.numberWithOptions(
-                          decimal: false,
-                          signed: false
-                        ),
+                            decimal: false, signed: false),
                         validator: (String value) {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             return 'This field is required';
-                          } else if(double.parse(value) <= 0){
+                          } else if (double.parse(value) <= 0) {
                             return 'Value must be greater than 0';
                           }
                         },
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           _formData['numberOfBins'] = value;
                         },
                       ),
-                      SizedBox(height: _fieldsGap,),
+                      SizedBox(
+                        height: _fieldsGap,
+                      ),
                       Container(
                         padding: EdgeInsets.only(right: 5),
                         alignment: Alignment.centerRight,
@@ -229,109 +248,151 @@ class _BookVendorPageState extends State<BookVendorPage>{
                           textColor: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 3,),
+                      SizedBox(
+                        height: 3,
+                      ),
                       OutlineButton(
-                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                         borderSide: BorderSide(width: 1),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Price: NGN ' + _wastePrice),
                             IconButton(
                               icon: Icon(Icons.edit),
-                              onPressed: (){
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => EditPricePage(_wastePrice)
-                                )).then((price){
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            EditPricePage(_wastePrice)))
+                                    .then((price) {
                                   setState(() {
-                                   _wastePrice = price;
+                                    _wastePrice = price;
                                   });
                                 });
                               },
                             )
                           ],
                         ),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => EditPricePage(_wastePrice)
-                          ));
+                              builder: (BuildContext context) =>
+                                  EditPricePage(_wastePrice)));
                         },
                       ),
-                      SizedBox(height: _fieldsGap,),
-                      _imageFiles.length == 0 ? Text('No Image(s)', style: TextStyle(color: Theme.of(context).primaryColor),) : 
-                      Column(
-                        children: List.generate(_imageFiles.length, (int index) => Container(
-                          // decoration: BoxDecoration(
-                          //   boxShadow: [BoxShadow()]
-                          // ),
-                          margin: EdgeInsets.only(bottom: _fieldsGap),
-                          child: Dismissible(
-                            key: UniqueKey(),
-                            onDismissed: (dir){
-                              setState(() {
-                               _imageFiles.removeAt(index); 
-                              });
-                            },
-                            child: Image.file(_imageFiles[index], 
-                              fit: BoxFit.cover, 
-                              height: 300, 
-                              width: MediaQuery.of(context).size.width, 
-                              alignment: Alignment.topCenter, //! can change to center
-                            ),
-                          ),
-                        )),
+                      SizedBox(
+                        height: _fieldsGap,
                       ),
-                      SizedBox(height: _fieldsGap,),
+                      _imageFiles.length == 0
+                          ? Text(
+                              'No Image(s)',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            )
+                          : Column(
+                              children: List.generate(
+                                  _imageFiles.length,
+                                  (int index) => Container(
+                                        // decoration: BoxDecoration(
+                                        //   boxShadow: [BoxShadow()]
+                                        // ),
+                                        margin:
+                                            EdgeInsets.only(bottom: _fieldsGap),
+                                        child: Dismissible(
+                                          key: UniqueKey(),
+                                          onDismissed: (dir) {
+                                            setState(() {
+                                              _imageFiles.removeAt(index);
+                                            });
+                                          },
+                                          child: Image.file(
+                                            _imageFiles[index],
+                                            fit: BoxFit.cover,
+                                            height: 300,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            alignment: Alignment
+                                                .topCenter, //! can change to center
+                                          ),
+                                        ),
+                                      )),
+                            ),
+                      SizedBox(
+                        height: _fieldsGap,
+                      ),
                       OutlineButton(
-                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                         borderSide: BorderSide(width: 1),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Add Image: ${_imageFiles.length}'),
                             IconButton(
                               icon: Icon(Icons.camera),
-                              onPressed: (){
+                              onPressed: () {
                                 _openImagePicker(context);
                               },
                             )
                           ],
                         ),
-                        onPressed: (){
+                        onPressed: () {
                           _openImagePicker(context);
                         },
                       ),
-                      SizedBox(height: _fieldsGap,),
+                      SizedBox(
+                        height: _fieldsGap,
+                      ),
                       ScopedModelDescendant(
-                        builder: (BuildContext context, Widget child, MainModel model){
-                          return model.isLoading ? CircularProgressIndicator() : RaisedButton(
-                            child: customText.BodyText(text: 'Send Offer', textColor: Colors.white,),
-                            onPressed: (){
-                              if(_formKey.currentState.validate()){
-                                _formKey.currentState.save();
-                                model.addOffering(DisposeOffering(
-                                  name: widget.wasteType,
-                                  price: _wastePrice,
-                                  rate: rate.toString(),
-                                  numberOfBins: _formData['numberOfBins'],
-                                  clientName: 'new',
-                                  clientLocation: _formData['location']
-                                ), _imageFiles).then((_){
-                                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (BuildContext context) => WalletPage(true)
-                                  ));
-                                });
-                              } else{
-                                _scrollController.animateTo(
-                                  0,
-                                  duration: new Duration(milliseconds: 200),
-                                  curve: Curves.easeOut,
+                        builder: (BuildContext context, Widget child,
+                            MainModel model) {
+                          return model.isLoading
+                              ? CircularProgressIndicator()
+                              : RaisedButton(
+                                  child: customText.BodyText(
+                                    text: 'Send Offer',
+                                    textColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (_formKey.currentState.validate()) {
+                                      _formKey.currentState.save();
+                                      model
+                                          .addOffering(
+                                              DisposeOffering(
+                                                  name: widget.wasteType,
+                                                  price: _wastePrice,
+                                                  rate: rate.toString(),
+                                                  numberOfBins:
+                                                      _formData['numberOfBins'],
+                                                  clientName: 'new',
+                                                  clientLocation:
+                                                      _formData['location']),
+                                              _imageFiles)
+                                          .then((_) {
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        WalletPage(true)));
+                                      });
+                                    } else {
+                                      _scrollController.animateTo(
+                                        0,
+                                        duration:
+                                            new Duration(milliseconds: 200),
+                                        curve: Curves.easeOut,
+                                      );
+                                    }
+                                  },
                                 );
-                              }
-                            },
-                          );
                         },
                       )
                     ],

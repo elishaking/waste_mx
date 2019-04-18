@@ -10,22 +10,24 @@ import '../widgets/custom_text.dart' as customText;
 
 import '../pages/vendor_list.dart';
 
-class RecycleWastePage extends StatelessWidget{
+class RecycleWastePage extends StatelessWidget {
   double _targetWidth = 0;
 
-  double _getSize(final double default_1440){
+  double _getSize(final double default_1440) {
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
 
-  Widget _buildCategoryWidget(BuildContext context, MainModel model, String wasteType, String imageUrl, [dynamic route]){
+  Widget _buildCategoryWidget(
+      BuildContext context, MainModel model, String wasteType, String imageUrl,
+      [dynamic route]) {
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-        side: BorderSide(color: Theme.of(context).primaryColor)
-      ),
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(color: Theme.of(context).primaryColor)),
       color: Colors.white,
-      padding: EdgeInsets.only(left: _getSize(18), right: _getSize(18), top: _getSize(23)),
+      padding: EdgeInsets.only(
+          left: _getSize(18), right: _getSize(18), top: _getSize(23)),
       child: SizedBox(
         width: _getSize(120),
         height: _getSize(120),
@@ -36,7 +38,9 @@ class RecycleWastePage extends StatelessWidget{
               height: _getSize(70),
               image: AssetImage(imageUrl),
             ),
-            SizedBox(height: _getSize(15),),
+            SizedBox(
+              height: _getSize(15),
+            ),
             customText.BodyText(
               text: wasteType,
               textColor: Theme.of(context).primaryColor,
@@ -44,10 +48,11 @@ class RecycleWastePage extends StatelessWidget{
           ],
         ),
       ),
-      onPressed: (){
+      onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => route != null ? route : VendorListPage(model, wasteType, OfferingType.recycle)
-        ));
+            builder: (BuildContext context) => route != null
+                ? route
+                : VendorListPage(model, wasteType, OfferingType.recycle)));
       },
     );
   }
@@ -58,35 +63,46 @@ class RecycleWastePage extends StatelessWidget{
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, model, RecycleWasteType.plastics, 'assets/plastic-bottle.png'),
-            _buildCategoryWidget(context, model, RecycleWasteType.glass, 'assets/thick-magnet.png')
+            _buildCategoryWidget(context, model, RecycleWasteType.plastics,
+                'assets/plastic-bottle.png'),
+            _buildCategoryWidget(context, model, RecycleWasteType.glass,
+                'assets/thick-magnet.png')
           ],
         ),
-        SizedBox(height: _getSize(15),),
+        SizedBox(
+          height: _getSize(15),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, model, RecycleWasteType.glass, 'assets/glass.png'),
-            _buildCategoryWidget(context, model, RecycleWasteType.paper, 'assets/stacked-print-products.png')
+            _buildCategoryWidget(
+                context, model, RecycleWasteType.glass, 'assets/glass.png'),
+            _buildCategoryWidget(context, model, RecycleWasteType.paper,
+                'assets/stacked-print-products.png')
           ],
         ),
-        SizedBox(height: _getSize(15),),
+        SizedBox(
+          height: _getSize(15),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, model, RecycleWasteType.nuclear, 'assets/incineration.png'),
-            _buildCategoryWidget(context, model, RecycleWasteType.otherWaste, 'assets/throw-to-paper-bin.png')
+            _buildCategoryWidget(context, model, RecycleWasteType.nuclear,
+                'assets/incineration.png'),
+            _buildCategoryWidget(context, model, RecycleWasteType.otherWaste,
+                'assets/throw-to-paper-bin.png')
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCategoriesSection(BuildContext context){
+  Widget _buildCategoriesSection(BuildContext context) {
     return ScopedModelDescendant(
-      builder: (BuildContext context, Widget child, MainModel model){
+      builder: (BuildContext context, Widget child, MainModel model) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: _getSize(20), vertical: _getSize(30)),
+          padding: EdgeInsets.symmetric(
+              horizontal: _getSize(20), vertical: _getSize(30)),
           child: _buildAllCategories(context, model),
         );
       },
@@ -97,12 +113,11 @@ class RecycleWastePage extends StatelessWidget{
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
 
-    void _pushRoute(route){
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) {
-          return route;
-        }
-      ));
+    void _pushRoute(route) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (BuildContext context) {
+        return route;
+      }));
     }
 
     return Scaffold(
@@ -112,7 +127,10 @@ class RecycleWastePage extends StatelessWidget{
       ),
       body: Stack(
         children: <Widget>[
-          Container(height: _getSize(200), color: Theme.of(context).primaryColor,),
+          Container(
+            height: _getSize(200),
+            color: Theme.of(context).primaryColor,
+          ),
           SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(_getSize(18)),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
-class CreditWalletPage extends StatelessWidget{
+class CreditWalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +15,12 @@ class CreditWalletPage extends StatelessWidget{
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text('Add money to wallet',),
-              SizedBox(height: 15,),
+              Text(
+                'Add money to wallet',
+              ),
+              SizedBox(
+                height: 15,
+              ),
               Form(
                 child: Column(
                   children: <Widget>[
@@ -25,36 +29,37 @@ class CreditWalletPage extends StatelessWidget{
                         prefixIcon: Icon(Icons.account_balance_wallet),
                         labelText: 'amount',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     RaisedButton(
                       child: customText.BodyText(
                         text: 'Proceed',
                         textColor: Colors.white,
                       ),
-                      onPressed: (){
-
-                      },
+                      onPressed: () {},
                     )
                   ],
                 ),
               ),
-              SizedBox(height: 25,),
+              SizedBox(
+                height: 25,
+              ),
               FlatButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(Icons.info_outline),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Text('Why use Waste MX Wallet')
                   ],
                 ),
-                onPressed: (){
-
-                },
+                onPressed: () {},
               )
             ],
           ),
