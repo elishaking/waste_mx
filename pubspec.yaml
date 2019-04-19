@@ -92,13 +92,13 @@ flutter:
   - assets/plastic-bottle.png
   - assets/thick-magnet.png
   - assets/no-network.png
-  - assets/decluster/Vehicles.png
-  - assets/decluster/Bottles.png
-  - assets/decluster/Clothes.png
-  - assets/decluster/Appliances.png
-  - assets/decluster/Furniture.png
-  - assets/decluster/Household.png
-  - assets/decluster/Stationery.png
+  - assets/decluster/vehicles.png
+  - assets/decluster/bottles.png
+  - assets/decluster/clothes.png
+  - assets/decluster/appliances.png
+  - assets/decluster/furniture.png
+  - assets/decluster/household.png
+  - assets/decluster/stationery.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

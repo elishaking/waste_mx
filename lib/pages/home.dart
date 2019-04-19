@@ -5,6 +5,7 @@ import '../widgets/bottom_navigation_bar.dart';
 
 import './dispose_waste.dart';
 import './recycle_waste.dart';
+import './decluster/decluster.dart';
 import './wallet.dart';
 
 class HomePage extends StatelessWidget {
@@ -247,7 +248,7 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buildCategoryWidget(
-                  context, 'De-clustering', 'assets/target.png'),
+                  context, 'De-clustering', 'assets/target.png', DeclusterPage()),
               _buildCategoryWidget(context, 'Sewage', 'assets/sewage.png')
             ],
           ),

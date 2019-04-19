@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../scoped_models/main.dart';
-import '../../models/offering.dart';
 import '../../models/decluster_offering.dart';
 
 import '../../widgets/custom_text.dart' as customText;
@@ -73,9 +72,9 @@ class DeclusterPage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, model, DeclusterType.vehicles, 'assets/decluster/${DeclusterType.vehicles}.png'),
+                context, model, DeclusterType.vehicles, 'assets/decluster/${DeclusterType.vehicles.toLowerCase()}.png'),
             _buildCategoryWidget(context, model, DeclusterType.bottles,
-                'assets/decluster/${DeclusterType.bottles}.png')
+                'assets/decluster/${DeclusterType.bottles.toLowerCase()}.png')
           ],
         ),
         SizedBox(
@@ -85,9 +84,9 @@ class DeclusterPage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, model, DeclusterType.clothes, 'assets/decluster/${DeclusterType.clothes}.png'),
+                context, model, DeclusterType.clothes, 'assets/decluster/${DeclusterType.clothes.toLowerCase()}.png'),
             _buildCategoryWidget(
-                context, model, DeclusterType.appliances, 'assets/decluster/${DeclusterType.appliances}.png')
+                context, model, DeclusterType.appliances, 'assets/decluster/${DeclusterType.appliances.toLowerCase()}.png')
           ],
         ),
         SizedBox(
@@ -97,9 +96,9 @@ class DeclusterPage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(context, model, DeclusterType.furniture,
-                'assets/decluster/${DeclusterType.furniture}.png'),
+                'assets/decluster/${DeclusterType.furniture.toLowerCase()}.png'),
             _buildCategoryWidget(context, model, DeclusterType.household,
-                'assets/decluster/${DeclusterType.household}.png')
+                'assets/decluster/${DeclusterType.household.toLowerCase()}.png')
           ],
         ),
         SizedBox(
@@ -109,7 +108,7 @@ class DeclusterPage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(context, model, DeclusterType.stationery,
-                'assets/decluster/${DeclusterType.stationery}.png'),
+                'assets/decluster/${DeclusterType.stationery.toLowerCase()}.png'),
           ],
         ),
       ],
@@ -122,7 +121,8 @@ class DeclusterPage extends StatelessWidget{
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('data'),
+        title: Text('Decluster'),
+        elevation: 0,
       ),
       body: Stack(
         children: <Widget>[
