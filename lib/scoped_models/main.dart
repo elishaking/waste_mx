@@ -70,6 +70,7 @@ class UserModel extends ConnectedModel {
     ResponseInfo responseInfo = ResponseInfo(false, 'User not Saved', -1);
 
     if (token != null) {
+      print(token);
       final DateTime now = DateTime.now();
       final parsedExpiryTime = expiryTimeString == null
           ? DateTime.now().subtract(Duration(days: 1))
@@ -81,6 +82,8 @@ class UserModel extends ConnectedModel {
             body: json.encode({'token': token, 'returnSecureToken': true}))
             .catchError((error) {
               print(error);
+              _isLoading = false;
+              notifyListeners();
               responseInfo = ResponseInfo(false, error, -1);
             });
             // .timeout(Duration(seconds: _httpTimeout), 
@@ -91,10 +94,11 @@ class UserModel extends ConnectedModel {
             // });
         if(response == null) return responseInfo;
         final Map<String, dynamic> responseData = json.decode(response.body);
+        print(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData);
         } else {
-          responseInfo = ResponseInfo(false, 'Could not save User info', -1);
+          responseInfo = ResponseInfo(true, 'Could not save User info', -1);
           _authenticatedUser = null;
           _isLoading = false;
           notifyListeners();
@@ -400,16 +404,16 @@ class OfferingModel extends ConnectedModel {
     _gettingLocation = true;
     notifyListeners();
     Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .timeout(Duration(seconds: 10), onTimeout: (){
-          print('get location timeout');
-        });
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        // .timeout(Duration(seconds: 10), onTimeout: (){
+        //   print('get location timeout');
+        // });
     if(position == null) return '';
     List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude)
-        .timeout(Duration(seconds: 5), onTimeout: (){
-          print('get location placement timeout');
-        });
+        .placemarkFromCoordinates(position.latitude, position.longitude);
+        // .timeout(Duration(seconds: 5), onTimeout: (){
+        //   print('get location placement timeout');
+        // });
     _gettingLocation = false;
     notifyListeners();
     print('position: ' + position.latitude.toString());

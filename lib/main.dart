@@ -100,13 +100,15 @@ class _MyAppState extends State<MyApp> {
         ),
       );
     } else if(!_authResponseInfo.success){
+      print(_authResponseInfo.message);
       return Scaffold(
         body: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Image(image: AssetImage('no-network.png'),),
+              Image(image: AssetImage('assets/no-network.png'),),
               SizedBox(height: 20),
-              customText.BodyText(text: 'No Connection',),
+              customText.HeadlineText(text: 'No Connection',textColor: Colors.black,),
               SizedBox(height: 20),
               RaisedButton(
                 child: Text('Retry'),
