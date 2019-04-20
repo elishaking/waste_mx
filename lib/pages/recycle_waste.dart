@@ -5,7 +5,8 @@ import '../scoped_models/main.dart';
 import '../models/recycle_offering.dart';
 import '../models/offering.dart';
 
-import '../widgets/bottom_navigation_bar.dart';
+// import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/bottom_nav.dart';
 import '../widgets/custom_text.dart' as customText;
 
 import '../pages/vendor_list.dart';
@@ -151,7 +152,7 @@ class RecycleWastePage extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: ButtomNavigationBar('recycle'),
+      bottomNavigationBar: BottomNav(2),
     );
   }
 }

@@ -5,7 +5,8 @@ import '../scoped_models/main.dart';
 import '../models/dispose_offering.dart';
 import '../models/offering.dart';
 
-import '../widgets/bottom_navigation_bar.dart';
+// import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/bottom_nav.dart';
 import '../widgets/custom_text.dart' as customText;
 
 import './vendor_list.dart';
@@ -208,7 +209,7 @@ class DisposeWastePage extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: ButtomNavigationBar('dispose'),
+      bottomNavigationBar: BottomNav(1),
     );
   }
 }

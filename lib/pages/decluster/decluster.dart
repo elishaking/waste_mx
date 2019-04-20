@@ -5,6 +5,7 @@ import '../../scoped_models/main.dart';
 import '../../models/decluster_offering.dart';
 
 import '../../widgets/custom_text.dart' as customText;
+import '../../widgets/bottom_nav.dart';
 
 class DeclusterPage extends StatelessWidget{
   double _targetWidth = 0;
@@ -150,6 +151,7 @@ class DeclusterPage extends StatelessWidget{
           )
         ],
       ),
+      bottomNavigationBar: BottomNav(3),
     );
   }
 }
