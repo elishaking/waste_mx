@@ -126,9 +126,11 @@ class _BookVendorPageState extends State<BookVendorPage> {
             builder: (BuildContext context) =>
                 EditPricePage(_wastePrice)))
         .then((price) {
-      setState(() {
-        _wastePrice = price;
-      });
+          if(price != null){
+            setState(() {
+              _wastePrice = price;
+            });
+          }
     });
   }
 
@@ -318,7 +320,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                       // SizedBox(height: _fieldsGap,),
                       TextFormField(
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.delete),
+                            prefixIcon: Icon(Icons.delete_outline),
                             labelText: 'Number of Bins',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10))),
