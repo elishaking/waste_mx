@@ -300,40 +300,40 @@ class _BookVendorPageState extends State<BookVendorPage> {
                         height: _fieldsGap,
                       ),
                       _imageFiles.length == 0
-                          ? Text(
-                              'No Image(s)',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                            )
-                          : Column(
-                              children: List.generate(
-                                  _imageFiles.length,
-                                  (int index) => Container(
-                                        // decoration: BoxDecoration(
-                                        //   boxShadow: [BoxShadow()]
-                                        // ),
-                                        margin:
-                                            EdgeInsets.only(bottom: _fieldsGap),
-                                        child: Dismissible(
-                                          key: UniqueKey(),
-                                          onDismissed: (dir) {
-                                            setState(() {
-                                              _imageFiles.removeAt(index);
-                                            });
-                                          },
-                                          child: Image.file(
-                                            _imageFiles[index],
-                                            fit: BoxFit.cover,
-                                            height: 300,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            alignment: Alignment
-                                                .topCenter, //! can change to center
-                                          ),
-                                        ),
-                                      )),
-                            ),
+                        ? Text(
+                            'No Image(s)',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          )
+                        : Column(
+                            children: List.generate(
+                              _imageFiles.length,
+                              (int index) => Container(
+                                    // decoration: BoxDecoration(
+                                    //   boxShadow: [BoxShadow()]
+                                    // ),
+                              margin:
+                                  EdgeInsets.only(bottom: _fieldsGap),
+                              child: Dismissible(
+                                key: UniqueKey(),
+                                onDismissed: (dir) {
+                                  setState(() {
+                                    _imageFiles.removeAt(index);
+                                  });
+                                },
+                                child: Image.file(
+                                  _imageFiles[index],
+                                  fit: BoxFit.cover,
+                                  height: 300,
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width,
+                                  alignment: Alignment
+                                      .topCenter, //! can change to center
+                                ),
+                              ),
+                            )),
+                          ),
                       SizedBox(
                         height: _fieldsGap,
                       ),
