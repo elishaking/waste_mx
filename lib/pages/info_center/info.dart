@@ -22,8 +22,18 @@ class _InfoPageState extends State<InfoPage> {
               Container(
                 height: 200,
                 padding: EdgeInsets.only(bottom: 20),
-                color: Theme.of(context).primaryColor,
                 alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  // color: Theme.of(context).primaryColor,
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Colors.green.shade700
+                    ]
+                  )
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
