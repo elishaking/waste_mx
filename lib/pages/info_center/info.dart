@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/custom_text.dart' as customText;
+import '../../widgets/bottom_nav.dart';
 
 class InfoPage extends StatefulWidget{
   @override
@@ -117,6 +118,7 @@ class _InfoPageState extends State<InfoPage> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNav(4),
     );
   }
 }
