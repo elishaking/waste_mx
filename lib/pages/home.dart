@@ -32,16 +32,6 @@ class HomePage extends StatelessWidget {
     },
   ];
 
-  final List<Map<String, dynamic>> _messages = [
-    {
-      'icon': Icons.account_balance_wallet,
-      'title': 'Earned Coins',
-      'message':
-          'You earned 50 points just for installation, check your wallet',
-      'action': 'WALLET'
-    },
-  ];
-
   double _targetWidth = 0;
 
   double _getSize(final double default_1440) {
@@ -250,43 +240,6 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildMessagesSection() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: Column(
-        children: List.generate(
-            _messages.length,
-            (int index) => Card(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(_messages[index]['icon']),
-                          title: Text(_messages[index]['title']),
-                          subtitle: Text(_messages[index]['message']),
-                        ),
-                        ButtonTheme.bar(
-                          child: ButtonBar(
-                            children: <Widget>[
-                              FlatButton(
-                                child: Text(_messages[index]['action']),
-                                onPressed: () {},
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )),
       ),
     );
   }

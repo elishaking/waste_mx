@@ -8,6 +8,57 @@ class InfoPage extends StatefulWidget{
 }
 
 class _InfoPageState extends State<InfoPage> {
+  final List<Map<String, dynamic>> _messages = [
+    {
+      'icon': Icons.account_balance_wallet,
+      'title': 'Earned Coins',
+      'message':
+          'You earned 50 points just for installation, check your wallet',
+      'action': 'WALLET'
+    },
+  ];
+
+  Widget _buildMessagesSection() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      child: Column(
+        children: List.generate(
+          _messages.length,
+          (int index) => Card(
+            child: Container(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 15
+              ),
+              color: Colors.green.withOpacity(0.05),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(_messages[index]['icon']),
+                    title: Text(_messages[index]['title']),
+                    subtitle: Text(_messages[index]['message']),
+                  ),
+                  ButtonTheme.bar(
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text(_messages[index]['action']),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +110,9 @@ class _InfoPageState extends State<InfoPage> {
                     )
                   ],
                 ),
-              )
+              ),
+              SizedBox(height: 25,),
+              _buildMessagesSection()
             ],
           ),
         ),
