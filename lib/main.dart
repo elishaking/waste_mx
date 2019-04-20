@@ -49,8 +49,8 @@ class _MyAppState extends State<MyApp> {
           title: 'Waste MX',
           theme: ThemeData(
             primaryColor: Colors.green,
-            accentColor: Colors.amber,
-            buttonColor: Colors.amber,
+            accentColor: Colors.amber.shade700,
+            buttonColor: Colors.amber.shade700,
             fontFamily: 'Lato',
             buttonTheme: ButtonThemeData(
               buttonColor: Colors.amber,
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           color: Colors.green,
-          home: BookVendorPage("Household Waste"),
+          home: HomePage(),
           routes: {
             // '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
             //       builder:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
-import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/bottom_nav.dart';
 
 import './dispose_waste.dart';
 import './recycle_waste.dart';
@@ -58,20 +58,6 @@ class HomePage extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          // Container(
-          //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
-          //   child: Text(
-          //     'You earned 50 points just for installation, check your wallet',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //       fontWeight: FontWeight.bold,
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // ),
-          // OutlineButton(
-          //   child: Text('Search vendor recycler'),
-          // ),
           SizedBox(
             height: 30,
           ),
@@ -409,7 +395,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: ButtomNavigationBar('home'),
+      bottomNavigationBar: BottomNav(0),
     );
   }
 }
