@@ -132,6 +132,81 @@ class _BookVendorPageState extends State<BookVendorPage> {
     });
   }
 
+  Column _buildImages(double _fieldsGap, BuildContext context) {
+    return Column(
+      children: List.generate(
+        _imageFiles.length,
+        (int index) => Dismissible(
+          key: UniqueKey(),
+          onDismissed: (dir) {
+            setState(() {
+              _imageFiles.removeAt(index);
+            });
+          },
+          child: Container(
+            margin:
+                EdgeInsets.only(bottom: _fieldsGap),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  spreadRadius: 5
+                )
+              ]
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Stack(
+                children: <Widget>[
+                  Image.file(
+                    _imageFiles[index],
+                    fit: BoxFit.cover,
+                    height: 300,
+                    width: MediaQuery.of(context)
+                        .size
+                        .width,
+                    alignment: Alignment
+                        .topCenter, //! can change to center
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10)
+                        )
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.remove_red_eye, color: Colors.white,),
+                            onPressed: (){
+
+                            },
+                          ),
+                          SizedBox(width: 10,),
+                          IconButton(
+                            icon: Icon(Icons.delete_forever, color: Colors.white,),
+                            onPressed: (){
+
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )),
+    );
+  }
+
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -305,35 +380,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor),
                           )
-                        : Column(
-                            children: List.generate(
-                              _imageFiles.length,
-                              (int index) => Container(
-                                    // decoration: BoxDecoration(
-                                    //   boxShadow: [BoxShadow()]
-                                    // ),
-                              margin:
-                                  EdgeInsets.only(bottom: _fieldsGap),
-                              child: Dismissible(
-                                key: UniqueKey(),
-                                onDismissed: (dir) {
-                                  setState(() {
-                                    _imageFiles.removeAt(index);
-                                  });
-                                },
-                                child: Image.file(
-                                  _imageFiles[index],
-                                  fit: BoxFit.cover,
-                                  height: 300,
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width,
-                                  alignment: Alignment
-                                      .topCenter, //! can change to center
-                                ),
-                              ),
-                            )),
-                          ),
+                        : _buildImages(_fieldsGap, context),
                       SizedBox(
                         height: _fieldsGap,
                       ),
