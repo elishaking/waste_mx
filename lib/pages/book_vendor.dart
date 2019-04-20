@@ -192,7 +192,9 @@ class _BookVendorPageState extends State<BookVendorPage> {
                           IconButton(
                             icon: Icon(Icons.delete_forever, color: Colors.white,),
                             onPressed: (){
-
+                              setState(() {
+                                _imageFiles.removeAt(index);
+                              });
                             },
                           )
                         ],
