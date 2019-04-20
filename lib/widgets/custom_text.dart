@@ -4,11 +4,13 @@ class HeadlineText extends StatelessWidget {
   final String text;
   final Color textColor;
   final TextAlign textAlign;
+  final double fontSize;
 
   HeadlineText(
       {this.text,
       this.textColor = Colors.white,
-      this.textAlign = TextAlign.left});
+      this.textAlign = TextAlign.left,
+      this.fontSize = 33});
 
   double _targetWidth = 0;
 
@@ -25,7 +27,7 @@ class HeadlineText extends StatelessWidget {
       style: TextStyle(
         fontFamily: 'Montserrat',
         fontWeight: FontWeight.w900,
-        fontSize: _getSize(33),
+        fontSize: _getSize(fontSize),
         color: textColor,
         letterSpacing: 1.3,
       ),

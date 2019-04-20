@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
           title: 'Waste MX',
           theme: ThemeData(
             primaryColor: Colors.green,
-            accentColor: Colors.amber.shade700,
+            accentColor: Colors.amber,
             buttonColor: Colors.amber.shade700,
             fontFamily: 'Lato',
             buttonTheme: ButtonThemeData(

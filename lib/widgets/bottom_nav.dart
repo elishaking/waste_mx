@@ -4,11 +4,12 @@ import '../pages/home.dart';
 import '../pages/dispose_waste.dart';
 import '../pages/recycle_waste.dart';
 import '../pages/decluster/decluster.dart';
+import '../pages/info_center/info.dart';
 
 
 class BottomNav extends StatelessWidget{
   final int index;
-  final List _routes = [HomePage(), DisposeWastePage(), RecycleWastePage(), DeclusterPage(), HomePage()];
+  final List _routes = [HomePage(), DisposeWastePage(), RecycleWastePage(), DeclusterPage(), InfoPage()];
 
   BottomNav(this.index);
 
