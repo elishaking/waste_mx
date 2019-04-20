@@ -27,35 +27,47 @@ class _InfoPageState extends State<InfoPage> {
       child: Column(
         children: List.generate(
           _messages.length,
-          (int index) => Card(
-            child: Container(
-              padding: EdgeInsets.only(
-                left: 10,
-                right: 10,
-                top: 15
+          (int index) => _buildMessage(index)),
+      ),
+    );
+  }
+
+  Widget _buildMessage(int index) {
+    return Dismissible(
+      onDismissed: (DismissDirection dir) {
+        setState(() {
+         _messages.removeAt(index); 
+        });
+      },
+      key: UniqueKey(),
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.only(
+            left: 10,
+            right: 10,
+            top: 15
+          ),
+          color: Colors.green.withOpacity(0.05),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(_messages[index]['icon']),
+                title: Text(_messages[index]['title']),
+                subtitle: Text(_messages[index]['message']),
               ),
-              color: Colors.green.withOpacity(0.05),
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(_messages[index]['icon']),
-                    title: Text(_messages[index]['title']),
-                    subtitle: Text(_messages[index]['message']),
-                  ),
-                  ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text(_messages[index]['action']),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
+              ButtonTheme.bar(
+                child: ButtonBar(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text(_messages[index]['action']),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
