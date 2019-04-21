@@ -11,7 +11,7 @@ class OnboardingPage extends StatefulWidget {
   }
 }
 
-class _OnboardingPageState extends State<OnboardingPage> {
+class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStateMixin{
   int _tabPos = 1;
   List<Map<String, String>> _infoList = [
     {
@@ -44,12 +44,33 @@ class _OnboardingPageState extends State<OnboardingPage> {
     },
   ];
 
+  List<AnimationController> _controllers = List();
+
+  @override
+  void initState(){
+    for(int i = 0; i < _infoList.length; i++){
+      _controllers.add(AnimationController(vsync: this, duration: Duration(milliseconds: 500)));
+    }
+    _controllers[0].forward();
+    super.initState();
+  }
+
+  double _getOpacity(double value){
+    return value < 0.2 ? 0.2 : value;
+  }
+
   Widget _buildOnboardingTab({int pos}) {
     return Expanded(
-      child: Container(
-        height: 5,
-        color: pos <= _tabPos ? Colors.white : Colors.white30,
-        margin: EdgeInsets.symmetric(horizontal: 2),
+      child: AnimatedBuilder(
+        animation: _controllers[pos - 1],
+        builder: (BuildContext context, Widget child){
+          print(_controllers[pos - 1].value);
+          return Container(
+            height: 5,
+            color: Colors.white.withOpacity(_getOpacity(_controllers[pos - 1].value)),
+            margin: EdgeInsets.symmetric(horizontal: 2),
+          );
+        },
       ),
     );
   }
@@ -66,9 +87,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
       body: GestureDetector(
         onTap: () {
           if (_tabPos < 5) {
-            setState(() {
-              _tabPos++;
-            });
+            _controllers[_tabPos - 1].reverse();
+            _controllers[_tabPos].forward();
+            _tabPos++;
+            // setState(() {
+            //   _tabPos++;
+            // });
           } else if (_tabPos == 5) {
             _navPush(context);
           }
@@ -98,9 +122,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       ),
                       onPressed: () {
                         if (_tabPos > 1) {
-                          setState(() {
-                            _tabPos--;
-                          });
+                          // setState(() {
+                          //   _tabPos--;
+                          // });
+                          _tabPos--;
+                          _controllers[_tabPos - 1].forward();
+                          _controllers[_tabPos].reverse();
                         }
                       },
                     ),
@@ -113,22 +140,31 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
               ),
               Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset(_infoList[_tabPos - 1]['imageUrl']),
-                        SizedBox(height: 10),
-                        custom_text.TitleText(
-                          text: _infoList[_tabPos - 1]['title'],
+                child: Stack(
+                  children: List.generate(_infoList.length, (int index) => ScaleTransition(
+                      scale: CurvedAnimation(
+                        parent: _controllers[index],
+                        curve: Interval(0, 1, curve: Curves.easeOut)
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Center(
+                          child: Column(
+                            children: <Widget>[
+                              Image.asset(_infoList[index]['imageUrl']),
+                              SizedBox(height: 10),
+                              custom_text.TitleText(
+                                text: _infoList[index]['title'],
+                              ),
+                              custom_text.BodyText(
+                                text: _infoList[index]['body'],
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
-                        custom_text.BodyText(
-                          text: _infoList[_tabPos - 1]['body'],
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                      ),
+                    )
                   ),
                 ),
               ),
