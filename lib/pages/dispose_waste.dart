@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 
-import '../scoped_models/main.dart';
 import '../models/dispose_offering.dart';
 import '../models/offering.dart';
 
@@ -9,7 +7,7 @@ import '../models/offering.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/custom_text.dart' as customText;
 
-import './vendor_list.dart';
+import './select_offer_type.dart';
 
 class DisposeWastePage extends StatelessWidget {
   /*
@@ -83,7 +81,7 @@ class DisposeWastePage extends StatelessWidget {
 */
 
   Widget _buildCategoryWidget(
-      BuildContext context, MainModel model, String wasteType, String imageUrl,
+      BuildContext context, String wasteType, String imageUrl,
       [dynamic route]) {
     return RaisedButton(
       elevation: 0,
@@ -115,34 +113,28 @@ class DisposeWastePage extends StatelessWidget {
       ),
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => route != null
-                ? route
-                : VendorListPage(model, wasteType, OfferingType.dispose)));
+            builder: (BuildContext context) => SelectOfferType(wasteType, OfferingType.dispose)));
       },
     );
   }
 
   Widget _buildCategoriesSection(BuildContext context) {
-    return ScopedModelDescendant(
-      builder: (BuildContext context, Widget child, MainModel model) {
-        return Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: _getSize(20), vertical: _getSize(30)),
-          child: _buildAllCategories(context, model),
-        );
-      },
+    return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: _getSize(20), vertical: _getSize(30)),
+      child: _buildAllCategories(context),
     );
   }
 
-  Column _buildAllCategories(BuildContext context, MainModel model) {
+  Column _buildAllCategories(BuildContext context) {
     return Column(
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, model, WasteType.householdWaste, 'assets/house.png'),
-            _buildCategoryWidget(context, model, WasteType.industrialWaste,
+                context, WasteType.householdWaste, 'assets/house.png'),
+            _buildCategoryWidget(context, WasteType.industrialWaste,
                 'assets/industrial.png')
           ],
         ),
@@ -153,9 +145,9 @@ class DisposeWastePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, model, WasteType.agricWaste, 'assets/harvest.png'),
+                context, WasteType.agricWaste, 'assets/harvest.png'),
             _buildCategoryWidget(
-                context, model, WasteType.bulkWaste, 'assets/bulk.png')
+                context, WasteType.bulkWaste, 'assets/bulk.png')
           ],
         ),
         SizedBox(
@@ -164,9 +156,9 @@ class DisposeWastePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, model, WasteType.nuclearWaste,
+            _buildCategoryWidget(context, WasteType.nuclearWaste,
                 'assets/nuclear-plant.png'),
-            _buildCategoryWidget(context, model, WasteType.otherWaste,
+            _buildCategoryWidget(context, WasteType.otherWaste,
                 'assets/throw-to-paper-bin.png')
           ],
         ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 
-import '../scoped_models/main.dart';
 import '../models/recycle_offering.dart';
 import '../models/offering.dart';
 
@@ -9,7 +7,7 @@ import '../models/offering.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/custom_text.dart' as customText;
 
-import '../pages/vendor_list.dart';
+import './select_offer_type.dart';
 
 class RecycleWastePage extends StatelessWidget {
   double _targetWidth = 0;
@@ -19,7 +17,7 @@ class RecycleWastePage extends StatelessWidget {
   }
 
   Widget _buildCategoryWidget(
-      BuildContext context, MainModel model, String wasteType, String imageUrl,
+      BuildContext context, String wasteType, String imageUrl,
       [dynamic route]) {
     return RaisedButton(
       elevation: 0,
@@ -51,22 +49,20 @@ class RecycleWastePage extends StatelessWidget {
       ),
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => route != null
-                ? route
-                : VendorListPage(model, wasteType, OfferingType.recycle)));
+            builder: (BuildContext context) => SelectOfferType(wasteType, OfferingType.dispose)));
       },
     );
   }
 
-  Column _buildAllCategories(BuildContext context, MainModel model) {
+  Column _buildAllCategories(BuildContext context) {
     return Column(
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, model, RecycleWasteType.plastics,
+            _buildCategoryWidget(context, RecycleWasteType.plastics,
                 'assets/plastic-bottle.png'),
-            _buildCategoryWidget(context, model, RecycleWasteType.glass,
+            _buildCategoryWidget(context, RecycleWasteType.glass,
                 'assets/thick-magnet.png')
           ],
         ),
@@ -77,8 +73,8 @@ class RecycleWastePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, model, RecycleWasteType.glass, 'assets/glass.png'),
-            _buildCategoryWidget(context, model, RecycleWasteType.paper,
+                context, RecycleWasteType.glass, 'assets/glass.png'),
+            _buildCategoryWidget(context, RecycleWasteType.paper,
                 'assets/stacked-print-products.png')
           ],
         ),
@@ -88,9 +84,9 @@ class RecycleWastePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, model, RecycleWasteType.nuclear,
+            _buildCategoryWidget(context, RecycleWasteType.nuclear,
                 'assets/incineration.png'),
-            _buildCategoryWidget(context, model, RecycleWasteType.otherWaste,
+            _buildCategoryWidget(context, RecycleWasteType.otherWaste,
                 'assets/throw-to-paper-bin.png')
           ],
         ),
@@ -99,14 +95,10 @@ class RecycleWastePage extends StatelessWidget {
   }
 
   Widget _buildCategoriesSection(BuildContext context) {
-    return ScopedModelDescendant(
-      builder: (BuildContext context, Widget child, MainModel model) {
-        return Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: _getSize(20), vertical: _getSize(30)),
-          child: _buildAllCategories(context, model),
-        );
-      },
+    return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: _getSize(20), vertical: _getSize(30)),
+      child: _buildAllCategories(context),
     );
   }
 
