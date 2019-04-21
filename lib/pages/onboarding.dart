@@ -49,7 +49,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
   @override
   void initState(){
     for(int i = 0; i < _infoList.length; i++){
-      _controllers.add(AnimationController(vsync: this, duration: Duration(milliseconds: 500)));
+      _controllers.add(AnimationController(vsync: this, duration: Duration(milliseconds: 300)));
     }
     _controllers[0].forward();
     super.initState();
@@ -64,7 +64,6 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
       child: AnimatedBuilder(
         animation: _controllers[pos - 1],
         builder: (BuildContext context, Widget child){
-          print(_controllers[pos - 1].value);
           return Container(
             height: 5,
             color: Colors.white.withOpacity(_getOpacity(_controllers[pos - 1].value)),
@@ -128,6 +127,8 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                           _tabPos--;
                           _controllers[_tabPos - 1].forward();
                           _controllers[_tabPos].reverse();
+                        } else{
+                          Navigator.of(context).pop();
                         }
                       },
                     ),
