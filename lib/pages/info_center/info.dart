@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/update.dart';
+
 import '../../widgets/custom_text.dart' as customText;
 import '../../widgets/bottom_nav.dart';
 
@@ -9,14 +11,38 @@ class InfoPage extends StatefulWidget{
 }
 
 class _InfoPageState extends State<InfoPage> {
-  final List<Map<String, dynamic>> _messages = [
-    {
-      'icon': Icons.account_balance_wallet,
-      'title': 'Earned Coins',
-      'message':
-          'You earned 50 points just for installation, check your wallet',
-      'action': 'WALLET'
-    },
+  // final List<Map<String, dynamic>> _messages = [
+  //   {
+  //     'icon': Icons.account_balance_wallet,
+  //     'title': 'Earned Coins',
+  //     'message':
+  //         'You earned 50 points just for installation, check your wallet',
+  //     'action': 'WALLET'
+  //   },
+  // ];
+
+  final List<Update> _messages = [
+    Update(
+      id: '1',
+      icon: Icon(Icons.account_balance_wallet),
+      title: 'Earned Coins',
+      message: 'You earned 50 points just for installation, check your wallet',
+      action: 'WALLET',
+    ),
+    Update(
+      id: '2',
+      icon: Icon(Icons.done_all),
+      title: 'Transaction Complete',
+      message: 'Household Waste disposal',
+      action: 'VIEW',
+    ),
+    Update(
+      id: '3',
+      icon: Icon(Icons.account_balance_wallet),
+      title: 'Earned Coins',
+      message: 'You earned 100 points just for installation, check your wallet',
+      action: 'WALLET',
+    ),
   ];
 
   Widget _buildMessagesSection() {
@@ -26,48 +52,38 @@ class _InfoPageState extends State<InfoPage> {
       ),
       child: Column(
         children: List.generate(
-          _messages.length,
-          (int index) => _buildMessage(index)),
-      ),
-    );
-  }
-
-  Widget _buildMessage(int index) {
-    return Dismissible(
-      onDismissed: (DismissDirection dir) {
-        setState(() {
-         _messages.removeAt(index); 
-        });
-      },
-      key: UniqueKey(),
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.only(
-            left: 10,
-            right: 10,
-            top: 15
-          ),
-          color: Colors.green.withOpacity(0.05),
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(_messages[index]['icon']),
-                title: Text(_messages[index]['title']),
-                subtitle: Text(_messages[index]['message']),
+        _messages.length,
+        (int index) => Dismissible(
+          key: Key(_messages[index].id),
+          onDismissed: (DismissDirection dir) {
+            _messages.removeAt(index);
+          },
+          child: Card(
+            child: Container(
+              padding: EdgeInsets.only(top: 15),
+              color: Theme.of(context).primaryColor.withAlpha(10),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: _messages[index].icon,
+                    title: Text(_messages[index].title),
+                    subtitle: Text(_messages[index].message),
+                  ),
+                  ButtonTheme.bar(
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text(_messages[index].action),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
-              ButtonTheme.bar(
-                child: ButtonBar(
-                  children: <Widget>[
-                    FlatButton(
-                      child: Text(_messages[index]['action']),
-                      onPressed: () {},
-                    )
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+        )),
       ),
     );
   }
