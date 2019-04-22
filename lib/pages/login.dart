@@ -4,6 +4,8 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 import '../models/user.dart';
 
+import './signup.dart';
+
 class LoginPage extends StatefulWidget {
   final UserType userType;
 
@@ -106,7 +108,9 @@ class _LoginPageState extends State<LoginPage> {
             );
           }).then((value){
             if(value == 'signup'){
-              Navigator.of(context).pushReplacementNamed('signup');
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (BuildContext context) => SignUpPage(widget.userType)
+              ), (Route route) => false);
             }
           });
       }
@@ -238,7 +242,9 @@ class _LoginPageState extends State<LoginPage> {
                       FlatButton(
                         child: Text("Don't have an account, Sign Up"),
                         onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(context, 'signup', (Route route) => false);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                            builder: (BuildContext context) => SignUpPage(widget.userType)
+                          ), (Route route) => false);
                         },
                       )
                     ],
