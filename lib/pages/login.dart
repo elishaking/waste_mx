@@ -104,6 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                 _buildErrorDialogActionButton(data['code'])
               ],
             );
+          }).then((value){
+            if(value == 'signup'){
+              Navigator.of(context).pushReplacementNamed('signup');
+            }
           });
       }
     });
@@ -114,9 +118,7 @@ class _LoginPageState extends State<LoginPage> {
       return FlatButton(
         child: Text('SIGN UP'),
         onPressed: () {
-          Navigator.pop(context, () {
-            Navigator.pushReplacementNamed(context, 'signup');
-          });
+          Navigator.of(context).pop('signup');
         },
       );
     } else if (code == 1) {

@@ -52,12 +52,12 @@ class _OfferingsPageState extends State<OfferingsPage> {
   //     date: 'Feb 1'
   //   ),
   // ];
-  Map<String, List> _offerings;
+  // Map<String, List> _offerings;
 
-  List<Widget> _buildOfferings(BuildContext context) {
-    List<String> _offeringNames = _offerings.keys;
+  List<Widget> _buildOfferings(BuildContext context, Map<String, List> offerings) {
+    List<String> _offeringNames = offerings.keys;
     return List.generate(_offeringNames.length, (index) {
-      List _offeringList = _offerings[_offeringNames[index]];
+      List _offeringList = offerings[_offeringNames[index]];
       return _offeringList.length > 0
           ? Container()
           : Container(
@@ -173,11 +173,12 @@ class _OfferingsPageState extends State<OfferingsPage> {
       ),
       body: ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
-          model.fetchOfferings().then((Map<String, List> offerings) {
-            setState(() {
-              _offerings = offerings;
-            });
-          });
+          model.fetchOfferings();
+          // .then((Map<String, List> offerings) {
+          //   setState(() {
+          //     offerings = offerings;
+          //   });
+          // });
           return model.isLoading
               ? Center(
                   child: CircularProgressIndicator(),
@@ -187,7 +188,7 @@ class _OfferingsPageState extends State<OfferingsPage> {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _buildOfferings(context),
+                      children: _buildOfferings(context, model.allOfferings),
                       // children: <Widget>[
                       //   customText.TitleText(
                       //     text: 'Requests',
