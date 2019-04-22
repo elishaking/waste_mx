@@ -11,7 +11,7 @@ class RecycleOffering {
   final String id;
   final String name;
   final String iconUrl;
-  final List<String> imageUrls;
+  final List<dynamic> imageUrls;
   final String price;
   final String rate;
   final String weight;
@@ -19,7 +19,7 @@ class RecycleOffering {
   final String clientLocation;
   final String date;
   final String userId;
-  final List<String> imagePaths;
+  final List<dynamic> imagePaths;
 
   RecycleOffering(
       {this.id,
