@@ -325,9 +325,6 @@ class UserModel extends ConnectedModel {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
 
-    _isLoading = false;
-    notifyListeners();
-
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
     String message = 'Authentication Success';
@@ -359,6 +356,9 @@ class UserModel extends ConnectedModel {
           break;
       }
     }
+
+    _isLoading = false;
+    notifyListeners();
 
     return {'success': success, 'message': message, 'code': code};
   }

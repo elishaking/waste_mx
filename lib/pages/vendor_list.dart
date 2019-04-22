@@ -113,7 +113,7 @@ class _VendorListPageState extends State<VendorListPage> {
             leading: Hero(
               tag: vendor.id,
               child: CircleAvatar(
-                child: Image.asset(vendor.imageUrl),
+                backgroundImage: AssetImage(vendor.imageUrl),
               ),
             ),
             title: Text(
@@ -224,8 +224,9 @@ class _VendorListPageState extends State<VendorListPage> {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : _buildVendorList(
-                  model.vendors != null ? model.vendors : _vendors);
+              // : _buildVendorList(
+              //     model.vendors != null ? model.vendors : _vendors);
+              :_buildVendorList(_vendors);
         },
       ),
     );
