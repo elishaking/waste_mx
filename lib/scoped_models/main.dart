@@ -409,18 +409,22 @@ class OfferingModel extends ConnectedModel {
     notifyListeners();
 
     try{
-      Position position = await Geolocator()
+      Geolocator geolocator = Geolocator();
+      Position position = await geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         // .timeout(Duration(seconds: 10), onTimeout: (){
         //   print('get location timeout');
         // });
+      print(position.longitude);
       if(position == null) {
         _gettingLocation = false;
         notifyListeners();
         return '';
       }
-      List<Placemark> placemark =  await Geolocator()
-          .placemarkFromCoordinates(position.latitude, position.longitude)
+      
+      // String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&location_type=ROOFTOP&result_type=street_address&key=YOUR_API_KEY";
+      List<Placemark> placemark =  await geolocator.placemarkFromPosition(position)
+          // .placemarkFromCoordinates(-122, 24)
           .catchError((error){
             print(error);
           });
@@ -435,7 +439,7 @@ class OfferingModel extends ConnectedModel {
 
       _gettingLocation = false;
       notifyListeners();
-      print('position: ' + position.latitude.toString());
+      // print('position: ' + position.latitude.toString());
 
       Placemark p = placemark[0];
   //    print('${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}');
@@ -446,6 +450,7 @@ class OfferingModel extends ConnectedModel {
       print(e.toString());
       _gettingLocation = false;
       notifyListeners();
+      return '';
     }
   }
 

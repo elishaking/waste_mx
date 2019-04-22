@@ -31,6 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool showPassword2 = true;
 
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _locationFieldController = TextEditingController();
 
   Widget _buildSocialMediaLogin() {
     return Container(
@@ -238,6 +239,41 @@ class _SignUpPageState extends State<SignUpPage> {
                       SizedBox(
                         height: 25,
                       ),
+                      TextFormField(
+                        controller: _locationFieldController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.location_on),
+                          labelText: 'location',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          suffixIcon: ScopedModelDescendant<MainModel>(
+                            builder: (BuildContext context, Widget child, MainModel model) {
+                              return model.gettingLocation
+                                ? Container(
+                                  padding: EdgeInsets.all(10),
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : GestureDetector(
+                                    child: Icon(Icons.my_location),
+                                    onTap: () {
+                                      model.getLocation().then((String location){
+                                        setState(() {
+                                          _locationFieldController.text = location;
+                                        });
+                                      });
+                                    },
+                                  );
+                            },
+                          )),
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a valid location';
+                          }
+                        },
+                        onSaved: (String value) {
+                          _formData['location'] = value;
+                        },
+                      ),
+                      SizedBox(height: 25,),
                       TextFormField(
                         controller: _passwordController,
                         decoration: InputDecoration(
