@@ -228,7 +228,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Book Vendor'),
+          title: Text('Create Offer'),
         ),
         body: SingleChildScrollView(
           controller: _scrollController,

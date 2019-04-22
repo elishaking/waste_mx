@@ -7,6 +7,7 @@ import './dispose_waste.dart';
 import './recycle_waste.dart';
 import './decluster/decluster.dart';
 import './wallet.dart';
+import './track_transactions.dart';
 
 class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
@@ -266,6 +267,15 @@ class HomePage extends StatelessWidget {
               selected: true,
             ),
             ListTile(
+              leading: Icon(Icons.format_list_bulleted),
+              title: Text('Transactions'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => TrackTransactionsPage()));
+                //  Navigator.pushNamed(context, 'profile');
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () {
@@ -282,30 +292,30 @@ class HomePage extends StatelessWidget {
                 //  Navigator.pushNamed(context, 'profile');
               },
             ),
-            ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: Text('Shop'),
-              onTap: () {
-                Navigator.pop(context);
-                //  Navigator.pushNamed(context, 'profile');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.supervised_user_circle),
-              title: Text('Vendors'),
-              onTap: () {
-                Navigator.pop(context);
-                //  Navigator.pushNamed(context, 'profile');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.markunread_mailbox),
-              title: Text('Packages'),
-              onTap: () {
-                Navigator.pop(context);
-                //  Navigator.pushNamed(context, 'profile');
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(Icons.shopping_cart),
+            //   title: Text('Shop'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     //  Navigator.pushNamed(context, 'profile');
+            //   },
+            // ),
+            // ListTile(
+            //   leading: Icon(Icons.supervised_user_circle),
+            //   title: Text('Vendors'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     //  Navigator.pushNamed(context, 'profile');
+            //   },
+            // ),
+            // ListTile(
+            //   leading: Icon(Icons.markunread_mailbox),
+            //   title: Text('Packages'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     //  Navigator.pushNamed(context, 'profile');
+            //   },
+            // ),
             ListTile(
               leading: Icon(Icons.label_outline),
               title: Text('Logout'),
