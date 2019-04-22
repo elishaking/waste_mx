@@ -106,13 +106,6 @@ class RecycleWastePage extends StatelessWidget {
   Widget build(BuildContext context) {
     _targetWidth = MediaQuery.of(context).size.width;
 
-    void _pushRoute(route) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (BuildContext context) {
-        return route;
-      }));
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Recycle Waste'),
