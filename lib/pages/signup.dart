@@ -24,7 +24,8 @@ class _SignUpPageState extends State<SignUpPage> {
     'phone': '',
     'email': '',
     'username': '',
-    'password': ''
+    'password': '',
+    'location': ''
   };
 
   bool showPassword1 = true;
@@ -86,16 +87,16 @@ class _SignUpPageState extends State<SignUpPage> {
           _formKey.currentState.save();
           if (widget.userType == UserType.Client) {
             Client _client = Client(
-                name: _formData['name'],
-                phone: _formData['phone'],
-                username: _formData['username'],
-                dateCreated: DateTime.now().toIso8601String());
-            model
-                .signup(_formData['email'], _formData['password'],
-                    client: _client)
-                .then((data) {
+              name: _formData['name'],
+              phone: _formData['phone'],
+              username: _formData['username'],
+              address: _formData['location'],
+              dateCreated: DateTime.now().toIso8601String()
+            );
+            model.signup(_formData['email'], _formData['password'], client: _client)
+              .then((data) {
               if (data['success']) {
-                Navigator.pushReplacementNamed(context, 'home');
+                Navigator.pushNamedAndRemoveUntil(context, 'home', (Route route) => false);
               } else {
                 showDialog(
                   context: context,

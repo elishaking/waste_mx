@@ -276,8 +276,9 @@ class UserModel extends ConnectedModel {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
 
-    // _isLoading = false;
-    // notifyListeners();
+    print('object');
+    _isLoading = false;
+    notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
@@ -424,7 +425,6 @@ class OfferingModel extends ConnectedModel {
       
       // String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&location_type=ROOFTOP&result_type=street_address&key=YOUR_API_KEY";
       List<Placemark> placemark =  await geolocator.placemarkFromPosition(position)
-          // .placemarkFromCoordinates(-122, 24)
           .catchError((error){
             print(error);
           });
@@ -442,8 +442,7 @@ class OfferingModel extends ConnectedModel {
       // print('position: ' + position.latitude.toString());
 
       Placemark p = placemark[0];
-  //    print('${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}');
-
+      
       return '${p.thoroughfare}, ${p.postalCode}, ${p.locality}, ${p.administrativeArea}, ${p.country}';
     
     } catch(e){
