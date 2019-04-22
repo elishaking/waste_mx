@@ -70,22 +70,22 @@ class UserModel extends ConnectedModel {
     ResponseInfo responseInfo = ResponseInfo(false, 'User not Saved', -1);
 
     if (token != null) {
-      print(token);
+      // print(token);
       final DateTime now = DateTime.now();
       final parsedExpiryTime = expiryTimeString == null
           ? DateTime.now().subtract(Duration(days: 1))
           : DateTime.parse(expiryTimeString);
       if (parsedExpiryTime.isBefore(now)) {
         final http.Response response = await http.post(
-            'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
-            headers: {'Content-Type': 'application/json'},
-            body: json.encode({'token': token, 'returnSecureToken': true}))
-            .catchError((error) {
-              print(error.toString());
-              _isLoading = false;
-              notifyListeners();
-              responseInfo = ResponseInfo(false, error, -1);
-            });
+          'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'token': token, 'returnSecureToken': true}))
+          .catchError((error) {
+            print(error.toString());
+            _isLoading = false;
+            notifyListeners();
+            responseInfo = ResponseInfo(false, error, -1);
+          });
             // .timeout(Duration(seconds: _httpTimeout), 
             // onTimeout: (){
             //   _authenticatedUser = null;
