@@ -124,7 +124,7 @@ class UserModel extends ConnectedModel {
     return responseInfo;
   }
 
-  Future _saveAuthUser(responseData) async {
+  Future _saveAuthUser(responseData, UserType userType) async {
     _authenticatedUser = User(
         id: responseData['localId'],
         email: responseData['email'],
@@ -134,7 +134,7 @@ class UserModel extends ConnectedModel {
     prefs.setString('token', responseData['idToken']);
     prefs.setString('userEmail', responseData['email']);
     prefs.setString('userId', responseData['localId']);
-    prefs.setString('userType', UserType.Client.toString());
+    prefs.setString('userType', userType.toString());
 
     final DateTime now = DateTime.now();
     final DateTime expiryTime =
@@ -284,11 +284,12 @@ class UserModel extends ConnectedModel {
     bool success = false;
     String message = 'Authentication Success';
     if (responseData.containsKey('idToken')) {
-      await _saveAuthUser(responseData);
       bool userAdded = false;
       if (vendor == null) {
+        await _saveAuthUser(responseData, UserType.Client);
         userAdded = await _addUser(client.toMap(), 'clients');
       } else {
+        await _saveAuthUser(responseData, UserType.Vendor);
         userAdded = await _addUser(vendor.toMap(), 'vendors');
       }
       success = userAdded;
