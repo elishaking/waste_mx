@@ -116,6 +116,10 @@ class UserModel extends ConnectedModel {
       responseInfo = ResponseInfo(true, 'Successful Authentication', -1);
       _isLoading = false;
       notifyListeners();
+    } else{
+      responseInfo = ResponseInfo(true, 'User not created', -1);
+      _isLoading = false;
+      notifyListeners();
     }
     return responseInfo;
   }
@@ -403,25 +407,46 @@ class OfferingModel extends ConnectedModel {
   Future<String> getLocation() async {
     _gettingLocation = true;
     notifyListeners();
-    Position position = await Geolocator()
+
+    try{
+      Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         // .timeout(Duration(seconds: 10), onTimeout: (){
         //   print('get location timeout');
         // });
-    if(position == null) return '';
-    List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-        // .timeout(Duration(seconds: 5), onTimeout: (){
-        //   print('get location placement timeout');
-        // });
-    _gettingLocation = false;
-    notifyListeners();
-    print('position: ' + position.latitude.toString());
+      if(position == null) {
+        _gettingLocation = false;
+        notifyListeners();
+        return '';
+      }
+      List<Placemark> placemark =  await Geolocator()
+          .placemarkFromCoordinates(position.latitude, position.longitude)
+          .catchError((error){
+            print(error);
+          });
+          // .timeout(Duration(seconds: 5), onTimeout: (){
+          //   print('get location placement timeout');
+          // });
+      if(placemark == null) {
+        _gettingLocation = false;
+        notifyListeners();
+        return '';
+      }
 
-    Placemark p = placemark[0];
-//    print('${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}');
+      _gettingLocation = false;
+      notifyListeners();
+      print('position: ' + position.latitude.toString());
 
-     return '${p.thoroughfare}, ${p.postalCode}, ${p.locality}, ${p.administrativeArea}, ${p.country}';
+      Placemark p = placemark[0];
+  //    print('${p.thoroughfare} ${p.postalCode} ${p.locality} ${p.administrativeArea} ${p.country}');
+
+      return '${p.thoroughfare}, ${p.postalCode}, ${p.locality}, ${p.administrativeArea}, ${p.country}';
+    
+    } catch(e){
+      print(e.toString());
+      _gettingLocation = false;
+      notifyListeners();
+    }
   }
 
   Future<Map<String, dynamic>> uploadImage(File image,

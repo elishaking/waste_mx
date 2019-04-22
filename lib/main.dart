@@ -36,9 +36,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // _model.autoAuthenticate().then((ResponseInfo responseInfo){
-    //   _authResponseInfo = responseInfo;
-    // });
+    _model.autoAuthenticate().then((ResponseInfo responseInfo){
+      _authResponseInfo = responseInfo;
+    });
     super.initState();
   }
 
@@ -60,14 +60,14 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           color: Colors.green,
-          home: HomePage(),
+          // home: HomePage(),
           routes: {
-            // '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
-            //       builder:
-            //           (BuildContext context, Widget child, MainModel model) {
-            //         return _setPage(model);
-            //       },
-            //     ),
+            '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
+                  builder:
+                      (BuildContext context, Widget child, MainModel model) {
+                    return _setPage(model);
+                  },
+                ),
             // '/': (BuildContext context) => BookVendorPage(),
             // 'login': (BuildContext context) => LoginPage(),
             'welcome': (BuildContext context) => WelcomePage(),
