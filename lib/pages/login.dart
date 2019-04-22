@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
   void _loginUser(MainModel model, UserType userType, String route) {
     model.login(_formData['email'], _formData['password'], userType).then((data) {
       if (data['success']) {
-        Navigator.pushReplacementNamed(context, route);
+        Navigator.of(context).pushNamedAndRemoveUntil(route, (Route route) => false);
       } else {
         showDialog(
           context: context,
@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                       FlatButton(
                         child: Text("Don't have an account, Sign Up"),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, 'signup');
+                          Navigator.pushNamedAndRemoveUntil(context, 'signup', (Route route) => false);
                         },
                       )
                     ],

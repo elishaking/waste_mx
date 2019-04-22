@@ -62,12 +62,12 @@ class _MyAppState extends State<MyApp> {
           color: Colors.green,
           home: WelcomePage(),
           routes: {
-            // '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
-            //       builder:
-            //           (BuildContext context, Widget child, MainModel model) {
-            //         return _setPage(model);
-            //       },
-            //     ),
+            '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
+                  builder:
+                      (BuildContext context, Widget child, MainModel model) {
+                    return _setPage(model);
+                  },
+                ),
             // '/': (BuildContext context) => BookVendorPage(),
             // 'login': (BuildContext context) => LoginPage(),
             'welcome': (BuildContext context) => WelcomePage(),

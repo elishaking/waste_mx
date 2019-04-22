@@ -66,6 +66,7 @@ class UserModel extends ConnectedModel {
     notifyListeners();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
+    final UserType userType = _getUserType(prefs.getString('userType'));
     final String expiryTimeString = prefs.getString('expiryTime');
     ResponseInfo responseInfo = ResponseInfo(false, 'User not Saved', -1);
 
@@ -96,7 +97,7 @@ class UserModel extends ConnectedModel {
         final Map<String, dynamic> responseData = json.decode(response.body);
         print(response.body);
         if (responseData.containsKey('idToken')) {
-          await _saveAuthUser(responseData);
+          await _saveAuthUser(responseData, userType);
         } else {
           responseInfo = ResponseInfo(true, 'Could not save User info', -1);
           _authenticatedUser = null;
@@ -108,7 +109,6 @@ class UserModel extends ConnectedModel {
 
       final String userEmail = prefs.getString('userEmail');
       final String userId = prefs.getString('userId');
-      final UserType userType = _getUserType(prefs.getString('userType'));
       _authenticatedUser =
           User(id: userId, email: userEmail, token: token, userType: userType);
       
@@ -129,7 +129,7 @@ class UserModel extends ConnectedModel {
         id: responseData['localId'],
         email: responseData['email'],
         token: responseData['idToken'],
-        userType: UserType.Client);
+        userType: userType);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', responseData['idToken']);
     prefs.setString('userEmail', responseData['email']);
@@ -408,7 +408,7 @@ class UserModel extends ConnectedModel {
 }
 
 class OfferingModel extends ConnectedModel {
-  Map<String, List> _offerings;
+  Map<String, List> _offerings = Map<String, List>();
 
   Map<String, List> get allOfferings {
     return Map.from(_offerings);
