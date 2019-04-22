@@ -74,35 +74,39 @@ class _LoginPageState extends State<LoginPage> {
         // if(_formKey.currentState.validate()){
         _formKey.currentState.save();
         if (widget.userType == UserType.Client) {
-          model.login(_formData['email'], _formData['password']).then((data) {
-            if (data['success']) {
-              Navigator.pushReplacementNamed(context, 'home');
-            } else {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('An Error Ocurred'),
-                      content: Text(data['message']),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        _buildErrorDialogActionButton(data['code'])
-                      ],
-                    );
-                  });
-            }
-          });
+          _loginUser(model, UserType.Client, 'home');
         } else {
-          Navigator.pushReplacementNamed(context, 'vendor_home');
+          _loginUser(model, UserType.Vendor, 'vendor_home');
         }
         // }
       },
     );
+  }
+
+  void _loginUser(MainModel model, UserType userType, String route) {
+    model.login(_formData['email'], _formData['password'], userType).then((data) {
+      if (data['success']) {
+        Navigator.pushReplacementNamed(context, route);
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('An Error Ocurred'),
+              content: Text(data['message']),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                _buildErrorDialogActionButton(data['code'])
+              ],
+            );
+          });
+      }
+    });
   }
 
   Widget _buildErrorDialogActionButton(int code) {
