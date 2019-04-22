@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           color: Colors.green,
-          // home: HomePage(),
+          // home: VendorHomePage(),
           routes: {
             '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
                   builder:

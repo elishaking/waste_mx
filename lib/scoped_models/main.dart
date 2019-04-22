@@ -363,6 +363,14 @@ class UserModel extends ConnectedModel {
     return {'success': success, 'message': message, 'code': code};
   }
 
+  Future<bool> logout() async{
+    _authenticatedUser = null;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('userEmail');
+    prefs.remove('userId');
+  }
+  
   void fetchVendors() {
     _isLoading = true;
     notifyListeners();
