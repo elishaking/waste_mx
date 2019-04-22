@@ -82,25 +82,25 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
       child: ButtonBar(
           children: transactions[index]['pending']
               ? [
-                  FlatButton(
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.chat_bubble_outline,
-                          color: Theme.of(context).primaryColor,
-                          size: _getSize(23),
-                        ),
-                        SizedBox(
-                          width: _getSize(10),
-                        ),
-                        customText.BodyText(
-                          text: 'CHAT',
-                          textColor: Theme.of(context).primaryColor,
-                        )
-                      ],
-                    ),
-                    onPressed: () {},
-                  ),
+                  // FlatButton(
+                  //   child: Row(
+                  //     children: <Widget>[
+                  //       Icon(
+                  //         Icons.chat_bubble_outline,
+                  //         color: Theme.of(context).primaryColor,
+                  //         size: _getSize(23),
+                  //       ),
+                  //       SizedBox(
+                  //         width: _getSize(10),
+                  //       ),
+                  //       customText.BodyText(
+                  //         text: 'CHAT',
+                  //         textColor: Theme.of(context).primaryColor,
+                  //       )
+                  //     ],
+                  //   ),
+                  //   onPressed: () {},
+                  // ),
                   FlatButton(
                     child: Row(
                       children: <Widget>[
@@ -124,7 +124,7 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
                     child: Row(
                       children: <Widget>[
                         Icon(
-                          Icons.done_all,
+                          Icons.remove_red_eye,
                           color: Theme.of(context).primaryColor,
                           size: _getSize(23),
                         ),
@@ -132,22 +132,72 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
                           width: _getSize(10),
                         ),
                         customText.BodyText(
-                          text: 'COMPLETE',
+                          text: 'VIEW',
                           textColor: Theme.of(context).primaryColor,
                         )
                       ],
                     ),
                     onPressed: () {},
                   ),
+                  // FlatButton(
+                  //   child: Row(
+                  //     children: <Widget>[
+                  //       Icon(
+                  //         Icons.done_all,
+                  //         color: Theme.of(context).primaryColor,
+                  //         size: _getSize(23),
+                  //       ),
+                  //       SizedBox(
+                  //         width: _getSize(10),
+                  //       ),
+                  //       customText.BodyText(
+                  //         text: 'COMPLETE',
+                  //         textColor: Theme.of(context).primaryColor,
+                  //       )
+                  //     ],
+                  //   ),
+                  //   onPressed: () {},
+                  // ),
                 ]
               : [
                   FlatButton(
-                    child: customText.BodyText(
-                      text: 'DELETE',
-                      textColor: Colors.deepOrange,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.delete_forever,
+                          color: Colors.deepOrange,
+                          size: _getSize(23),
+                        ),
+                        SizedBox(
+                          width: _getSize(10),
+                        ),
+                        customText.BodyText(
+                          text: 'DELETE',
+                          textColor: Colors.deepOrange,
+                        ),
+                      ],
                     ),
                     onPressed: () {},
-                  )
+                  ),
+                  FlatButton(
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.remove_red_eye,
+                          color: Theme.of(context).primaryColor,
+                          size: _getSize(23),
+                        ),
+                        SizedBox(
+                          width: _getSize(10),
+                        ),
+                        customText.BodyText(
+                          text: 'VIEW',
+                          textColor: Theme.of(context).primaryColor,
+                        )
+                      ],
+                    ),
+                    onPressed: () {},
+                  ),
                 ]),
     );
   }
