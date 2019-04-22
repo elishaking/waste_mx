@@ -276,7 +276,6 @@ class UserModel extends ConnectedModel {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
 
-    print('object');
     _isLoading = false;
     notifyListeners();
 
@@ -316,7 +315,7 @@ class UserModel extends ConnectedModel {
     return {'success': success, 'message': message};
   }
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password, UserType userType) async {
     _isLoading = true;
     notifyListeners();
 
@@ -334,9 +333,9 @@ class UserModel extends ConnectedModel {
     String message = 'Authentication Success';
     int code = -1;
     if (responseData.containsKey('idToken')) {
-      success = true;
-      await _saveAuthUser(responseData);
+      await _saveAuthUser(responseData, userType);
       await _getUserData(); //! prevent login if data not saved locally
+      success = true;
     } else {
       switch (responseData['error']['message']) {
         case 'EMAIL_NOT_FOUND':
@@ -370,6 +369,7 @@ class UserModel extends ConnectedModel {
     prefs.remove('token');
     prefs.remove('userEmail');
     prefs.remove('userId');
+    return true;
   }
   
   void fetchVendors() {
