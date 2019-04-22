@@ -556,6 +556,7 @@ class OfferingModel extends ConnectedModel {
       DisposeOffering offering, List<File> imageFiles) async {
     _isLoading = true;
     notifyListeners();
+    print(imageFiles[0].uri);
     final List uploadImageData = new List(imageFiles.length);
     final List _uploadImageUrls = new List(imageFiles.length);
     final List _uploadImagePaths = new List(imageFiles.length);
@@ -564,6 +565,7 @@ class OfferingModel extends ConnectedModel {
     // });
     for (int i = 0; i < imageFiles.length; i++) {
       uploadImageData[i] = await uploadImage(imageFiles[i]);
+      print(uploadImageData[i]);
       _uploadImageUrls[i] = uploadImageData[i]['imageUrl'];
       _uploadImagePaths[i] = uploadImageData[i]['imagePath'];
     }

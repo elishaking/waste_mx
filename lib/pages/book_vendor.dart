@@ -278,11 +278,11 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                               _locationFieldController.text = location;
                                             });
                                           });
-//                                          final SnackBar snackBar = SnackBar(
-//                                            content: Text('Getting Location'),
-//                                          );
-//                                          Scaffold.of(context)
-//                                              .showSnackBar(snackBar);
+                                        //  final SnackBar snackBar = SnackBar(
+                                        //    content: Text('Getting Location'),
+                                        //  );
+                                        //  Scaffold.of(context)
+                                        //      .showSnackBar(snackBar);
                                         },
                                       );
                               },
@@ -427,25 +427,20 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
-                                      model
-                                          .addOffering(
-                                              DisposeOffering(
-                                                  name: widget.wasteType,
-                                                  price: _wastePrice,
-                                                  rate: rate.toString(),
-                                                  numberOfBins:
-                                                      _formData['numberOfBins'],
-                                                  clientName: 'new',
-                                                  clientLocation:
-                                                      _formData['location']),
-                                              _imageFiles)
-                                          .then((_) {
+                                      model.addOffering(
+                                        DisposeOffering(
+                                          name: widget.wasteType,
+                                          price: _wastePrice,
+                                          rate: rate.toString(),
+                                          numberOfBins: _formData['numberOfBins'],
+                                          clientName: 'new',
+                                          clientLocation: _formData['location']
+                                        ), _imageFiles).then((_) {
                                         Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        WalletPage(true)));
-                                      });
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) => WalletPage(true))
+                                          );
+                                        });
                                     } else {
                                       _scrollController.animateTo(
                                         0,
