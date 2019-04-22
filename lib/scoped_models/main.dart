@@ -81,7 +81,7 @@ class UserModel extends ConnectedModel {
             headers: {'Content-Type': 'application/json'},
             body: json.encode({'token': token, 'returnSecureToken': true}))
             .catchError((error) {
-              print(error);
+              print(error.toString());
               _isLoading = false;
               notifyListeners();
               responseInfo = ResponseInfo(false, error, -1);

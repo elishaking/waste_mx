@@ -86,42 +86,68 @@ class _SignUpPageState extends State<SignUpPage> {
         if(_formKey.currentState.validate()){
           _formKey.currentState.save();
           if (widget.userType == UserType.Client) {
-            Client _client = Client(
-              name: _formData['name'],
-              phone: _formData['phone'],
-              username: _formData['username'],
-              address: _formData['location'],
-              dateCreated: DateTime.now().toIso8601String()
-            );
-            model.signup(_formData['email'], _formData['password'], client: _client)
-              .then((data) {
-              if (data['success']) {
-                Navigator.pushNamedAndRemoveUntil(context, 'home', (Route route) => false);
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('An Error Ocurred'),
-                      content: Text(data['message']),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    );
-                  }
-                );
-              }
-            });
+            _signupClient(model);
           } else {
-            Navigator.pushReplacementNamed(context, 'vendor_home');
+            _signupVendor(model);
           }
         }
       },
+    );
+  }
+
+  void _signupClient(MainModel model) {
+    Client _client = Client(
+      name: _formData['name'],
+      phone: _formData['phone'],
+      username: _formData['username'],
+      address: _formData['location'],
+      dateCreated: DateTime.now().toIso8601String()
+    );
+    model.signup(_formData['email'], _formData['password'], client: _client)
+      .then((data) {
+      if (data['success']) {
+        Navigator.pushNamedAndRemoveUntil(context, 'home', (Route route) => false);
+      } else {
+        _showErrorDialog(data);
+      }
+    });
+  }
+
+  void _signupVendor(MainModel model) {
+    Vendor _vendor = Vendor(
+      name: _formData['name'],
+      phone: _formData['phone'],
+      username: _formData['username'],
+      address: _formData['location'],
+      dateCreated: DateTime.now().toIso8601String()
+    );
+    model.signup(_formData['email'], _formData['password'], vendor: _vendor)
+      .then((data) {
+      if (data['success']) {
+        Navigator.pushNamedAndRemoveUntil(context, 'vendor_home', (Route route) => false);
+      } else {
+        _showErrorDialog(data);
+      }
+    });
+  }
+
+  void _showErrorDialog(Map<String, dynamic> data) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('An Error Ocurred'),
+          content: Text(data['message']),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      }
     );
   }
   // Widget _buildEmailField(){
