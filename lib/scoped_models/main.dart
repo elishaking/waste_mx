@@ -656,7 +656,7 @@ class OfferingModel extends ConnectedModel {
           clientLocation: offeringData['clientLocation'],
           userId: _authenticatedUser.id,
           imagePaths: offeringData['imagePaths'],
-          date: DateTime.now().toString()
+          date: DateTime.now().month.toString()
         );
         disposeOfferings.add(offering);
       });
