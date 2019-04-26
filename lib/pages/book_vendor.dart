@@ -255,47 +255,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                   child: Column(
 //                crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      TextFormField(
-                        controller: _locationFieldController,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.location_on),
-                            labelText: 'Waste location',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            suffixIcon: ScopedModelDescendant<MainModel>(
-                              builder: (BuildContext context, Widget child,
-                                  MainModel model) {
-                                return model.gettingLocation
-                                    ? Container(
-                                      padding: EdgeInsets.all(10),
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : GestureDetector(
-                                        child: Icon(Icons.my_location),
-                                        onTap: () {
-                                          model.getLocation().then((String location){
-                                            setState(() {
-                                              _locationFieldController.text = location;
-                                            });
-                                          });
-                                        //  final SnackBar snackBar = SnackBar(
-                                        //    content: Text('Getting Location'),
-                                        //  );
-                                        //  Scaffold.of(context)
-                                        //      .showSnackBar(snackBar);
-                                        },
-                                      );
-                              },
-                            )),
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a valid location';
-                          }
-                        },
-                        onSaved: (String value) {
-                          _formData['location'] = value;
-                        },
-                      ),
+                      _buildWasteLocationField(),
                       SizedBox(
                         height: _fieldsGap,
                       ),
@@ -461,6 +421,50 @@ class _BookVendorPageState extends State<BookVendorPage> {
           ),
         ),
       ),
+    );
+  }
+
+  TextFormField _buildWasteLocationField() {
+    return TextFormField(
+      controller: _locationFieldController,
+      decoration: InputDecoration(
+          prefixIcon: Icon(Icons.location_on),
+          labelText: 'Waste location',
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10)),
+          suffixIcon: ScopedModelDescendant<MainModel>(
+            builder: (BuildContext context, Widget child,
+                MainModel model) {
+              return model.gettingLocation
+                  ? Container(
+                    padding: EdgeInsets.all(10),
+                      child: CircularProgressIndicator(),
+                    )
+                  : GestureDetector(
+                      child: Icon(Icons.my_location),
+                      onTap: () {
+                        model.getLocation().then((String location){
+                          setState(() {
+                            _locationFieldController.text = location;
+                          });
+                        });
+                      //  final SnackBar snackBar = SnackBar(
+                      //    content: Text('Getting Location'),
+                      //  );
+                      //  Scaffold.of(context)
+                      //      .showSnackBar(snackBar);
+                      },
+                    );
+            },
+          )),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Please enter a valid location';
+        }
+      },
+      onSaved: (String value) {
+        _formData['location'] = value;
+      },
     );
   }
 }
