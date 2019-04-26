@@ -76,30 +76,30 @@ class VendorHomePage extends StatelessWidget {
                 //  Navigator.pushNamed(context, 'profile');
               },
             ),
-            ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: Text('Shop'),
-              onTap: () {
-                Navigator.pop(context);
-                //  Navigator.pushNamed(context, 'profile');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.supervised_user_circle),
-              title: Text('Vendors'),
-              onTap: () {
-                Navigator.pop(context);
-                //  Navigator.pushNamed(context, 'profile');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.markunread_mailbox),
-              title: Text('Packages'),
-              onTap: () {
-                Navigator.pop(context);
-                //  Navigator.pushNamed(context, 'profile');
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(Icons.shopping_cart),
+            //   title: Text('Shop'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     //  Navigator.pushNamed(context, 'profile');
+            //   },
+            // ),
+            // ListTile(
+            //   leading: Icon(Icons.supervised_user_circle),
+            //   title: Text('Vendors'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     //  Navigator.pushNamed(context, 'profile');
+            //   },
+            // ),
+            // ListTile(
+            //   leading: Icon(Icons.markunread_mailbox),
+            //   title: Text('Packages'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     //  Navigator.pushNamed(context, 'profile');
+            //   },
+            // ),
             ListTile(
               leading: Icon(Icons.label_outline),
               title: Text('Logout'),
