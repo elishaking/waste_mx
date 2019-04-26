@@ -7,12 +7,27 @@ import '../../models/decluster_offering.dart';
 import '../../widgets/custom_text.dart' as customText;
 import '../../widgets/bottom_nav.dart';
 
+import './subcategory_list.dart';
+
 class DeclusterPage extends StatelessWidget{
   double _targetWidth = 0;
 
   double _getSize(final double default_1440) {
     return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
   }
+
+  Map<String, List<String>> _subCategories = {
+    DeclusterType.vehicles: [
+      'Cars', 'Trucks and Trailers', 'Motorcycles & Scooters',
+      'Bicycles', 'Tricycles', 'Vehicle Parts & Accessories',
+      'Aircrafts & Watercrafts', 'Mixed Items'
+    ],
+    DeclusterType.household: [
+      'Office Wares', 'Mattrassess', 'Furniture', 'Dresses',
+      'Doors and Gates', 'Refrigerators & Freezers', 'Phones',
+      'Mixed Items'
+    ]
+  };
 
   Widget _buildCategoryWidget(
       BuildContext context, MainModel model, String declusterType, String imageUrl,
@@ -46,10 +61,9 @@ class DeclusterPage extends StatelessWidget{
         ),
       ),
       onPressed: () {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (BuildContext context) => route != null
-        //         ? route
-        //         : VendorListPage(model, declusterType, OfferingType.dispose)));
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => SubCategoryListPage(declusterType, _subCategories[declusterType])
+        ));
       },
     );
   }
