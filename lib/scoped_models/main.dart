@@ -636,6 +636,7 @@ class OfferingModel extends ConnectedModel {
     notifyListeners();
     http.Response response1 = await http
         .get('$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}');
+    print(response1.body);
     // http.Response response2 = await http.get('$_dbUrl/recycle_offerings.json?auth=${_authenticatedUser.token}');
     _isLoading = false;
     notifyListeners();
