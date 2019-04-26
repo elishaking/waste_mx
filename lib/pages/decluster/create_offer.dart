@@ -232,7 +232,7 @@ class _CreateOfferPageState extends State<CreateOfferPage> {
                   height: 20,
                 ),
                 customText.BodyText(
-                  text: widget.wasteType,
+                  text: "${widget.wasteType}  >  ${widget.subCategory}",
                   textColor: Theme.of(context).primaryColor,
                 ),
                 SizedBox(
