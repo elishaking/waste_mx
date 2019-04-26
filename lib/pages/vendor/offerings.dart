@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -10,6 +11,10 @@ import '../../widgets/custom_text.dart' as customText;
 import './offering_details.dart';
 
 class OfferingsPage extends StatefulWidget {
+  final MainModel model;
+
+  OfferingsPage(this.model);
+
   @override
   State<StatefulWidget> createState() {
     return _OfferingsPageState();
@@ -53,12 +58,18 @@ class _OfferingsPageState extends State<OfferingsPage> {
   //   ),
   // ];
   // Map<String, List> _offerings;
+  @override
+  void initState(){
+    widget.model.fetchOfferings();
+    super.initState();
+  }
 
   List<Widget> _buildOfferings(BuildContext context, Map<String, List> offerings) {
-    List<String> _offeringNames = offerings.keys;
+    if(offerings.length < 1) return [Container()];
+    List<String> _offeringNames = offerings.keys.toList();
     return List.generate(_offeringNames.length, (index) {
       List _offeringList = offerings[_offeringNames[index]];
-      return _offeringList.length > 0
+      return _offeringList.length < 1
           ? Container()
           : Container(
               child: Column(
@@ -173,7 +184,6 @@ class _OfferingsPageState extends State<OfferingsPage> {
       ),
       body: ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
-          model.fetchOfferings();
           // .then((Map<String, List> offerings) {
           //   setState(() {
           //     offerings = offerings;

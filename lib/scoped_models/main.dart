@@ -631,12 +631,12 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future<Map<String, List>> fetchOfferings() async {
+  void fetchOfferings() async {
     _isLoading = true;
     notifyListeners();
     http.Response response1 = await http
         .get('$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}');
-    print(response1.body);
+    // print(response1.body);
     // http.Response response2 = await http.get('$_dbUrl/recycle_offerings.json?auth=${_authenticatedUser.token}');
     _isLoading = false;
     notifyListeners();
@@ -646,7 +646,8 @@ class OfferingModel extends ConnectedModel {
       offeringsData.forEach((String offeringId, dynamic offeringData) {
         final DisposeOffering offering = DisposeOffering(
           id: offeringId,
-          name: offeringData['title'],
+          name: 'House', //offeringData['title'],
+          iconUrl: 'assets/throw-to-paper-bin.png',
           imageUrls: offeringData['imageUrls'],
           price: offeringData['price'],
           rate: offeringData['imageUrl'],
@@ -655,12 +656,12 @@ class OfferingModel extends ConnectedModel {
           clientLocation: offeringData['clientLocation'],
           userId: _authenticatedUser.id,
           imagePaths: offeringData['imagePaths'],
+          date: DateTime.now().toString()
         );
         disposeOfferings.add(offering);
       });
       _offerings['Dispose Offerings'] = disposeOfferings;
     }
-    return _offerings;
   }
 
   //TODO: implement update

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../../scoped_models/main.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 import '../../models/update.dart';
@@ -141,46 +144,50 @@ class VendorHomePage extends StatelessWidget {
           Container(
             padding:
                 EdgeInsets.symmetric(horizontal: 10, vertical: pad_vertical),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: FlatButton(
-                    padding: EdgeInsets.symmetric(vertical: 13.5),
-                    color: Colors.white,
-                    shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(100),
-                          bottomLeft: Radius.circular(100),
-                          topRight: Radius.circular(0),
-                          bottomRight: Radius.circular(0)),
+            child: ScopedModelDescendant<MainModel>(
+              builder: (BuildContext context, Widget child, MainModel model){
+                return Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FlatButton(
+                        padding: EdgeInsets.symmetric(vertical: 13.5),
+                        color: Colors.white,
+                        shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(100),
+                              bottomLeft: Radius.circular(100),
+                              topRight: Radius.circular(0),
+                              bottomRight: Radius.circular(0)),
+                        ),
+                        child: Text('View Client Offerings'),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => OfferingsPage(model)));
+                        },
+                      ),
                     ),
-                    child: Text('View Client Offerings'),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => OfferingsPage()));
-                    },
-                  ),
-                ),
-                FlatButton(
-                  child: Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.white,
-                  ),
-                  color: Theme.of(context).accentColor,
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(0),
-                        bottomLeft: Radius.circular(0),
-                        topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100)),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => OfferingsPage()));
-                  },
-                )
-              ],
+                    FlatButton(
+                      child: Icon(
+                        Icons.remove_red_eye,
+                        color: Colors.white,
+                      ),
+                      color: Theme.of(context).accentColor,
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            bottomLeft: Radius.circular(0),
+                            topRight: Radius.circular(100),
+                            bottomRight: Radius.circular(100)),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => OfferingsPage(model)));
+                      },
+                    )
+                  ],
+                );
+              },
             ),
             /*TextField(
                 onTap: () => Navigator.pushNamed(context, 'search'),
