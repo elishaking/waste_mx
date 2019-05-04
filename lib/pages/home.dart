@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_text.dart' as customText;
 import '../widgets/bottom_nav.dart';
 
+import '../utils/responsive.dart';
+
 import './dispose_waste.dart';
 import './recycle_waste.dart';
 import './decluster/decluster.dart';
@@ -32,13 +34,7 @@ class HomePage extends StatelessWidget {
       'page': DisposeWastePage()
     },
   ];
-
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
-  }
-
+  
   Widget _buildTopSection(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -179,12 +175,12 @@ class HomePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       borderSide: BorderSide(color: Theme.of(context).primaryColor),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: pad_vertical),
+      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 40)),
       child: Column(
         children: <Widget>[
           Image(
-            width: _getSize(110),
-            height: _getSize(110),
+            width: getSize(context, 110),  //? previously 110
+            height: getSize(context, 110), //? previously 110
             image: AssetImage(imageUrl),
           ),
           SizedBox(
@@ -193,6 +189,7 @@ class HomePage extends StatelessWidget {
           customText.BodyText(
             text: title,
             textColor: Theme.of(context).primaryColor,
+            
           )
         ],
       ),
@@ -252,7 +249,7 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             Container(
               height: 230,
-              width: _targetWidth,
+              width: double.infinity,
               color: Theme.of(context).primaryColor,
               //  child: CircleAvatar(
               //    child: Image(image: AssetImage('assets/profile.png'), fit: BoxFit.fill,),
@@ -332,8 +329,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       drawer: _buildDrawer(context),
       appBar: AppBar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/responsive.dart';
 
 class HeadlineText extends StatelessWidget {
   final String text;
@@ -11,23 +12,15 @@ class HeadlineText extends StatelessWidget {
       this.textColor = Colors.white,
       this.textAlign = TextAlign.left,
       this.fontSize = 33});
-
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
-  }
-
+  
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Text(
       text,
       style: TextStyle(
         fontFamily: 'Montserrat',
         fontWeight: FontWeight.w900,
-        fontSize: _getSize(fontSize),
+        fontSize: getSize(context, fontSize),
         color: textColor,
         letterSpacing: 1.3,
       ),
@@ -45,23 +38,15 @@ class TitleText extends StatelessWidget {
       {this.text,
       this.textColor = Colors.white,
       this.textAlign = TextAlign.left});
-
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
-  }
-
+    
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Text(
       text,
       style: TextStyle(
         fontFamily: 'Montserrat',
         fontWeight: FontWeight.w900,
-        fontSize: _getSize(20),
+        fontSize: getSize(context, 20),
         color: textColor,
         // letterSpacing: 2,
       ),
@@ -75,17 +60,24 @@ class BodyText extends StatelessWidget {
   final Color textColor;
   final TextAlign textAlign;
   final TextOverflow textOverflow;
+  final FontWeight fontWeight;
+  final double fontSize;
 
   BodyText(
-      {this.text,
+    {
+      this.text,
       this.textColor = Colors.white,
       this.textAlign = TextAlign.left,
-      this.textOverflow = TextOverflow.ellipsis});
+      this.textOverflow = TextOverflow.ellipsis,
+      this.fontWeight = FontWeight.normal,
+      this.fontSize = 14
+    }
+  );
 
-  double _getTextSize(final double targetWidth) {
-    // at 1440px width, fontsize = 14
-    return 0.0027 * targetWidth + 10.136;
-  }
+  // double _getTextSize(final double targetWidth) {
+  //   // at 1440px width, fontsize = 14
+  //   return 0.0027 * targetWidth + 10.136;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +85,7 @@ class BodyText extends StatelessWidget {
       text,
       style: TextStyle(
           fontFamily: 'Lato',
-          fontSize: _getTextSize(MediaQuery.of(context).size.width),
+          fontSize: getSize(context, fontSize),
           color: textColor),
       textAlign: textAlign,
       overflow: textOverflow,
