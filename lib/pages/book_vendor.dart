@@ -10,6 +10,8 @@ import '../models/dispose_offering.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
+import '../utils/responsive.dart';
+
 // import './book_vendor_success.dart';
 // import './book_vendor_fail.dart';
 import './edit_price.dart';
@@ -27,6 +29,7 @@ class BookVendorPage extends StatefulWidget {
 
 class _BookVendorPageState extends State<BookVendorPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final double _inputRadius = 50;
 
   final Map<String, dynamic> _formData = {
     'location': '',
@@ -85,7 +88,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 200,
+          height: getSize(context, 230),
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Column(
             children: <Widget>[
@@ -283,7 +286,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             prefixIcon: Icon(Icons.delete_outline),
                             labelText: 'Number of Bins',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                                borderRadius: BorderRadius.circular(_inputRadius))),
                         controller: _controller,
                         keyboardType: TextInputType.numberWithOptions(
                             decimal: false, signed: false),
@@ -302,7 +305,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                         height: _fieldsGap,
                       ),
                       Container(
-                        padding: EdgeInsets.only(right: 5),
+                        padding: EdgeInsets.only(right: getSize(context, 30)),
                         alignment: Alignment.centerRight,
                         child: customText.BodyText(
                           text: 'NGN ${rate.toString()} per bin',
@@ -317,7 +320,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                         borderSide: BorderSide(width: 1),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(_inputRadius),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,7 +356,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             EdgeInsets.symmetric(horizontal: 18, vertical: 7),
                         borderSide: BorderSide(width: 1),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(_inputRadius),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -431,7 +434,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
           prefixIcon: Icon(Icons.location_on),
           labelText: 'Waste location',
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(_inputRadius)),
           suffixIcon: ScopedModelDescendant<MainModel>(
             builder: (BuildContext context, Widget child,
                 MainModel model) {
