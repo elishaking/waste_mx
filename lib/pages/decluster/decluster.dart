@@ -7,16 +7,12 @@ import '../../models/decluster_offering.dart';
 import '../../widgets/custom_text.dart' as customText;
 import '../../widgets/bottom_nav.dart';
 
+import '../../utils/responsive.dart';
+
 import './subcategory_list.dart';
 
 class DeclusterPage extends StatelessWidget{
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
-  }
-
-  Map<String, List<String>> _subCategories = {
+  final Map<String, List<String>> _subCategories = {
     DeclusterType.vehicles: [
       'Cars', 'Trucks and Trailers', 'Motorcycles & Scooters',
       'Bicycles', 'Tricycles', 'Vehicle Parts & Accessories',
@@ -38,27 +34,28 @@ class DeclusterPage extends StatelessWidget{
           borderRadius: BorderRadius.circular(5),
           side: BorderSide(color: Theme.of(context).primaryColor)),
       color: Colors.white,
-      padding: EdgeInsets.symmetric(
-          horizontal: _getSize(18), vertical: _getSize(18)),
-      child: SizedBox(
-        width: _getSize(120),
-        height: _getSize(120),
-        child: Column(
-          children: <Widget>[
-            Image(
-              width: _getSize(70),
-              height: _getSize(70),
-              image: AssetImage(imageUrl),
-            ),
-            SizedBox(
-              height: _getSize(15),
-            ),
-            customText.BodyText(
+      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 30)),
+      child: Column(
+        children: <Widget>[
+          Image(
+            width: getSize(context, 90),
+            height: getSize(context, 90),
+            image: AssetImage(imageUrl),
+          ),
+          SizedBox(
+            height: getSize(context, 15),
+          ),
+          Container(
+            width: getSize(context, 130),
+            alignment: Alignment.center,
+            child: customText.BodyText(
               text: declusterType,
               textColor: Theme.of(context).primaryColor,
-            )
-          ],
-        ),
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+            ),
+          )
+        ],
       ),
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -69,11 +66,10 @@ class DeclusterPage extends StatelessWidget{
   }
 
   Widget _buildCategoriesSection(BuildContext context) {
-    return ScopedModelDescendant(
+    return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
         return Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: _getSize(20), vertical: _getSize(30)),
+          padding: EdgeInsets.symmetric(vertical: getSize(context, 30)),
           child: _buildAllCategories(context, model),
         );
       },
@@ -93,7 +89,7 @@ class DeclusterPage extends StatelessWidget{
           ],
         ),
         SizedBox(
-          height: _getSize(15),
+          height: getSize(context, 30),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -105,7 +101,7 @@ class DeclusterPage extends StatelessWidget{
           ],
         ),
         SizedBox(
-          height: _getSize(15),
+          height: getSize(context, 30),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,7 +113,7 @@ class DeclusterPage extends StatelessWidget{
           ],
         ),
         SizedBox(
-          height: _getSize(15),
+          height: getSize(context, 30),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -132,8 +128,6 @@ class DeclusterPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Decluster'),
@@ -142,18 +136,18 @@ class DeclusterPage extends StatelessWidget{
       body: Stack(
         children: <Widget>[
           Container(
-            height: _getSize(200),
+            height: getSize(context, 200),
             color: Theme.of(context).primaryColor,
           ),
           SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.all(_getSize(18)),
+              padding: EdgeInsets.all(getSize(context, 18)),
               child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: _getSize(20)),
+                    padding: EdgeInsets.symmetric(vertical: getSize(context, 20)),
                     child: Image(
-                      height: _getSize(50),
+                      height: getSize(context, 50),
                       image: AssetImage('assets/garbage-can.png'),
                     ),
                   ),
