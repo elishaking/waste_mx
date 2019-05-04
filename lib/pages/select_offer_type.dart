@@ -66,7 +66,7 @@ class _SelectOfferTypeState extends State<SelectOfferType> {
               ),
               Divider(),
               ListTile(
-                title: Text('Create a Closed Offer'),
+                title: Text('Engage Vendor'),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
