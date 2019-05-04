@@ -333,7 +333,7 @@ class _CreateOfferPageState extends State<CreateOfferPage> {
                                         ), _imageFiles).then((_) {
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                              builder: (BuildContext context) => WalletPage(true))
+                                              builder: (BuildContext context) => WalletPage(model, true))
                                           );
                                         });
                                     } else {

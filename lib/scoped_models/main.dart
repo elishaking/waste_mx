@@ -15,7 +15,7 @@ import '../models/recycle_offering.dart';
 import '../models/decluster_offering.dart';
 import '../models/http.dart';
 
-class MainModel extends Model with ConnectedModel, UserModel, OfferingModel {}
+class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel {}
 
 class ConnectedModel extends Model {
   User _authenticatedUser;
@@ -635,7 +635,7 @@ class OfferingModel extends ConnectedModel {
       DisposeOffering offering, List<File> imageFiles) async {
     _isLoading = true;
     notifyListeners();
-    print(imageFiles[0].uri);
+    // print(imageFiles[0].uri);
     final List uploadImageData = new List(imageFiles.length);
     final List _uploadImageUrls = new List(imageFiles.length);
     final List _uploadImagePaths = new List(imageFiles.length);
@@ -737,4 +737,8 @@ class OfferingModel extends ConnectedModel {
   //TODO: implement update
   //TODO: implement delete
   //? make sure to add ?auth=<idToken> in the urls
+}
+
+class TransactionModel extends ConnectedModel{
+  
 }

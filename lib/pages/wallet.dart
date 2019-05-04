@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped_models/main.dart';
 
 import '../widgets/custom_text.dart' as customText;
+
+import '../utils/responsive.dart';
 
 import './credit_wallet.dart';
 import './wallet_pay.dart';
 
-class WalletPage extends StatelessWidget {
+class WalletPage extends StatefulWidget {
   final bool payable;
+  final MainModel model;
+
+  WalletPage(this.model, this.payable);
+
+  @override
+  _WalletPageState createState() => _WalletPageState();
+}
+
+class _WalletPageState extends State<WalletPage> {
   final double walletBalance = 5000.0;
 
-  WalletPage(this.payable);
-
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
+  @override
+  void initState() {
+    print(widget.model.client.name);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Wallet'),
@@ -32,7 +42,7 @@ class WalletPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image(
-                width: _getSize(200),
+                width: getSize(context, 200),
                 image: AssetImage('assets/wallet-enclosed.png'),
               ),
               customText.TitleText(
@@ -40,14 +50,14 @@ class WalletPage extends StatelessWidget {
                 textColor: Theme.of(context).primaryColor,
               ),
               SizedBox(
-                height: _getSize(15),
+                height: getSize(context, 15),
               ),
               customText.HeadlineText(
                 text: walletBalance.toString(),
                 textColor: Colors.lightGreen,
               ),
               SizedBox(
-                height: _getSize(15),
+                height: getSize(context, 15),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -67,14 +77,14 @@ class WalletPage extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: _getSize(30),
+                height: getSize(context, 30),
               ),
               RaisedButton(
                 child: customText.BodyText(
                   text: 'Make Payment',
                   textColor: Colors.white,
                 ),
-                onPressed: payable
+                onPressed: widget.payable
                     ? () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>

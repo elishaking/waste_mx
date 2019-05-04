@@ -335,7 +335,7 @@ class _BookVendorPageState extends State<BookRecyclerPage> {
                                             MaterialPageRoute(
                                                 builder:
                                                     (BuildContext context) =>
-                                                        WalletPage(true)));
+                                                        WalletPage(model, true)));
                                       });
                                     } else {
                                       _scrollController.animateTo(

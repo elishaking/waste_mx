@@ -29,7 +29,7 @@ class BookVendorPage extends StatefulWidget {
 
 class _BookVendorPageState extends State<BookVendorPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final double _inputRadius = 50;
+  final double _inputRadius = 10;
 
   final Map<String, dynamic> _formData = {
     'location': '',
@@ -305,7 +305,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                         height: _fieldsGap,
                       ),
                       Container(
-                        padding: EdgeInsets.only(right: getSize(context, 30)),
+                        padding: EdgeInsets.only(right: getSize(context, 10)),
                         alignment: Alignment.centerRight,
                         child: customText.BodyText(
                           text: 'NGN ${rate.toString()} per bin',
@@ -390,20 +390,25 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
-                                      model.addOffering(
-                                        DisposeOffering(
-                                          name: widget.wasteType,
-                                          price: _wastePrice,
-                                          rate: rate.toString(),
-                                          numberOfBins: _formData['numberOfBins'],
-                                          clientName: 'new',
-                                          clientLocation: _formData['location']
-                                        ), _imageFiles).then((_) {
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) => WalletPage(true))
-                                          );
-                                        });
+                                      // model.addOffering(
+                                      //   DisposeOffering(
+                                      //     name: widget.wasteType,
+                                      //     price: _wastePrice,
+                                      //     rate: rate.toString(),
+                                      //     numberOfBins: _formData['numberOfBins'],
+                                      //     clientName: 'new',
+                                      //     clientLocation: _formData['location']
+                                      //   ), _imageFiles).then((_) {
+                                      //   Navigator.of(context).pushReplacement(
+                                      //     MaterialPageRoute(
+                                      //         builder: (BuildContext context) => WalletPage(model, true))
+                                      //     );
+                                      //   });
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) => WalletPage(model, true)
+                                        )
+                                      );
                                     } else {
                                       _scrollController.animateTo(
                                         0,

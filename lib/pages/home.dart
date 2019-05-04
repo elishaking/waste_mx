@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped_models/main.dart';
 
 import '../widgets/custom_text.dart' as customText;
 import '../widgets/bottom_nav.dart';
@@ -285,13 +288,17 @@ class HomePage extends StatelessWidget {
                 Navigator.pushNamed(context, 'profile');
               },
             ),
-            ListTile(
-              leading: Icon(Icons.account_balance_wallet),
-              title: Text('Wallet'),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => WalletPage(false)));
-                //  Navigator.pushNamed(context, 'profile');
+            ScopedModelDescendant<MainModel>(
+              builder: (BuildContext context, Widget child, MainModel model){
+                return ListTile(
+                  leading: Icon(Icons.account_balance_wallet),
+                  title: Text('Wallet'),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => WalletPage(model, false)));
+                    //  Navigator.pushNamed(context, 'profile');
+                  },
+                );
               },
             ),
             // ListTile(
