@@ -7,14 +7,11 @@ import '../models/offering.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/custom_text.dart' as customText;
 
+import '../utils/responsive.dart';
+
 import './select_offer_type.dart';
 
 class RecycleWastePage extends StatelessWidget {
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
-  }
 
   Widget _buildCategoryWidget(
       BuildContext context, String wasteType, String imageUrl,
@@ -25,31 +22,32 @@ class RecycleWastePage extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           side: BorderSide(color: Theme.of(context).primaryColor)),
       color: Colors.white,
-      padding: EdgeInsets.only(
-          left: _getSize(18), right: _getSize(18), top: _getSize(23)),
-      child: SizedBox(
-        width: _getSize(120),
-        height: _getSize(120),
-        child: Column(
-          children: <Widget>[
-            Image(
-              width: _getSize(70),
-              height: _getSize(70),
-              image: AssetImage(imageUrl),
-            ),
-            SizedBox(
-              height: _getSize(15),
-            ),
-            customText.BodyText(
+      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 30)),
+      child: Column(
+        children: <Widget>[
+          Image(
+            width: getSize(context, 90),
+            height: getSize(context, 90),
+            image: AssetImage(imageUrl),
+          ),
+          SizedBox(
+            height: getSize(context, 15),
+          ),
+          Container(
+            width: getSize(context, 140),
+            alignment: Alignment.center,
+            child: customText.BodyText(
               text: wasteType,
               textColor: Theme.of(context).primaryColor,
-            )
-          ],
-        ),
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+            ),
+          )
+        ],
       ),
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => SelectOfferType(wasteType, OfferingType.dispose)));
+            builder: (BuildContext context) => SelectOfferType(wasteType, OfferingType.recycle)));
       },
     );
   }
@@ -67,7 +65,7 @@ class RecycleWastePage extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: _getSize(15),
+          height: getSize(context, 30),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -79,7 +77,7 @@ class RecycleWastePage extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: _getSize(15),
+          height: getSize(context, 30),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -96,16 +94,13 @@ class RecycleWastePage extends StatelessWidget {
 
   Widget _buildCategoriesSection(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: _getSize(20), vertical: _getSize(30)),
+      padding: EdgeInsets.symmetric(vertical: getSize(context, 30)),
       child: _buildAllCategories(context),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Recycle Waste'),
@@ -114,18 +109,18 @@ class RecycleWastePage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            height: _getSize(200),
+            height: getSize(context, 200),
             color: Theme.of(context).primaryColor,
           ),
           SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.all(_getSize(18)),
+              padding: EdgeInsets.symmetric(vertical: getSize(context, 18)),
               child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: _getSize(20)),
+                    padding: EdgeInsets.symmetric(vertical: getSize(context, 20)),
                     child: Image(
-                      height: _getSize(50),
+                      height: getSize(context, 50),
                       image: AssetImage('assets/eco-factory-solid.png'),
                     ),
                   ),
