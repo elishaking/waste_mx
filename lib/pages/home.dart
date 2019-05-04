@@ -175,21 +175,26 @@ class HomePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       borderSide: BorderSide(color: Theme.of(context).primaryColor),
-      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 40)),
+      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 30)),
       child: Column(
         children: <Widget>[
           Image(
-            width: getSize(context, 110),  //? previously 110
-            height: getSize(context, 110), //? previously 110
+            width: getSize(context, 90),  //? previously 110
+            height: getSize(context, 90), //? previously 110
             image: AssetImage(imageUrl),
           ),
           SizedBox(
-            height: 15,
+            height: getSize(context, 20),
           ),
-          customText.BodyText(
-            text: title,
-            textColor: Theme.of(context).primaryColor,
-            
+          Container(
+            width: getSize(context, 130),
+            alignment: Alignment.center,
+            child: customText.BodyText(
+              text: title,
+              textColor: Theme.of(context).primaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
           )
         ],
       ),

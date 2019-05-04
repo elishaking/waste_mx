@@ -84,7 +84,7 @@ class BodyText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontFamily: 'Lato',
+          // fontFamily: 'Lato',
           fontSize: getSize(context, fontSize),
           color: textColor),
       textAlign: textAlign,

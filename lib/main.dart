@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Colors.green,
             accentColor: Colors.amber,
             buttonColor: Colors.amber.shade700,
-            fontFamily: 'Lato',
+            // fontFamily: 'Lato',
             buttonTheme: ButtonThemeData(
               buttonColor: Colors.amber,
               shape: RoundedRectangleBorder(
