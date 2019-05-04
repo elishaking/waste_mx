@@ -96,7 +96,7 @@ class UserModel extends ConnectedModel {
             // });
         if(response == null) return responseInfo;
         final Map<String, dynamic> responseData = json.decode(response.body);
-        print(response.body);
+        // print(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData, userType);
         } else {
@@ -153,15 +153,48 @@ class UserModel extends ConnectedModel {
   Future<bool> _getUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authenticatedUser.userType == UserType.Client) {
-      _client = Client(
+      if(prefs.getString('clientId') == null){
+        http.Response response = await http
+          .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+        Map<String, dynamic> responseData = json.decode(response.body);
+        print(responseData);
+        String key = responseData.keys.toList()[0];
+        _client = Client(
+          id: key,
+          name: responseData[key]['clientName'],
+          phone: responseData[key]['clientPhone'],
+          username: responseData[key]['clientUsername'],
+          address: responseData[key]['clientAddress'],
+          dateCreated: responseData[key]['clientDateCreated']
+        );
+      } else{
+        _client = Client(
           id: prefs.getString('clientId'),
           name: prefs.getString('clientName'),
           phone: prefs.getString('clientPhone'),
           username: prefs.getString('clientUsername'),
           address: prefs.getString('clientAddress'),
           dateCreated: prefs.getString('clientDateCreated'));
+      }
     } else {
-      _vendor = Vendor(
+      if(prefs.getString('clientId') == null){
+        http.Response response = await http
+          .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+        Map<String, dynamic> responseData = json.decode(response.body);
+        print(responseData);
+        String key = responseData.keys.toList()[0];
+        _vendor = Vendor(
+          id: key,
+          name: responseData[key]['clientName'],
+          phone: responseData[key]['clientPhone'],
+          companyName: responseData[key]['companyName'],
+          companyAddress: responseData[key]['companyAddress'],
+          username: responseData[key]['clientUsername'],
+          address: responseData[key]['clientAddress'],
+          dateCreated: responseData[key]['clientDateCreated']
+        );
+      } else{
+        _vendor = Vendor(
           id: prefs.getString('vendorId'),
           name: prefs.getString('vendorName'),
           phone: prefs.getString('vendorPhone'),
@@ -170,17 +203,18 @@ class UserModel extends ConnectedModel {
           username: prefs.getString('vendorUsername'),
           address: prefs.getString('vendorAddress'),
           dateCreated: prefs.getString('vendorDateCreated'));
+      }
     }
     return true;
   }
 
   Future<bool> _addUser(
-      Map<String, dynamic> userData, String collectionName) async {
+      Map<String, dynamic> userData, String collectionName, String userId) async {
     _isLoading = true;
     notifyListeners();
     try {
       final http.Response response = await http.post(
-          '$_dbUrl$collectionName.json?auth=${_authenticatedUser.token}',
+          '$_dbUrl$collectionName/$userId.json?auth=${_authenticatedUser.token}',
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -287,10 +321,10 @@ class UserModel extends ConnectedModel {
       bool userAdded = false;
       if (vendor == null) {
         await _saveAuthUser(responseData, UserType.Client);
-        userAdded = await _addUser(client.toMap(), 'clients');
+        userAdded = await _addUser(client.toMap(), 'clients', _authenticatedUser.id);
       } else {
         await _saveAuthUser(responseData, UserType.Vendor);
-        userAdded = await _addUser(vendor.toMap(), 'vendors');
+        userAdded = await _addUser(vendor.toMap(), 'vendors', _authenticatedUser.id);
       }
       success = userAdded;
       if (!success) message = 'Failed to upload user data';
