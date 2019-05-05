@@ -14,14 +14,17 @@ import '../models/dispose_offering.dart';
 import '../models/recycle_offering.dart';
 import '../models/decluster_offering.dart';
 import '../models/http.dart';
+import '../models/transaction.dart';
 
 class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel {}
 
 class ConnectedModel extends Model {
   User _authenticatedUser;
+  Client _client;
+  Vendor _vendor;
   bool _isLoading = false;
   bool _gettingLocation = false;
-  String _dbUrl = 'https://waste-mx.firebaseio.com/';
+  String _dbUrl = 'https://waste-mx.firebaseio.com';
   int _httpTimeout = 5;
 
   bool get isLoading {
@@ -35,8 +38,6 @@ class ConnectedModel extends Model {
 
 class UserModel extends ConnectedModel {
   String _apiKey = 'AIzaSyA5EgolK6BG47l3XLsiZlKVrx96djJuGtI';
-  Client _client;
-  Vendor _vendor;
 
   List<Vendor> _vendors;
 
@@ -214,7 +215,7 @@ class UserModel extends ConnectedModel {
     notifyListeners();
     try {
       final http.Response response = await http.post(
-          '$_dbUrl$collectionName/$userId.json?auth=${_authenticatedUser.token}',
+          '$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}',
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -258,7 +259,7 @@ class UserModel extends ConnectedModel {
   Future<bool> updateUser(Map<String, dynamic> userData, String collectionName) async{
     try {
       final http.Response response = await http.post(
-          "$_dbUrl$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
+          "$_dbUrl/$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -774,5 +775,36 @@ class OfferingModel extends ConnectedModel {
 }
 
 class TransactionModel extends ConnectedModel{
-  
+  Wallet _wallet;
+
+  Wallet get wallet{
+    return _wallet;
+  }
+
+  String _kurepayUrl = 'https://wallet.kurepay.com/api/v2';
+  void register() async{
+    _isLoading = true;
+    notifyListeners();
+    Map<String, dynamic> data = {
+      "fullname": _client.name,
+      "email": _authenticatedUser.email,
+      "password": "123456789"
+    };
+    http.Response response = await http.post('$_kurepayUrl/auth/register', body: json.encode(data));
+    print(response.body);
+
+    http.Response dbWalletResponse = await http.post('$_dbUrl/wallets/${_authenticatedUser.id}.json', 
+      body: json.encode(data));
+
+    Map<String, dynamic> responseData = json.decode(dbWalletResponse.body);
+    _wallet = Wallet(
+      id: responseData['name'],
+      fullname: _client.name,
+      email: _authenticatedUser.email,
+      password: "123456789"
+    );
+
+    _isLoading = false;
+    notifyListeners();
+  }
 }

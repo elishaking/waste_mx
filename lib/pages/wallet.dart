@@ -23,9 +23,12 @@ class WalletPage extends StatefulWidget {
 class _WalletPageState extends State<WalletPage> {
   final double walletBalance = 5000.0;
 
+  double _opacity = 0, _loadingOpacity = 1;
+
   @override
   void initState() {
     print(widget.model.client.name);
+    widget.model.register();
     super.initState();
   }
 
@@ -35,65 +38,95 @@ class _WalletPageState extends State<WalletPage> {
       appBar: AppBar(
         title: Text('Wallet'),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      body: ScopedModelDescendant<MainModel>(
+        builder: (BuildContext context, Widget child, MainModel model){
+          if(model.isLoading){
+            _opacity = 0;
+            _loadingOpacity = 1;
+          } else{
+            _opacity = 1;
+            _loadingOpacity = 0;
+          }
+          return Stack(
             children: <Widget>[
-              Image(
-                width: getSize(context, 200),
-                image: AssetImage('assets/wallet-enclosed.png'),
+              AnimatedOpacity(
+                opacity: _opacity,
+                duration: Duration(milliseconds: 500),
+                child: _buildWalletPageBody(context),
               ),
-              customText.TitleText(
-                text: 'Waste MX Wallet Balance',
-                textColor: Theme.of(context).primaryColor,
-              ),
-              SizedBox(
-                height: getSize(context, 15),
-              ),
-              customText.HeadlineText(
-                text: walletBalance.toString(),
-                textColor: Colors.lightGreen,
-              ),
-              SizedBox(
-                height: getSize(context, 15),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  OutlineButton(
-                    child: Text('View Statement'),
-                    onPressed: () {},
-                  ),
-                  OutlineButton(
-                    child: Text('Credit Wallet'),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              CreditWalletPage()));
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: getSize(context, 30),
-              ),
-              RaisedButton(
-                child: customText.BodyText(
-                  text: 'Make Payment',
-                  textColor: Colors.white,
+              AnimatedOpacity(
+                opacity: _loadingOpacity,
+                duration: Duration(milliseconds: 500),
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-                onPressed: widget.payable
-                    ? () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                WalletPayPage()));
-                      }
-                    : null,
               )
             ],
-          ),
+          );
+        },
+      ),
+    );
+  }
+
+  Container _buildWalletPageBody(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image(
+              width: getSize(context, 200),
+              image: AssetImage('assets/wallet-enclosed.png'),
+            ),
+            customText.TitleText(
+              text: 'Waste MX Wallet Balance',
+              textColor: Theme.of(context).primaryColor,
+            ),
+            SizedBox(
+              height: getSize(context, 15),
+            ),
+            customText.HeadlineText(
+              text: walletBalance.toString(),
+              textColor: Colors.lightGreen,
+            ),
+            SizedBox(
+              height: getSize(context, 15),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                OutlineButton(
+                  child: Text('View Statement'),
+                  onPressed: () {},
+                ),
+                OutlineButton(
+                  child: Text('Credit Wallet'),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            CreditWalletPage()));
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: getSize(context, 30),
+            ),
+            RaisedButton(
+              child: customText.BodyText(
+                text: 'Make Payment',
+                textColor: Colors.white,
+              ),
+              onPressed: widget.payable
+                  ? () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              WalletPayPage()));
+                    }
+                  : null,
+            )
+          ],
         ),
       ),
     );
