@@ -790,6 +790,7 @@ class TransactionModel extends ConnectedModel{
       "email": _authenticatedUser.email,
       "password": "123456789"
     };
+    print(json.encode(data));
     http.Response response = await http.post('$_kurepayUrl/auth/register', body: json.encode(data));
     print(response.body);
 
