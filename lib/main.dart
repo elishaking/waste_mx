@@ -31,14 +31,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _model = MainModel();
-  ResponseInfo _authResponseInfo;
   bool _isAuthenticated = false;
 
   @override
   void initState() {
-    _model.autoAuthenticate().then((ResponseInfo responseInfo){
-      _authResponseInfo = responseInfo;
-    });
+    _model.autoAuthenticate();
     super.initState();
   }
 
@@ -100,8 +97,8 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
-    } else if(!_authResponseInfo.success){
-      print(_authResponseInfo.message);
+    } else if(!model.authResponse.success){
+      print(model.authResponse.message);
       return Scaffold(
         body: Center(
           child: Column(

@@ -20,12 +20,17 @@ class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, Tra
 
 class ConnectedModel extends Model {
   User _authenticatedUser;
+  ResponseInfo _authResponse;
   Client _client;
   Vendor _vendor;
   bool _isLoading = false;
   bool _gettingLocation = false;
   String _dbUrl = 'https://waste-mx.firebaseio.com';
   int _httpTimeout = 5;
+
+  ResponseInfo get authResponse{
+    return _authResponse;
+  }
 
   bool get isLoading {
     return _isLoading;
@@ -63,14 +68,14 @@ class UserModel extends ConnectedModel {
         : UserType.Vendor;
   }
 
-  Future<ResponseInfo> autoAuthenticate() async {
+  void autoAuthenticate() async {
     _isLoading = true;
     notifyListeners();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
     final UserType userType = _getUserType(prefs.getString('userType'));
     final String expiryTimeString = prefs.getString('expiryTime');
-    ResponseInfo responseInfo = ResponseInfo(false, 'User not Saved', -1);
+    _authResponse = ResponseInfo(false, 'User not Saved', -1);
 
     if (token != null) {
       // print(token);
@@ -87,7 +92,7 @@ class UserModel extends ConnectedModel {
             print(error.toString());
             _isLoading = false;
             notifyListeners();
-            responseInfo = ResponseInfo(false, error, -1);
+            _authResponse = ResponseInfo(false, error, -1);
           });
             // .timeout(Duration(seconds: _httpTimeout), 
             // onTimeout: (){
@@ -95,17 +100,16 @@ class UserModel extends ConnectedModel {
             //   _isLoading = false;
             //   notifyListeners();
             // });
-        if(response == null) return responseInfo;
+        if(response == null) return;
         final Map<String, dynamic> responseData = json.decode(response.body);
         // print(response.body);
         if (responseData.containsKey('idToken')) {
           await _saveAuthUser(responseData, userType);
         } else {
-          responseInfo = ResponseInfo(true, 'Could not save User info', -1);
+          _authResponse = ResponseInfo(true, 'Could not save User info', -1);
           _authenticatedUser = null;
           _isLoading = false;
           notifyListeners();
-          return responseInfo;
         }
       }
 
@@ -115,15 +119,14 @@ class UserModel extends ConnectedModel {
           User(id: userId, email: userEmail, token: token, userType: userType);
       
       await _getUserData();
-      responseInfo = ResponseInfo(true, 'Successful Authentication', -1);
+      _authResponse = ResponseInfo(true, 'Successful Authentication', -1);
       _isLoading = false;
       notifyListeners();
     } else{
-      responseInfo = ResponseInfo(true, 'User not created', -1);
+      _authResponse = ResponseInfo(true, 'User not created', -1);
       _isLoading = false;
       notifyListeners();
     }
-    return responseInfo;
   }
 
   Future _saveAuthUser(responseData, UserType userType) async {
