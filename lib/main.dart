@@ -3,7 +3,6 @@ import 'package:scoped_model/scoped_model.dart';
 
 import './scoped_models/main.dart';
 import './models/user.dart';
-import './models/http.dart';
 
 import './widgets/custom_text.dart' as customText;
 
@@ -18,7 +17,6 @@ import './pages/dispose_waste.dart';
 import './pages/vendor/vendor_home.dart';
 // import './pages/vendor/offerings.dart';
 // import './pages/book_vendor.dart';
-import './pages/welcome.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,13 +27,16 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with TickerProviderStateMixin{
   final MainModel _model = MainModel();
-  bool _isAuthenticated = false;
+  // bool _isAuthenticated = false;
+  AnimationController _animationController;
 
   @override
   void initState() {
     _model.autoAuthenticate();
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    _animationController.forward();
     super.initState();
   }
 
@@ -123,8 +124,14 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Image(
-              image: AssetImage('assets/logo.png'),
+            FadeTransition(
+              opacity: CurvedAnimation(
+                parent: _animationController,
+                curve: Interval(0, 1, curve: Curves.easeOut)
+              ),
+              child: Image(
+                image: AssetImage('assets/logo.png'),
+              ),
             ),
             SizedBox(height: 20,),
             customText.HeadlineText(text: 'Waste MX', textColor: Colors.white,),

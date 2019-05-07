@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../models/offering.dart';
 // import '../../models/decluster_offering.dart';
 
 // import '../select_offer_type.dart';

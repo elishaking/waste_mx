@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import './custom_text.dart' as customText;
 
 import '../pages/home.dart';
 import '../pages/dispose_waste.dart';
