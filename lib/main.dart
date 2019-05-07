@@ -80,44 +80,10 @@ class _MyAppState extends State<MyApp> {
 
   Widget _setPage(MainModel model) {
     if(model.isLoading){
-      return Scaffold(
-        backgroundColor: Colors.green,
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image(
-                image: AssetImage('assets/logo.png'),
-              ),
-              SizedBox(height: 20,),
-              customText.HeadlineText(text: 'Waste MX', textColor: Colors.white,),
-              SizedBox(height: 30,),
-              CircularProgressIndicator()
-            ],
-          ),
-        ),
-      );
+      return _buildLoadingPage();
     } else if(!model.authResponse.success){
       print(model.authResponse.message);
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image(image: AssetImage('assets/no-network.png'),),
-              SizedBox(height: 20),
-              customText.HeadlineText(text: 'No Connection',textColor: Colors.black,),
-              SizedBox(height: 20),
-              RaisedButton(
-                child: Text('Retry'),
-                onPressed: (){
-
-                },
-              )
-            ],
-          ),
-        ),
-      );
+      return _buildNoNetworkPage();
     }
     else if(model.user == null){
       return WelcomePage();
@@ -126,5 +92,47 @@ class _MyAppState extends State<MyApp> {
     } else{
       return VendorHomePage();
     }
+  }
+
+  Scaffold _buildNoNetworkPage() {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image(image: AssetImage('assets/no-network.png'),),
+            SizedBox(height: 20),
+            customText.HeadlineText(text: 'No Connection',textColor: Colors.black,),
+            SizedBox(height: 20),
+            RaisedButton(
+              child: Text('Retry'),
+              onPressed: (){
+
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Scaffold _buildLoadingPage() {
+    return Scaffold(
+      backgroundColor: Colors.green,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image(
+              image: AssetImage('assets/logo.png'),
+            ),
+            SizedBox(height: 20,),
+            customText.HeadlineText(text: 'Waste MX', textColor: Colors.white,),
+            SizedBox(height: 30,),
+            CircularProgressIndicator()
+          ],
+        ),
+      ),
+    );
   }
 }
