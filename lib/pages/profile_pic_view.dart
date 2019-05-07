@@ -6,6 +6,7 @@ class ProfilePicViewPage extends StatelessWidget{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
