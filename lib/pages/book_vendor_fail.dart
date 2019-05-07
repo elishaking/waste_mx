@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../widgets/custom_text.dart' as customText;
 
-import './vendor_list.dart';
 
 class BookVendorFailPage extends StatelessWidget {
   final String vendorName;
