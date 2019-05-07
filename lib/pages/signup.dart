@@ -375,9 +375,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       FlatButton(
                         child: Text("Already have an account, Login"),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  LoginPage(widget.userType)));
+                                  LoginPage(widget.userType)), (Route route) => false);
                         },
                       )
                     ],

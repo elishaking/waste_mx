@@ -72,11 +72,11 @@ class _SelectRolePageState extends State<SelectRolePage> {
                   child: Text('Next'),
                   textColor: Colors.white,
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                         builder: (BuildContext context) => SignUpPage(
                             _clientSelected
                                 ? UserType.Client
-                                : UserType.Vendor)));
+                                : UserType.Vendor)), (Route route) => false);
                   },
                 ),
               )
