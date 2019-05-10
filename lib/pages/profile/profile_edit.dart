@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../scoped_models/main.dart';
+import '../../scoped_models/main.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
 class ProfileEditPage extends StatefulWidget {
   @override

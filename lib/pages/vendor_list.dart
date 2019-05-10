@@ -11,7 +11,7 @@ import '../widgets/custom_text.dart' as customText;
 
 import './vendor.dart';
 import './book_vendor.dart';
-import './book_recycler.dart';
+import './recycle/book_recycler.dart';
 
 class VendorListPage extends StatefulWidget {
   final MainModel model;

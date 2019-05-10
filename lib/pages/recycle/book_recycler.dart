@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../scoped_models/main.dart';
+import '../../scoped_models/main.dart';
 
-import '../models/recycle_offering.dart';
+import '../../models/recycle_offering.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
-import './edit_price.dart';
-import './wallet.dart';
+import '../edit_price.dart';
+import '../wallet/wallet.dart';
 
 class BookRecyclerPage extends StatefulWidget {
   final String wasteType;

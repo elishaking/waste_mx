@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
 import './track_transactions.dart';
 

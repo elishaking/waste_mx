@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../models/recycle_offering.dart';
-import '../models/offering.dart';
+import '../../models/recycle_offering.dart';
+import '../../models/offering.dart';
 
 // import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/bottom_nav.dart';
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/bottom_nav.dart';
+import '../../widgets/custom_text.dart' as customText;
 
-import '../utils/responsive.dart';
+import '../../utils/responsive.dart';
 
-import './select_offer_type.dart';
+import '../select_offer_type.dart';
 
 class RecycleWastePage extends StatelessWidget {
 

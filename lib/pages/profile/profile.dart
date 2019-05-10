@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
 
-import '../scoped_models/main.dart';
-import '../models/user.dart';
+import '../../scoped_models/main.dart';
+import '../../models/user.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
 import './profile_edit.dart';
 import './profile_pic_view.dart';

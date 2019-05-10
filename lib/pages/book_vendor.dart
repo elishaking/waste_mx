@@ -15,7 +15,7 @@ import '../utils/responsive.dart';
 // import './book_vendor_success.dart';
 // import './book_vendor_fail.dart';
 import './edit_price.dart';
-import './wallet.dart';
+import './wallet/wallet.dart';
 
 class BookVendorPage extends StatefulWidget {
   final String wasteType;

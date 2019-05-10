@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
 import './signup.dart';
 

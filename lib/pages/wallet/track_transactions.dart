@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
-import './home.dart';
+import '../home.dart';
 
 class TrackTransactionsPage extends StatefulWidget {
   @override

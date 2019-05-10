@@ -7,7 +7,7 @@ import '../widgets/custom_text.dart' as customText;
 import '../widgets/rating.dart' as ratingWidget;
 
 import './book_vendor.dart';
-import './book_recycler.dart';
+import './recycle/book_recycler.dart';
 
 class VendorPage extends StatelessWidget {
   final Vendor _vendor;

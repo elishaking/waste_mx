@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../pages/home.dart';
-import '../pages/dispose_waste.dart';
-import '../pages/recycle_waste.dart';
+import '../pages/dispose/dispose_waste.dart';
+import '../pages/recycle/recycle_waste.dart';
 import '../pages/decluster/decluster.dart';
 import '../pages/info_center/info.dart';
 

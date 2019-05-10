@@ -8,11 +8,11 @@ import '../widgets/bottom_nav.dart';
 
 import '../utils/responsive.dart';
 
-import './dispose_waste.dart';
-import './recycle_waste.dart';
+import './dispose/dispose_waste.dart';
+import './recycle/recycle_waste.dart';
 import './decluster/decluster.dart';
-import './wallet.dart';
-import './track_transactions.dart';
+import './wallet/wallet.dart';
+import './wallet/track_transactions.dart';
 
 class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;

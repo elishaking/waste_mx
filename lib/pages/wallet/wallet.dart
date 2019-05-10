@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../scoped_models/main.dart';
+import '../../scoped_models/main.dart';
 
-import '../widgets/custom_text.dart' as customText;
+import '../../widgets/custom_text.dart' as customText;
 
-import '../utils/responsive.dart';
+import '../../utils/responsive.dart';
 
 import './credit_wallet.dart';
 import './wallet_pay.dart';

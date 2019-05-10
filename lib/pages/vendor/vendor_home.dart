@@ -6,7 +6,7 @@ import '../../scoped_models/main.dart';
 import '../../widgets/custom_text.dart' as customText;
 import '../../models/update.dart';
 
-import '../wallet.dart';
+import '../wallet/wallet.dart';
 import './offerings.dart';
 
 class VendorHomePage extends StatelessWidget {
