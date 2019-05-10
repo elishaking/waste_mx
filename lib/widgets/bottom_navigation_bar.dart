@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/responsive.dart';
 
 import '../pages/home.dart';
 import '../pages/dispose/dispose_waste.dart';
@@ -9,12 +10,6 @@ class ButtomNavigationBar extends StatelessWidget {
   final String page;
 
   ButtomNavigationBar(this.page);
-
-  double _targetWidth = 0;
-
-  double _getSize(final double default_1440) {
-    return (default_1440 / 14) * (0.0027 * _targetWidth + 10.136);
-  }
 
   Widget _buildPageSelected(
       BuildContext context, IconData iconData, String title) {
@@ -29,7 +24,7 @@ class ButtomNavigationBar extends StatelessWidget {
           title,
           style: TextStyle(
             color: Theme.of(context).accentColor,
-            fontSize: _getSize(11),
+            fontSize: getSize(context, 11),
           ),
           overflow: TextOverflow.ellipsis,
         )
@@ -46,10 +41,8 @@ class ButtomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _targetWidth = MediaQuery.of(context).size.width;
-
     return Container(
-      padding: EdgeInsets.symmetric(vertical: _getSize(3)),
+      padding: EdgeInsets.symmetric(vertical: getSize(context, 3)),
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Colors.black, width: 0.5))),
       child: Row(
