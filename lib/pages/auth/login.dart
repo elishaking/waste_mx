@@ -73,14 +73,14 @@ class _LoginPageState extends State<LoginPage> {
       textColor: Colors.white,
       child: Text('Login'),
       onPressed: () {
-        // if(_formKey.currentState.validate()){
-        _formKey.currentState.save();
-        if (widget.userType == UserType.Client) {
-          _loginUser(model, UserType.Client, 'home');
-        } else {
-          _loginUser(model, UserType.Vendor, 'vendor_home');
+        if(_formKey.currentState.validate()){
+          _formKey.currentState.save();
+          if (widget.userType == UserType.Client) {
+            _loginUser(model, UserType.Client, 'home');
+          } else {
+            _loginUser(model, UserType.Vendor, 'vendor_home');
+          }
         }
-        // }
       },
     );
   }
