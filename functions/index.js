@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs'); //? File System
 const fbAdmin = require('firebase-admin');
 const uuid = require('uuid/v4');
+const axios = require('axios');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -113,6 +114,9 @@ exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
         error: 'Unauthorized'
       })
     }
+    
+    // let clientPos = JSON.parse(req.body['pos']);
+    let clientPos = req.body['pos'];
 
     function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
       var R = 6371; // Radius of the earth in km
@@ -132,28 +136,52 @@ exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
       return deg * (Math.PI/180)
     }
 
+    function compareDist(vendor1, vendor2){
+      return getDistanceFromLatLonInKm(vendor1['pos'][0], vendor1['pos'][1], clientPos[0], clientPos[1]) < getDistanceFromLatLonInKm(vendor2['pos'][0], vendor2['pos'][1], clientPos[0], clientPos[1]) ? 1 : -1;
+    }
+
     let idToken = req.headers.authorization.split('Bearer ')[1];
 
     // return res.status(201).json({
     //   'pos': req.body['pos']
     // });
-    let clientPos = JSON.parse(req.body['pos']);
 
     return fbAdmin.auth().verifyIdToken(idToken).then(() => {
-      let db = fbAdmin.database();
-      db.ref('/vendors').on("value", (snapshot) => {
-        let vendors = [];// snapshot.val();
+      // let db = fbAdmin.database();
+      // db.ref('vendors').on("value", (snapshot) => {
+      //   vendors = snapshot.val();
         
-        let closestVendors = [];
-        vendors.forEach((vendor, index, vendors) => {
-          if(getDistanceFromLatLonInKm(vendor['pos'][0], vendor['pos'][1], clientPos[0], clientPos[1]) < 10){
-            closestVendors.push(vendor);
-          }
-        });
+      //   let closestVendors = [];
+      //   // vendors.forEach((vendor, index, vendors) => {
+      //   //   if(getDistanceFromLatLonInKm(vendor['pos'][0], vendor['pos'][1], clientPos[0], clientPos[1]) < 10){
+      //   //     closestVendors.push(vendor);
+      //   //   }
+      //   // });
+      //   // closestVendors = vendors.sort((vendor1, vendor2) => compareDist(vendor1, vendor2));
 
-        return res.status(201).json(closestVendors);
+      //   // return res.status(201).json(vendors);
+      // });
+      axios.get('https://waste-mx.firebaseio.com/vendors.json').then((resp) => {
+        let vendorObjs = resp.data;
+        let vendors = [];
+        let closestVendors = [];
+        for(id in vendorObjs){
+          let vendorObj = vendorObjs[id];
+          vendorObj['id'] = id;
+          vendors.push(vendorObj);
+        }
+
+        closestVendors = vendors.sort((vendor1, vendor2) => compareDist(vendor1, vendor2));
+        closestVendorObjs = {};
+        closestVendors.forEach((closestVendor) => {
+          let id =  closestVendor['id']
+          delete closestVendor['id']
+          closestVendorObjs['id'] = closestVendor;
+        });
+        return res.status(201).json({'data': closestVendorObjs});
       });
     }).catch((error) => {
+      console.log(error);
       return res.status(401).json({
         error: 'Unathorized'
       });
