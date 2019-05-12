@@ -137,7 +137,7 @@ exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
     }
 
     function compareDist(vendor1, vendor2){
-      return getDistanceFromLatLonInKm(vendor1['pos'][0], vendor1['pos'][1], clientPos[0], clientPos[1]) < getDistanceFromLatLonInKm(vendor2['pos'][0], vendor2['pos'][1], clientPos[0], clientPos[1]) ? 1 : -1;
+      return getDistanceFromLatLonInKm(vendor1['vendorPos'][0], vendor1['vendorPos'][1], clientPos[0], clientPos[1]) < getDistanceFromLatLonInKm(vendor2['vendorPos'][0], vendor2['vendorPos'][1], clientPos[0], clientPos[1]) ? 1 : -1;
     }
 
     let idToken = req.headers.authorization.split('Bearer ')[1];
@@ -183,7 +183,7 @@ exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
 
           delete closestVendor['id'];
           delete closestVendor['userId'];
-          closestVendor['distance'] = getDistanceFromLatLonInKm(closestVendor['pos'][0], closestVendor['pos'][1], clientPos[0], clientPos[1]);
+          closestVendor['distance'] = getDistanceFromLatLonInKm(closestVendor['vendorPos'][0], closestVendor['vendorPos'][1], clientPos[0], clientPos[1]);
           closestVendorObjs[userId] = {};
           closestVendorObjs[userId][id] = closestVendor
         });

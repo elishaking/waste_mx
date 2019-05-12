@@ -171,19 +171,23 @@ class UserModel extends ConnectedModel {
         _client = Client(
           id: key,
           name: responseData[key]['clientName'],
+          pos: responseData[key]['clientPos'],
           phone: responseData[key]['clientPhone'],
           username: responseData[key]['clientUsername'],
           address: responseData[key]['clientAddress'],
           dateCreated: responseData[key]['clientDateCreated']
         );
       } else{
+        String pos = prefs.getString('clientPos');
         _client = Client(
           id: prefs.getString('clientId'),
           name: prefs.getString('clientName'),
+          pos: json.decode(pos == null ? "[0,0]" : pos).map<double>((x) {return double.parse(x.toString());}).toList(),
           phone: prefs.getString('clientPhone'),
           username: prefs.getString('clientUsername'),
           address: prefs.getString('clientAddress'),
           dateCreated: prefs.getString('clientDateCreated'));
+        print(_client.pos);
       }
     } else {
       if(prefs.getString('clientId') == null){
@@ -194,19 +198,21 @@ class UserModel extends ConnectedModel {
         String key = responseData.keys.toList()[0];
         _vendor = Vendor(
           id: key,
-          name: responseData[key]['clientName'],
-          phone: responseData[key]['clientPhone'],
+          name: responseData[key]['vendorName'],
+          phone: responseData[key]['vendorPhone'],
+          pos: responseData[key]['vendorPos'],
           companyName: responseData[key]['companyName'],
           companyAddress: responseData[key]['companyAddress'],
-          username: responseData[key]['clientUsername'],
-          address: responseData[key]['clientAddress'],
-          dateCreated: responseData[key]['clientDateCreated']
+          username: responseData[key]['vendorUsername'],
+          address: responseData[key]['vendorAddress'],
+          dateCreated: responseData[key]['vendorDateCreated']
         );
       } else{
         _vendor = Vendor(
           id: prefs.getString('vendorId'),
           name: prefs.getString('vendorName'),
           phone: prefs.getString('vendorPhone'),
+          pos: json.decode(prefs.getString('vendorPos')),
           companyName: prefs.getString('companyName'),
           companyAddress: prefs.getString('companyAddress'),
           username: prefs.getString('vendorUsername'),
@@ -226,7 +232,7 @@ class UserModel extends ConnectedModel {
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
       List<double> pos = [position.latitude, position.longitude];
-      userData['pos'] = pos;
+      userData[collectionName.substring(0, collectionName.length - 2) + "Pos"] = pos;
 
       final http.Response response = await http.post(
           '$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}',
@@ -543,7 +549,7 @@ class OfferingModel extends ConnectedModel {
   Future fetchClosestVendors() async{
     toggleLoading(true);
     final response = await http.post('https://us-central1-waste-mx.cloudfunctions.net/fetchClosestVendors', body: json.encode({
-      'pos': [1, 2]
+      'pos': _client.pos
     }),
     headers: {
       'Authorization': 'Bearer ${_authenticatedUser.token}',
