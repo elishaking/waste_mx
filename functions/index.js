@@ -99,3 +99,64 @@ exports.storeImage = functions.https.onRequest((req, res) => {
     return busboy.end(req.rawBody);
   });
 });
+
+exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if(req.method !== 'POST'){
+      return res.status(500).json({
+        message: 'Not allowed'
+      });
+    }
+
+    if(!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')){
+      return res.status(403).json({
+        error: 'Unauthorized'
+      })
+    }
+
+    function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(lat2-lat1);  // deg2rad below
+      var dLon = deg2rad(lon2-lon1); 
+      var a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c; // Distance in km
+      return d;
+    }
+    
+    function deg2rad(deg) {
+      return deg * (Math.PI/180)
+    }
+
+    let idToken = req.headers.authorization.split('Bearer ')[1];
+
+    // return res.status(201).json({
+    //   'pos': req.body['pos']
+    // });
+    let clientPos = JSON.parse(req.body['pos']);
+
+    return fbAdmin.auth().verifyIdToken(idToken).then(() => {
+      let db = fbAdmin.database();
+      db.ref('/vendors').on("value", (snapshot) => {
+        let vendors = [];// snapshot.val();
+        
+        let closestVendors = [];
+        vendors.forEach((vendor, index, vendors) => {
+          if(getDistanceFromLatLonInKm(vendor['pos'][0], vendor['pos'][1], clientPos[0], clientPos[1]) < 10){
+            closestVendors.push(vendor);
+          }
+        });
+
+        return res.status(201).json(closestVendors);
+      });
+    }).catch((error) => {
+      return res.status(401).json({
+        error: 'Unathorized'
+      });
+    });
+  });
+});
