@@ -165,18 +165,27 @@ exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
         let vendorObjs = resp.data;
         let vendors = [];
         let closestVendors = [];
-        for(id in vendorObjs){
-          let vendorObj = vendorObjs[id];
-          vendorObj['id'] = id;
-          vendors.push(vendorObj);
+        for(userId in vendorObjs){
+          let vendorObj = vendorObjs[userId];
+          for(id in vendorObj){
+            vendorObj = vendorObj[id];
+            vendorObj['userId'] = userId;
+            vendorObj['id'] = id;
+            vendors.push(vendorObj);
+          }
         }
 
         closestVendors = vendors.sort((vendor1, vendor2) => compareDist(vendor1, vendor2));
         closestVendorObjs = {};
         closestVendors.forEach((closestVendor) => {
-          let id =  closestVendor['id']
-          delete closestVendor['id']
-          closestVendorObjs[id] = closestVendor;
+          let userId =  closestVendor['userId'];
+          let id =  closestVendor['id'];
+
+          delete closestVendor['id'];
+          delete closestVendor['userId'];
+          closestVendor['distance'] = getDistanceFromLatLonInKm(closestVendor['pos'][0], closestVendor['pos'][1], clientPos[0], clientPos[1]);
+          closestVendorObjs[userId] = {};
+          closestVendorObjs[userId][id] = closestVendor
         });
         return res.status(201).json({'data': closestVendorObjs});
       });
