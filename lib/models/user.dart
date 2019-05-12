@@ -33,6 +33,7 @@ class Client {
   final String id;
   final String name;
   final String phone;
+  final List<double> pos;
   final String username;
   final String address;
   final String dateCreated;
@@ -41,6 +42,7 @@ class Client {
       {this.id,
       this.name,
       this.phone,
+      this.pos,
       this.username,
       this.address,
       this.dateCreated});

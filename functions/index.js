@@ -176,7 +176,7 @@ exports.fetchClosestVendors = functions.https.onRequest((req, res) => {
         closestVendors.forEach((closestVendor) => {
           let id =  closestVendor['id']
           delete closestVendor['id']
-          closestVendorObjs['id'] = closestVendor;
+          closestVendorObjs[id] = closestVendor;
         });
         return res.status(201).json({'data': closestVendorObjs});
       });

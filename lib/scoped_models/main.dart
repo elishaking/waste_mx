@@ -221,6 +221,13 @@ class UserModel extends ConnectedModel {
       Map<String, dynamic> userData, String collectionName, String userId) async {
     toggleLoading(true);
     try {
+      Geolocator geolocator = Geolocator();
+        Position position = await geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+      List<double> pos = [position.latitude, position.longitude];
+      userData['pos'] = pos;
+
       final http.Response response = await http.post(
           '$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}',
           body: json.encode(userData));
@@ -233,20 +240,17 @@ class UserModel extends ConnectedModel {
         _client = Client(
             id: responseData['name'],
             name: userData['clientName'],
+            pos: pos,
             phone: userData['clientPhone'],
             username: userData['clientUsername'],
             address: userData['clientAddress'],
             dateCreated: userData['clientDateCreated']);
         print(json.encode(_client.toMap()));
       } else {
-        Geolocator geolocator = Geolocator();
-        Position position = await geolocator
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        
         _vendor = Vendor(
             id: responseData['name'],
             name: userData['vendorName'],
-            pos: [position.latitude, position.longitude],
+            pos: pos,
             companyName: userData['vendorCompanyName'],
             companyAddress: userData['vendorCompanyAddress'],
             phone: userData['vendorPhone'],
