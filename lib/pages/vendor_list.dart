@@ -65,7 +65,7 @@ class _VendorListPageState extends State<VendorListPage> {
 
   @override
   initState() {
-    widget.model.fetchVendors();
+    widget.model.fetchClosestVendors();
     super.initState();
   }
 

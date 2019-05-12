@@ -61,6 +61,7 @@ class Vendor {
   final String id;
   final String name;
   final String imageUrl;
+  final List<double> pos;
   final String companyName;
   final String companyAddress;
   final String phone;
@@ -75,6 +76,7 @@ class Vendor {
       {this.id,
       this.name,
       this.imageUrl,
+      this.pos,
       this.companyName,
       this.companyAddress,
       this.phone,
@@ -90,6 +92,7 @@ class Vendor {
       'vendorId': id,
       'vendorName': name,
       'vendorImageUrl': imageUrl,
+      'vendorPos': pos,
       'vendorPhone': phone,
       'vendorUsername': username,
       'vendorAddress': address,

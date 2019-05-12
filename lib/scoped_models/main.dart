@@ -39,6 +39,11 @@ class ConnectedModel extends Model {
   bool get gettingLocation{
     return _gettingLocation;
   }
+
+  void toggleLoading(bool value){
+    _isLoading = value;
+    notifyListeners();
+  }
 }
 
 class UserModel extends ConnectedModel {
@@ -214,15 +219,13 @@ class UserModel extends ConnectedModel {
 
   Future<bool> _addUser(
       Map<String, dynamic> userData, String collectionName, String userId) async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
     try {
       final http.Response response = await http.post(
           '$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}',
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
-        _isLoading = false;
-        notifyListeners();
+        toggleLoading(false);
         return false;
       }
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -236,9 +239,14 @@ class UserModel extends ConnectedModel {
             dateCreated: userData['clientDateCreated']);
         print(json.encode(_client.toMap()));
       } else {
+        Geolocator geolocator = Geolocator();
+        Position position = await geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        
         _vendor = Vendor(
             id: responseData['name'],
             name: userData['vendorName'],
+            pos: [position.latitude, position.longitude],
             companyName: userData['vendorCompanyName'],
             companyAddress: userData['vendorCompanyAddress'],
             phone: userData['vendorPhone'],
@@ -248,12 +256,10 @@ class UserModel extends ConnectedModel {
       }
       userData['id'] = responseData['name'];
       await _saveUserData(userData);
-      _isLoading = false;
-      notifyListeners();
+      toggleLoading(false);
       return true;
     } catch (error) {
-      _isLoading = false;
-      notifyListeners();
+      toggleLoading(false);
       print(error);
       return false;
     }
@@ -306,8 +312,7 @@ class UserModel extends ConnectedModel {
   Future<Map<String, dynamic>> signup(String email, String password,
       {Client client, Vendor vendor}) async {
     // final Map<String, dynamic> authData =
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
 
     final http.Response response = await http.post(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${_apiKey}',
@@ -315,8 +320,8 @@ class UserModel extends ConnectedModel {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
 
-    _isLoading = false;
-    notifyListeners();
+    // _isLoading = false;
+    // notifyListeners();
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
@@ -333,8 +338,6 @@ class UserModel extends ConnectedModel {
       success = userAdded;
       if (!success) message = 'Failed to upload user data';
     } else {
-      _isLoading = false;
-      notifyListeners();
       switch (responseData['error']['message']) {
         case 'EMAIL_EXISTS':
           message = 'Your email already exists';
@@ -351,6 +354,7 @@ class UserModel extends ConnectedModel {
       }
     }
 
+    toggleLoading(false);
     return {'success': success, 'message': message};
   }
 
@@ -530,6 +534,19 @@ class OfferingModel extends ConnectedModel {
       print(error);
       return null;
     }
+  }
+
+  Future fetchClosestVendors() async{
+    toggleLoading(true);
+    final response = await http.post('https://us-central1-waste-mx.cloudfunctions.net/fetchClosestVendors', body: json.encode({
+      'pos': [1, 2]
+    }),
+    headers: {
+      'Authorization': 'Bearer ${_authenticatedUser.token}',
+      'Content-Type': 'application/json'
+    });
+    print(response.body);
+    toggleLoading(false);
   }
 
   //! join the 3 methods below
