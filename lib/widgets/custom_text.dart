@@ -43,14 +43,13 @@ class TitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
+      style: Theme.of(context).textTheme.title.merge(TextStyle(
         fontFamily: 'Montserrat',
         fontWeight: FontWeight.w900,
-        fontSize: getSize(context, 20),
+        // fontSize: getSize(context, 20),
         color: textColor,
         // letterSpacing: 2,
-      ),
-      textAlign: textAlign,
+      ))
     );
   }
 }
@@ -83,10 +82,10 @@ class BodyText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
-          // fontFamily: 'Lato',
-          fontSize: getSize(context, fontSize),
-          color: textColor),
+      style: Theme.of(context).textTheme.body1.merge(TextStyle(
+        // fontSize: getSize(context, fontSize),
+        color: textColor
+      )),
       textAlign: textAlign,
       overflow: textOverflow,
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waste_mx/utils/responsive.dart';
 
 import '../widgets/custom_text.dart' as custom_text;
 
@@ -151,15 +152,21 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: Center(
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Image.asset(_infoList[index]['imageUrl']),
-                              SizedBox(height: 10),
+                              Image(
+                                image: AssetImage(_infoList[index]['imageUrl']),
+                                height: getSize(context, 400),
+                              ),
+                              SizedBox(height: getSize(context, 30)),
                               custom_text.TitleText(
                                 text: _infoList[index]['title'],
                               ),
+                              SizedBox(height: 5,),
                               custom_text.BodyText(
                                 text: _infoList[index]['body'],
                                 textAlign: TextAlign.center,
+                                textOverflow: TextOverflow.clip,
                               ),
                             ],
                           ),
