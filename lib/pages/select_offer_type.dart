@@ -52,8 +52,8 @@ class _SelectOfferTypeState extends State<SelectOfferType> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('This creates an offer for all vendors to see and place a pickup request'),
-                    SizedBox(height: 10,),
-                    Text('70 NGN transaction fee')
+                    // SizedBox(height: 10,),
+                    // Text('70 NGN transaction fee')
                   ],
                 ),
                 selected: _open,
@@ -71,8 +71,8 @@ class _SelectOfferTypeState extends State<SelectOfferType> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('This creates an offer for just one vendor to see and place a pickup request'),
-                    SizedBox(height: 10,),
-                    Text('50 NGN transaction fee')
+                    // SizedBox(height: 10,),
+                    // Text('50 NGN transaction fee')
                   ],
                 ),
                 selected: _closed,
