@@ -137,7 +137,9 @@ class _VendorListPageState extends State<VendorListPage> {
                     text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
                     textColor: Colors.white,
                   ),
-                )
+                ),
+                SizedBox(height: 10,),
+                customText.BodyText(text: '0 km', textColor: Colors.green.shade700,)
               ],
             ),
             trailing: customText.BodyText(
