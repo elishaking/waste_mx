@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:waste_mx/utils/responsive.dart';
 
-import '../widgets/custom_text.dart' as custom_text;
+import '../../widgets/custom_text.dart' as custom_text;
 
-import './auth/select_role.dart';
+import '../auth/select_role.dart';
 
 class OnboardingPage extends StatefulWidget {
   @override

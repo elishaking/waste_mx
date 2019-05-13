@@ -7,7 +7,7 @@ import './models/user.dart';
 
 import './widgets/custom_text.dart' as customText;
 
-import './pages/welcome.dart';
+import './pages/launch/welcome.dart';
 // import './pages/login.dart';
 // import './pages/signup.dart';
 import './pages/home.dart';
