@@ -171,7 +171,7 @@ class UserModel extends ConnectedModel {
         _client = Client(
           id: key,
           name: responseData[key]['clientName'],
-          pos: responseData[key]['clientPos'],
+          pos: responseData[key]['clientPos'].map<double>((x) {return double.parse(x.toString());}).toList(),
           phone: responseData[key]['clientPhone'],
           username: responseData[key]['clientUsername'],
           address: responseData[key]['clientAddress'],
