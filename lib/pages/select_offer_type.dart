@@ -3,6 +3,9 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped_models/main.dart';
 
+import '../utils/assets.dart';
+import '../utils/responsive.dart';
+
 import '../widgets/custom_text.dart' as customText;
 
 import './vendor_list.dart';
@@ -19,7 +22,7 @@ class SelectOfferType extends StatefulWidget{
 }
 
 class _SelectOfferTypeState extends State<SelectOfferType> {
-  bool _open = false, _closed = false;
+  // bool _open = false, _closed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +38,36 @@ class _SelectOfferTypeState extends State<SelectOfferType> {
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(bottom: 30),
-                child: customText.TitleText(
-                  text: 'How would you like to proceed',
-                  textColor: Colors.black,
-                  textAlign: TextAlign.center,
-                ),
+          child: ScopedModelDescendant(
+            builder: (BuildContext context, Widget child, MainModel model){
+              return _buildTypes(context, model);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Column _buildTypes(BuildContext context, MainModel model) {
+    return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image(
+              image: AssetImage(ImageAssets.logo),
+              height: getSize(context, 150),
+            ),
+            SizedBox(height: getSize(context, 70),),
+            Padding(
+              padding: EdgeInsets.only(bottom: 30),
+              child: customText.TitleText(
+                text: 'How would you like to proceed',
+                textColor: Colors.black,
+                textAlign: TextAlign.center,
               ),
-              ListTile(
+            ),
+            OutlineButton(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: ListTile(
                 title: Text('Create Open Offer'),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,16 +77,25 @@ class _SelectOfferTypeState extends State<SelectOfferType> {
                     // Text('70 NGN transaction fee')
                   ],
                 ),
-                selected: _open,
-                onTap: () {
-                  setState(() {
-                    _open = true;
-                    _closed = false;
-                  });
-                },
+                trailing: Icon(Icons.arrow_forward_ios),
+                // selected: _open,
+                // onTap: () {
+                //   // setState(() {
+                //   //   _open = true;
+                //   //   _closed = false;
+                //   // });
+                // },
               ),
-              Divider(),
-              ListTile(
+              onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => BookVendorPage(widget.wasteType)
+                ));
+              },
+            ),
+            SizedBox(height: 30,),
+            OutlineButton(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: ListTile(
                 title: Text('Engage Vendor'),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,36 +105,40 @@ class _SelectOfferTypeState extends State<SelectOfferType> {
                     // Text('50 NGN transaction fee')
                   ],
                 ),
-                selected: _closed,
-                onTap: () {
-                  setState(() {
-                    _closed = true;
-                    _open = false;
-                  });
-                },
+                trailing: Icon(Icons.arrow_forward_ios),
+                // selected: _closed,
+                // onTap: () {
+                //   // setState(() {
+                //   //   _closed = true;
+                //   //   _open = false;
+                //   // });
+                // },
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: ScopedModelDescendant<MainModel>(
-                  builder: (BuildContext context, Widget child, MainModel model){
-                    return RaisedButton(
-                      child: Text('Next'),
-                      textColor: Colors.white,
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => _closed ? 
-                            VendorListPage(model, widget.wasteType, widget.offeringType)
-                            : BookVendorPage(widget.wasteType)
-                        ));
-                      },
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+              onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => VendorListPage(model, widget.wasteType, widget.offeringType)
+                ));
+              },
+            ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: 30),
+            //   child: ScopedModelDescendant<MainModel>(
+            //     builder: (BuildContext context, Widget child, MainModel model){
+            //       return RaisedButton(
+            //         child: Text('Next'),
+            //         textColor: Colors.white,
+            //         onPressed: () {
+            //           Navigator.of(context).push(MaterialPageRoute(
+            //               builder: (BuildContext context) => _closed ? 
+            //               VendorListPage(model, widget.wasteType, widget.offeringType)
+            //               : BookVendorPage(widget.wasteType)
+            //           ));
+            //         },
+            //       );
+            //     },
+            //   ),
+            // )
+          ],
+        );
   }
 }

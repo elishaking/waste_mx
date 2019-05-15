@@ -131,7 +131,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin{
                 curve: Interval(0, 1, curve: Curves.easeOut)
               ),
               child: Image(
-                height: getSize(context, 300),
+                height: 300,
                 image: AssetImage('assets/logo.png'),
               ),
             ),
