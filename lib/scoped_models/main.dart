@@ -16,6 +16,8 @@ import '../models/decluster_offering.dart';
 import '../models/http.dart';
 import '../models/transaction.dart';
 
+import '../utils/data.dart';
+
 class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel {}
 
 class ConnectedModel extends Model {
@@ -162,7 +164,7 @@ class UserModel extends ConnectedModel {
   Future<bool> _getUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_authenticatedUser.userType == UserType.Client) {
-      if(prefs.getString('clientId') == null){
+      if(prefs.getString(Datakeys.clientId) == null){
         http.Response response = await http
           .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -170,27 +172,27 @@ class UserModel extends ConnectedModel {
         String key = responseData.keys.toList()[0];
         _client = Client(
           id: key,
-          name: responseData[key]['clientName'],
-          pos: responseData[key]['clientPos'].map<double>((x) {return double.parse(x.toString());}).toList(),
-          phone: responseData[key]['clientPhone'],
-          username: responseData[key]['clientUsername'],
-          address: responseData[key]['clientAddress'],
-          dateCreated: responseData[key]['clientDateCreated']
+          name: responseData[key][Datakeys.clientName],
+          pos: responseData[key][Datakeys.clientPos].map<double>((x) {return double.parse(x.toString());}).toList(),
+          phone: responseData[key][Datakeys.clientPhone],
+          username: responseData[key][Datakeys.clientUsername],
+          address: responseData[key][Datakeys.clientAddress],
+          dateCreated: responseData[key][Datakeys.clientDateCreated]
         );
       } else{
-        String pos = prefs.getString('clientPos');
+        String pos = prefs.getString(Datakeys.clientPos);
         _client = Client(
-          id: prefs.getString('clientId'),
-          name: prefs.getString('clientName'),
+          id: prefs.getString(Datakeys.clientId),
+          name: prefs.getString(Datakeys.clientName),
           pos: json.decode(pos == null ? "[0,0]" : pos).map<double>((x) {return double.parse(x.toString());}).toList(),
-          phone: prefs.getString('clientPhone'),
-          username: prefs.getString('clientUsername'),
-          address: prefs.getString('clientAddress'),
-          dateCreated: prefs.getString('clientDateCreated'));
+          phone: prefs.getString(Datakeys.clientPhone),
+          username: prefs.getString(Datakeys.clientUsername),
+          address: prefs.getString(Datakeys.clientAddress),
+          dateCreated: prefs.getString(Datakeys.clientDateCreated));
         print(_client.pos);
       }
     } else {
-      if(prefs.getString('clientId') == null){
+      if(prefs.getString(Datakeys.clientId) == null){
         http.Response response = await http
           .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -198,26 +200,26 @@ class UserModel extends ConnectedModel {
         String key = responseData.keys.toList()[0];
         _vendor = Vendor(
           id: key,
-          name: responseData[key]['vendorName'],
-          phone: responseData[key]['vendorPhone'],
-          pos: responseData[key]['vendorPos'],
-          companyName: responseData[key]['companyName'],
-          companyAddress: responseData[key]['companyAddress'],
-          username: responseData[key]['vendorUsername'],
-          address: responseData[key]['vendorAddress'],
-          dateCreated: responseData[key]['vendorDateCreated']
+          name: responseData[key][Datakeys.vendorName],
+          phone: responseData[key][Datakeys.vendorPhone],
+          pos: responseData[key][Datakeys.vendorPos],
+          companyName: responseData[key][Datakeys.vendorCompanyName],
+          companyAddress: responseData[key][Datakeys.vendorCompanyAddress],
+          username: responseData[key][Datakeys.vendorUsername],
+          address: responseData[key][Datakeys.vendorAddress],
+          dateCreated: responseData[key][Datakeys.vendorDateCreated]
         );
       } else{
         _vendor = Vendor(
-          id: prefs.getString('vendorId'),
-          name: prefs.getString('vendorName'),
-          phone: prefs.getString('vendorPhone'),
-          pos: json.decode(prefs.getString('vendorPos')),
-          companyName: prefs.getString('companyName'),
-          companyAddress: prefs.getString('companyAddress'),
-          username: prefs.getString('vendorUsername'),
-          address: prefs.getString('vendorAddress'),
-          dateCreated: prefs.getString('vendorDateCreated'));
+          id: prefs.getString(Datakeys.vendorId),
+          name: prefs.getString(Datakeys.vendorName),
+          phone: prefs.getString(Datakeys.vendorPhone),
+          pos: json.decode(prefs.getString(Datakeys.vendorPos)),
+          companyName: prefs.getString(Datakeys.vendorCompanyName),
+          companyAddress: prefs.getString(Datakeys.vendorCompanyAddress),
+          username: prefs.getString(Datakeys.vendorUsername),
+          address: prefs.getString(Datakeys.vendorAddress),
+          dateCreated: prefs.getString(Datakeys.vendorDateCreated));
       }
     }
     return true;
@@ -245,24 +247,24 @@ class UserModel extends ConnectedModel {
       if (collectionName == "clients") {
         _client = Client(
             id: responseData['name'],
-            name: userData['clientName'],
+            name: userData[Datakeys.clientName],
             pos: pos,
-            phone: userData['clientPhone'],
-            username: userData['clientUsername'],
-            address: userData['clientAddress'],
-            dateCreated: userData['clientDateCreated']);
+            phone: userData[Datakeys.clientPhone],
+            username: userData[Datakeys.clientUsername],
+            address: userData[Datakeys.clientAddress],
+            dateCreated: userData[Datakeys.clientDateCreated]);
         print(json.encode(_client.toMap()));
       } else {
         _vendor = Vendor(
             id: responseData['name'],
-            name: userData['vendorName'],
+            name: userData[Datakeys.vendorName],
             pos: pos,
-            companyName: userData['vendorCompanyName'],
-            companyAddress: userData['vendorCompanyAddress'],
-            phone: userData['vendorPhone'],
-            username: userData['vendorUsername'],
-            address: userData['vendorAddress'],
-            dateCreated: userData['vendorDateCreated']);
+            companyName: userData[Datakeys.vendorCompanyName],
+            companyAddress: userData[Datakeys.vendorCompanyAddress],
+            phone: userData[Datakeys.vendorPhone],
+            username: userData[Datakeys.vendorUsername],
+            address: userData[Datakeys.vendorAddress],
+            dateCreated: userData[Datakeys.vendorDateCreated]);
       }
       userData['id'] = responseData['name'];
       await _saveUserData(userData);
@@ -289,22 +291,22 @@ class UserModel extends ConnectedModel {
       if (collectionName == "clients") {
         _client = Client(
             id: responseData['name'],
-            name: userData['clientName'],
-            phone: userData['clientPhone'],
-            username: userData['clientUsername'],
-            address: userData['clientAddress'],
-            dateCreated: userData['clientDateCreated']);
+            name: userData[Datakeys.clientName],
+            phone: userData[Datakeys.clientPhone],
+            username: userData[Datakeys.clientUsername],
+            address: userData[Datakeys.clientAddress],
+            dateCreated: userData[Datakeys.clientDateCreated]);
         print(json.encode(_client.toMap()));
       } else {
         _vendor = Vendor(
             id: responseData['name'],
-            name: userData['vendorName'],
-            companyName: userData['vendorCompanyName'],
-            companyAddress: userData['vendorCompanyAddress'],
-            phone: userData['vendorPhone'],
-            username: userData['vendorUsername'],
-            address: userData['vendorAddress'],
-            dateCreated: userData['vendorDateCreated']);
+            name: userData[Datakeys.vendorName],
+            companyName: userData[Datakeys.vendorCompanyName],
+            companyAddress: userData[Datakeys.vendorCompanyAddress],
+            phone: userData[Datakeys.vendorPhone],
+            username: userData[Datakeys.vendorUsername],
+            address: userData[Datakeys.vendorAddress],
+            dateCreated: userData[Datakeys.vendorDateCreated]);
       }
       userData['id'] = responseData['name'];
       await _saveUserData(userData);
@@ -437,8 +439,8 @@ class UserModel extends ConnectedModel {
           final Vendor product = Vendor(
             id: vendorId,
             name: vendorData['name'],
-            companyName: vendorData['companyName'],
-            companyAddress: vendorData['companyAddress'],
+            companyName: vendorData[Datakeys.vendorCompanyName],
+            companyAddress: vendorData[Datakeys.vendorCompanyAddress],
             phone: vendorData['phone'],
             username: vendorData['username'],
             address: vendorData['address'],
@@ -587,7 +589,7 @@ class OfferingModel extends ConnectedModel {
       'price': offering.price,
       'rate': offering.rate,
       // 'weight': offering.weight,
-      'clientName': offering.clientName,
+      Datakeys.clientName: offering.clientName,
       'clientLocation': offering.clientLocation,
       'userId': _authenticatedUser.id,
       'imagePath': _uploadImagePaths,
@@ -655,7 +657,7 @@ class OfferingModel extends ConnectedModel {
       'price': offering.price,
       'rate': offering.rate,
       'weight': offering.weight,
-      'clientName': offering.clientName,
+      Datakeys.clientName: offering.clientName,
       'clientLocation': offering.clientLocation,
       'userId': _authenticatedUser.id,
       'imagePath': _uploadImagePaths,
@@ -725,7 +727,7 @@ class OfferingModel extends ConnectedModel {
       'price': offering.price,
       'rate': offering.rate,
       'numberOfBins': offering.numberOfBins,
-      'clientName': offering.clientName,
+      Datakeys.clientName: offering.clientName,
       'clientLocation': offering.clientLocation,
       'userId': _authenticatedUser.id,
       'imagePath': _uploadImagePaths,
@@ -787,7 +789,7 @@ class OfferingModel extends ConnectedModel {
           price: offeringData['price'],
           rate: offeringData['imageUrl'],
           numberOfBins: offeringData['numberOfBins'],
-          clientName: offeringData['clientName'],
+          clientName: offeringData[Datakeys.clientName],
           clientLocation: offeringData['clientLocation'],
           userId: _authenticatedUser.id,
           imagePaths: offeringData['imagePaths'],
