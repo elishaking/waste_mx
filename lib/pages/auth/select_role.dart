@@ -52,7 +52,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: ListTile(
                   title: Text('Continue as User'),
-                  subtitle: Text('Request for Vendor (waste collector)'),
+                  subtitle: Text('I am a household/office I have waste to dispose/recycle/declust'),
                   // selected: _clientSelected,
                   // onTap: () {
                   //   setState(() {
@@ -75,7 +75,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: ListTile(
                   title: Text('Continue as Vendor'),
-                  subtitle: Text('Collect and recycle waste'),
+                  subtitle: Text('I am a waste collector/recycler'),
                   // selected: _vendorSelected,
                   // onTap: () {
                   //   setState(() {
