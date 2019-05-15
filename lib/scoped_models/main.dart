@@ -27,7 +27,7 @@ class ConnectedModel extends Model {
   Vendor _vendor;
   bool _isLoading = false;
   bool _gettingLocation = false;
-  String _dbUrl = 'https://waste-mx.firebaseio.com';
+  String _dbUrl = "https://waste-mx.firebaseio.com";
   int _httpTimeout = 5;
 
   ResponseInfo get authResponse{
@@ -92,7 +92,7 @@ class UserModel extends ConnectedModel {
           : DateTime.parse(expiryTimeString);
       if (parsedExpiryTime.isBefore(now)) {
         final http.Response response = await http.post(
-          'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey',
+          "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey",
           headers: {'Content-Type': 'application/json'},
           body: json.encode({'token': token, 'returnSecureToken': true}))
           .catchError((error) {
@@ -237,7 +237,7 @@ class UserModel extends ConnectedModel {
       userData[collectionName.substring(0, collectionName.length - 2) + "Pos"] = pos;
 
       final http.Response response = await http.post(
-          '$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}',
+          "$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}",
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
         toggleLoading(false);
@@ -327,7 +327,7 @@ class UserModel extends ConnectedModel {
     toggleLoading(true);
 
     final http.Response response = await http.post(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${_apiKey}',
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${_apiKey}",
         headers: {'Content-Type': 'application/json'},
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
@@ -375,7 +375,7 @@ class UserModel extends ConnectedModel {
     notifyListeners();
 
     final http.Response response = await http.post(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey',
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey",
         headers: {'Content-Type': 'application/json'},
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
@@ -523,7 +523,7 @@ class OfferingModel extends ConnectedModel {
     final imageUploadRequest = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'https://us-central1-waste-mx.cloudfunctions.net/storeImage'));
+            "https://us-central1-waste-mx.cloudfunctions.net/storeImage"));
     final file = await http.MultipartFile.fromPath('image', image.path,
         contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     imageUploadRequest.files.add(file);
@@ -550,7 +550,7 @@ class OfferingModel extends ConnectedModel {
 
   Future fetchClosestVendors() async{
     toggleLoading(true);
-    final response = await http.post('https://us-central1-waste-mx.cloudfunctions.net/fetchClosestVendors', body: json.encode({
+    final response = await http.post("https://us-central1-waste-mx.cloudfunctions.net/fetchClosestVendors", body: json.encode({
       'pos': _client.pos
     }),
     headers: {
@@ -783,7 +783,7 @@ class OfferingModel extends ConnectedModel {
       offeringsData.forEach((String offeringId, dynamic offeringData) {
         final DisposeOffering offering = DisposeOffering(
           id: offeringId,
-          name: 'House', //offeringData['title'],
+          name: "house", //offeringData['title'],
           iconUrl: 'assets/throw-to-paper-bin.png',
           imageUrls: offeringData['imageUrls'],
           price: offeringData['price'],
@@ -813,7 +813,7 @@ class TransactionModel extends ConnectedModel{
     return _wallet;
   }
 
-  String _kurepayUrl = 'https://wallet.kurepay.com/api/v2';
+  String _kurepayUrl = "https://wallet.kurepay.com/api/v2";
   void register() async{
     _isLoading = true;
     notifyListeners();
@@ -823,10 +823,10 @@ class TransactionModel extends ConnectedModel{
       "password": "123456789"
     };
     print(json.encode(data));
-    http.Response response = await http.post('$_kurepayUrl/auth/register', body: json.encode(data));
+    http.Response response = await http.post("$_kurepayUrl/auth/register", body: json.encode(data));
     print(response.body);
 
-    http.Response dbWalletResponse = await http.post('$_dbUrl/wallets/${_authenticatedUser.id}.json', 
+    http.Response dbWalletResponse = await http.post("$_dbUrl/wallets/${_authenticatedUser.id}.json", 
       body: json.encode(data));
 
     Map<String, dynamic> responseData = json.decode(dbWalletResponse.body);
