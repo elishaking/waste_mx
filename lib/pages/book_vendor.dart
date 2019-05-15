@@ -384,7 +384,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                               ? CircularProgressIndicator()
                               : RaisedButton(
                                   child: customText.BodyText(
-                                    text: 'Send Offer',
+                                    text: 'Create Offer',
                                     textColor: Colors.white,
                                   ),
                                   onPressed: () {
