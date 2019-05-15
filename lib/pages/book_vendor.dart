@@ -334,9 +334,9 @@ class _BookVendorPageState extends State<BookVendorPage> {
                             )
                           ],
                         ),
-                        onPressed: () {
-                          _editPrice(context);
-                        },
+                        // onPressed: () {
+                        //   _editPrice(context);
+                        // },
                       ),
                       SizedBox(
                         height: _fieldsGap,
