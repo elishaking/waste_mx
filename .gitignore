@@ -74,5 +74,6 @@ key.properties
 cards.dart
 
 node_modules/
+screenshots/
 
 *.zip
