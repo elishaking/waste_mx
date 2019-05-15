@@ -42,10 +42,19 @@ class _SelectRolePageState extends State<SelectRolePage> {
               SizedBox(height: getSize(context, 70),),
               Padding(
                 padding: EdgeInsets.only(bottom: 30),
-                child: customText.TitleText(
-                  text: 'How would you like to use Waste MX',
-                  textColor: Colors.black,
+                child: RichText(
                   textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.title.merge(TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w100,
+                    )),
+                    children: [
+                      TextSpan(text: 'How would you like to use '),
+                      TextSpan(text: 'WasteMX', style: TextStyle(fontWeight: FontWeight.w700))
+                    ]
+                  ),
                 ),
               ),
               OutlineButton(
