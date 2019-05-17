@@ -98,18 +98,19 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin{
 
   Scaffold _buildNoNetworkPage() {
     return Scaffold(
+      backgroundColor: Colors.green,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Image(image: AssetImage('assets/no-network.png'),),
             SizedBox(height: 20),
-            customText.HeadlineText(text: 'No Connection',textColor: Colors.black,),
+            customText.HeadlineText(text: 'No Connection',textColor: Colors.white,),
             SizedBox(height: 20),
             RaisedButton(
-              child: Text('Retry'),
+              child: customText.BodyText(text: "Retry",),
               onPressed: (){
-
+                _model.autoAuthenticate();
               },
             )
           ],
