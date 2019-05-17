@@ -29,6 +29,7 @@ dependencies:
   mime: ^0.9.6+2
   shared_preferences: ^0.5.2
   geolocator: ^4.0.0
+  firebase_auth:
 
 dev_dependencies:
   flutter_test:

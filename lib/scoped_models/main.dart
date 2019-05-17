@@ -9,6 +9,8 @@ import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 
+// import 'package:firebase_auth/firebase_auth.dart';
+
 import '../models/user.dart';
 import '../models/dispose_offering.dart';
 import '../models/recycle_offering.dart';
@@ -380,11 +382,24 @@ class UserModel extends ConnectedModel {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
 
+    // FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    //   email: email,
+    //   password: password
+    // );
+    // .catchError((e){
+    //   print(e);
+    //   // print(e['message']);
+    //   // print(json.encode(e));
+    // });
+
+    print(json.encode(user.toString()));
+
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
     String message = 'Authentication Success';
     int code = -1;
     if (responseData.containsKey('idToken')) {
+    // if(user.){
       await _saveAuthUser(responseData, userType);
       await _getUserData(); //! prevent login if data not saved locally
       success = true;

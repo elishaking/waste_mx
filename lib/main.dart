@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin{
 
   @override
   void initState() {
-    _model.autoAuthenticate();
+    // _model.autoAuthenticate();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
     _animationController.forward();
     super.initState();
@@ -59,14 +59,14 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin{
             ),
           ),
           color: Colors.green,
-          // home: WelcomePage(),
+          home: WelcomePage(),
           routes: {
-            '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
-                  builder:
-                      (BuildContext context, Widget child, MainModel model) {
-                    return _setPage(model);
-                  },
-                ),
+            // '/': (BuildContext context) => ScopedModelDescendant<MainModel>(
+            //       builder:
+            //           (BuildContext context, Widget child, MainModel model) {
+            //         return _setPage(model);
+            //       },
+            //     ),
             // '/': (BuildContext context) => BookVendorPage(),
             // 'login': (BuildContext context) => LoginPage(),
             'welcome': (BuildContext context) => WelcomePage(),
