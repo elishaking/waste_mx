@@ -132,26 +132,29 @@ class _VendorListPageState extends State<VendorListPage> {
                 ),
               ),
               title: Text(vendor.name),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _buildVendorRating(vendor.rating),
-                  // SizedBox(height: 5,),
-                  Container(
-                    margin: EdgeInsets.only(top: 7),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(100)),
-                    child: customText.BodyText(
-                      text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
-                      textColor: Colors.white,
+              subtitle: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildVendorRating(vendor.rating),
+                    // SizedBox(height: 5,),
+                    Container(
+                      margin: EdgeInsets.only(top: 7),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(100)),
+                      child: customText.BodyText(
+                        text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
+                        textColor: Colors.white,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10,),
-                  vendor.distance == null ? customText.BodyText(text: "Distance Unknown", textColor: Colors.grey,) : customText.BodyText(text: '${vendor.distance.toStringAsFixed(2)} km', textColor: Colors.green.shade700,)
-                ],
+                    SizedBox(height: 10,),
+                    vendor.distance == null ? customText.BodyText(text: "Distance Unknown", textColor: Colors.grey,) : customText.BodyText(text: '${vendor.distance.toStringAsFixed(2)} km', textColor: Colors.green.shade700,)
+                  ],
+                ),
               ),
               trailing: customText.BodyText(
                 text: vendor.verified ? 'Verified' : 'Not Verified',

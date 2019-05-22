@@ -11,7 +11,7 @@ class RatingDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color fillColor = Theme.of(context).accentColor;
     return IconTheme(
-      data: IconThemeData(color: Colors.grey, size: getSize(context, 20)),
+      data: IconThemeData(color: Colors.grey, size: getSize(context, 25)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
