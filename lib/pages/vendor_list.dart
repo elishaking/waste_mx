@@ -63,10 +63,21 @@ class _VendorListPageState extends State<VendorListPage> {
         verified: true),
   ];
 
+  List<Vendor> _closestVendors = [];
+  bool _showVendors = false;
+
   @override
   initState() {
-    widget.model.fetchClosestVendors();
-    print(widget.model.client.pos);
+    widget.model.fetchClosestVendors().then((List<Vendor> closestVendors){
+      // print(closestVendors);
+      if(closestVendors != null && closestVendors.length > 0) {
+        _closestVendors = closestVendors;
+        setState(() {
+         _showVendors = true; 
+        });
+      }
+    });
+    // print(widget.model.client.pos);
     super.initState();
   }
 
@@ -76,7 +87,8 @@ class _VendorListPageState extends State<VendorListPage> {
     );
   }
 
-  Container _buildVendorList(List<Vendor> vendors) {
+  Container _buildVendorList() {
+    List<Vendor> vendors = _closestVendors;
     return Container(
       padding: EdgeInsets.all(10),
       child: ListView.builder(
@@ -116,7 +128,7 @@ class _VendorListPageState extends State<VendorListPage> {
               leading: Hero(
                 tag: vendor.id,
                 child: CircleAvatar(
-                  backgroundImage: AssetImage(vendor.imageUrl),
+                  // backgroundImage: AssetImage(vendor.imageUrl),
                 ),
               ),
               title: Text(vendor.name),
@@ -138,7 +150,7 @@ class _VendorListPageState extends State<VendorListPage> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  customText.BodyText(text: '0 km', textColor: Colors.green.shade700,)
+                  customText.BodyText(text: '${vendor.distance.toStringAsFixed(2)} km', textColor: Colors.green.shade700,)
                 ],
               ),
               trailing: customText.BodyText(
@@ -221,17 +233,24 @@ class _VendorListPageState extends State<VendorListPage> {
       appBar: AppBar(
         title: Text('Vendor List'),
       ),
-      body: ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget child, MainModel model) {
-          return model.isLoading
+      body: !_showVendors
               ? Center(
                   child: CircularProgressIndicator(),
                 )
               // : _buildVendorList(
               //     model.vendors != null ? model.vendors : _vendors);
-              :_buildVendorList(_vendors);
-        },
-      ),
+              :_buildVendorList()
+      // ScopedModelDescendant<MainModel>(
+      //   builder: (BuildContext context, Widget child, MainModel model) {
+      //     return model.isLoading
+      //         ? Center(
+      //             child: CircularProgressIndicator(),
+      //           )
+      //         // : _buildVendorList(
+      //         //     model.vendors != null ? model.vendors : _vendors);
+      //         :_buildVendorList(_vendors);
+      //   },
+      // ),
     );
   }
 }

@@ -563,7 +563,7 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future fetchClosestVendors() async{
+  Future<List<Vendor>> fetchClosestVendors() async{
     toggleLoading(true);
     final response = await http.post("https://us-central1-waste-mx.cloudfunctions.net/fetchClosestVendors", body: json.encode({
       'pos': _client.pos
@@ -573,7 +573,34 @@ class OfferingModel extends ConnectedModel {
       'Content-Type': 'application/json'
     });
     print(response.body);
-    toggleLoading(false);
+    List<Vendor> _closestVendors = List<Vendor>();
+    Map<String, dynamic> _closestVendorsData = json.decode(response.body);
+    _closestVendorsData.forEach((String key, dynamic value){
+      print(key);
+      value.forEach((String key, dynamic value){
+        print(key);
+        value.forEach((String key, dynamic vendorData){
+          _closestVendors.add(
+            Vendor(
+              id: key,
+              name: vendorData[Datakeys.vendorName],
+              username: vendorData[Datakeys.vendorUsername],
+              phone: vendorData[Datakeys.vendorPhone],
+              address: vendorData[Datakeys.vendorAddress],
+              dateCreated: vendorData[Datakeys.vendorDateCreated],
+              pos: vendorData[Datakeys.vendorPos].map<double>((x) {return double.parse(x.toString());}).toList(),
+              verified: false,
+              rating: 0,
+              rate: 100,
+              distance: vendorData["distance"]
+            )
+          );
+        });
+      });
+    });
+    // toggleLoading(false);
+    _isLoading = false;
+    return _closestVendors;
   }
 
   //! join the 3 methods below

@@ -73,6 +73,7 @@ class Vendor {
   final int rating;
   final int rate;
   final bool verified;
+  final double distance;
 
   Vendor(
       {this.id,
@@ -87,7 +88,8 @@ class Vendor {
       this.dateCreated,
       this.rating,
       this.rate,
-      this.verified});
+      this.verified,
+      this.distance});
 
   Map<String, dynamic> toMap() {
     return {
@@ -104,6 +106,7 @@ class Vendor {
       'vendorRating': rating,
       'vendorRate': rate,
       'vendorVerified': verified,
+      'distance': distance
     };
   }
 }
