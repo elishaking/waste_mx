@@ -580,7 +580,7 @@ class OfferingModel extends ConnectedModel {
     });
     print(response.body);
     List<Vendor> _closestVendors = List<Vendor>();
-    Map<String, dynamic> _closestVendorsData = json.decode(response.body);
+    Map<String, dynamic> _closestVendorsData = {}; // json.decode(response.body);
     _closestVendorsData.forEach((String key, dynamic value){
       print(key);
       value.forEach((String key, dynamic value){

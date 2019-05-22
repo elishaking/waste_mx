@@ -128,9 +128,10 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                           _tabPos--;
                           _controllers[_tabPos - 1].forward();
                           _controllers[_tabPos].reverse();
-                        } else{
-                          Navigator.of(context).pop();
-                        }
+                        } 
+                        // else{
+                        //   Navigator.of(context).pop();
+                        // }
                       },
                     ),
                     FlatButton(

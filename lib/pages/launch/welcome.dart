@@ -13,9 +13,9 @@ class WelcomePage extends StatelessWidget {
       body: GestureDetector(
         onTap: () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
+              .pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) {
             return OnboardingPage();
-          }));
+          }), (Route route) => false);
         },
         child: Container(
           color: Theme.of(context).primaryColor,

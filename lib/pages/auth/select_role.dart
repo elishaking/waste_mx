@@ -72,10 +72,9 @@ class _SelectRolePageState extends State<SelectRolePage> {
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
                 onPressed: (){
-                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                  Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => LoginPage(UserType.Client)
                     ), 
-                    (Route route) => false
                   );
                 },
               ),
@@ -95,10 +94,9 @@ class _SelectRolePageState extends State<SelectRolePage> {
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
                 onPressed: (){
-                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                  Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => LoginPage(UserType.Vendor)
-                    ), 
-                    (Route route) => false
+                    ),
                   );
                 },
               ),
@@ -108,7 +106,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
               //     child: Text('Next'),
               //     textColor: Colors.white,
               //     onPressed: () {
-              //       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+              //       Navigator.of(context).push(MaterialPageRoute(
               //           builder: (BuildContext context) => SignUpPage(
               //               _clientSelected
               //                   ? UserType.Client
