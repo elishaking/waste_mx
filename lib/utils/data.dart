@@ -19,4 +19,7 @@ class Datakeys{
   static const String vendorAddress = "vendorAddress";
   static const String vendorDateCreated = "vendorDateCreated";
   static const String vendorPhone = "vendorPhone";
+  static const String vendorRating= "vendorRating";
+  static const String vendorRate = "vendorRate";
+  static const String vendorVerified = "vendorVerified";
 }

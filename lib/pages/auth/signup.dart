@@ -119,6 +119,9 @@ class _SignUpPageState extends State<SignUpPage> {
       phone: _formData['phone'],
       username: _formData['username'],
       address: _formData['location'],
+      rate: 100,
+      rating: 0,
+      verified: false,
       dateCreated: DateTime.now().toIso8601String()
     );
     model.signup(_formData['email'], _formData['password'], vendor: _vendor)

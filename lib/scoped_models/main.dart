@@ -209,6 +209,9 @@ class UserModel extends ConnectedModel {
           companyAddress: responseData[key][Datakeys.vendorCompanyAddress],
           username: responseData[key][Datakeys.vendorUsername],
           address: responseData[key][Datakeys.vendorAddress],
+          verified: responseData[key][Datakeys.vendorVerified],
+          rate: responseData[key][Datakeys.vendorRate],
+          rating: responseData[key][Datakeys.vendorRating],
           dateCreated: responseData[key][Datakeys.vendorDateCreated]
         );
       } else{
@@ -266,6 +269,9 @@ class UserModel extends ConnectedModel {
             phone: userData[Datakeys.vendorPhone],
             username: userData[Datakeys.vendorUsername],
             address: userData[Datakeys.vendorAddress],
+            verified: userData[Datakeys.vendorVerified],
+            rate: userData[Datakeys.vendorRating],
+            rating: userData[Datakeys.vendorRating],
             dateCreated: userData[Datakeys.vendorDateCreated]);
       }
       userData['id'] = responseData['name'];
@@ -589,9 +595,9 @@ class OfferingModel extends ConnectedModel {
               address: vendorData[Datakeys.vendorAddress],
               dateCreated: vendorData[Datakeys.vendorDateCreated],
               pos: vendorData[Datakeys.vendorPos].map<double>((x) {return double.parse(x.toString());}).toList(),
-              verified: false,
-              rating: 0,
-              rate: 100,
+              verified: vendorData[Datakeys.vendorVerified],
+              rating: vendorData[Datakeys.vendorRating],
+              rate: vendorData[Datakeys.vendorRate],
               distance: vendorData["distance"]
             )
           );
