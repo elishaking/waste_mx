@@ -864,25 +864,27 @@ class TransactionModel extends ConnectedModel{
   }
 
   String _kurepayUrl = "https://wallet.kurepay.com/api/v2";
-  void registerWallet() async{
-    toggleLoading(true);
+  Future registerWallet([bool toggle = true]) async{
+    if(toggle) toggleLoading(true);
 
     Random _random = Random.secure();
     String _password = String.fromCharCodes(List.generate(12, (index){
       return _random.nextInt(33)+89;
     }));
-    FlutterSecureStorage storage = FlutterSecureStorage();
-    await storage.write(key: "KurePayPassword", value: _password);
 
     Map<String, dynamic> data = {
       "fullname": _client.name,
-      "email": _authenticatedUser.email,
+      "email": "test1@skyblazar.com",// _authenticatedUser.email,
       "password": _password
     };
     print(json.encode(data));
 
     http.Response response = await http.post("$_kurepayUrl/auth/register", body: json.encode(data));
     print(response.body);
+
+    
+    FlutterSecureStorage storage = FlutterSecureStorage();
+    await storage.write(key: "KurePayPassword", value: _password);
 
     http.Response dbWalletResponse = await http.post("$_dbUrl/wallets/${_authenticatedUser.id}.json", 
       body: json.encode(data));
@@ -891,19 +893,22 @@ class TransactionModel extends ConnectedModel{
     _wallet = Wallet(
       id: responseData['name'],
       fullname: _client.name,
-      email: _authenticatedUser.email,
+      email: "test1@skyblazar.com",// _authenticatedUser.email,
     );
 
     toggleLoading(false);
   }
 
-  void loginWallet() async{
+  Future loginWallet() async{
     toggleLoading(true);
 
     FlutterSecureStorage storage = FlutterSecureStorage();
+    await storage.deleteAll();
     String _password = await storage.read(key: "KurePayPassword");
+    if(_password == null) return registerWallet(false);
+
     Map<String, dynamic> data = {
-      "email": _authenticatedUser.email,
+      "email": "test1@skyblazar.com",// _authenticatedUser.email,
       "password": _password
     };
 
