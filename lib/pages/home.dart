@@ -182,8 +182,8 @@ class HomePage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image(
-            width: getSize(context, 90),  //? previously 110
-            height: getSize(context, 90), //? previously 110
+            width: getSize(context, 70),  //? previously 110
+            height: getSize(context, 70), //? previously 110
             image: AssetImage(imageUrl),
           ),
           SizedBox(
@@ -192,11 +192,31 @@ class HomePage extends StatelessWidget {
           Container(
             width: getSize(context, 130),
             alignment: Alignment.center,
-            child: customText.BodyText(
-              text: title,
-              textColor: Theme.of(context).primaryColor,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
+            // child: customText.BodyText(
+            //   text: title,
+            //   textColor: Theme.of(context).primaryColor,
+            //   fontSize: 18,
+            //   fontWeight: FontWeight.w700,
+            // ),
+            child: RichText(
+              textAlign: TextAlign.center,
+
+              text: TextSpan(
+                style: Theme.of(context).textTheme.body1.merge(TextStyle(
+                  color: Theme.of(context).primaryColor
+                ),),
+                children: [
+                  TextSpan(
+                    text: title + "\n",
+                    style: Theme.of(context).textTheme.title.merge(TextStyle(
+                      color: Theme.of(context).primaryColor
+                    ))
+                  ),
+                  TextSpan(
+                    text: title == "Info" ? "Center" : "Waste"
+                  )
+                ]
+              ),
             ),
           )
         ],
@@ -217,9 +237,9 @@ class HomePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildCategoryWidget(context, 'Dispose Waste',
+              _buildCategoryWidget(context, 'Dispose',
                   'assets/recycling-bin.png', DisposeWastePage()),
-              _buildCategoryWidget(context, 'Recycle Waste',
+              _buildCategoryWidget(context, 'Recycle',
                   'assets/eco-factory.png', RecycleWastePage())
             ],
           ),
@@ -230,21 +250,23 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buildCategoryWidget(
-                  context, 'De-clustering', 'assets/target.png', DeclusterPage()),
-              _buildCategoryWidget(context, 'Sewage', 'assets/sewage.png')
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _buildCategoryWidget(context, 'Upcycling', 'assets/creative.png'),
+                  context, 'De-cluster', 'assets/target.png', DeclusterPage()),
               _buildCategoryWidget(
-                  context, 'Info Center', 'assets/analysis.png')
+                  context, 'Info', 'assets/analysis.png')
+              // _buildCategoryWidget(context, 'Sewage', 'assets/sewage.png')
             ],
           ),
+          // SizedBox(
+          //   height: 30,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   children: <Widget>[
+          //     // _buildCategoryWidget(context, 'Upcycling', 'assets/creative.png'),
+          //     _buildCategoryWidget(
+          //         context, 'Info', 'assets/analysis.png')
+          //   ],
+          // ),
         ],
       ),
     );

@@ -7,7 +7,7 @@ import '../../utils/responsive.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
-import './signup.dart';
+import './login.dart';
 
 class SelectRolePage extends StatefulWidget {
   @override
@@ -73,7 +73,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                 ),
                 onPressed: (){
                   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                      builder: (BuildContext context) => SignUpPage(UserType.Client)
+                      builder: (BuildContext context) => LoginPage(UserType.Client)
                     ), 
                     (Route route) => false
                   );
@@ -96,7 +96,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                 ),
                 onPressed: (){
                   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                      builder: (BuildContext context) => SignUpPage(UserType.Vendor)
+                      builder: (BuildContext context) => LoginPage(UserType.Vendor)
                     ), 
                     (Route route) => false
                   );
