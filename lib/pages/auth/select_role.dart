@@ -79,7 +79,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                   );
                 },
               ),
-              Divider(),
+              SizedBox(height: 20,),
               OutlineButton(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: ListTile(
