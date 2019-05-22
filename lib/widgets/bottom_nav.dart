@@ -16,8 +16,9 @@ class BottomNav extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      fixedColor: Colors.green,
       currentIndex: index,
-      // type: BottomNavigationBarType.shifting,
       onTap: (int idx){
         if(idx == index) return;
         Navigator.of(context).pushAndRemoveUntil(
@@ -30,17 +31,14 @@ class BottomNav extends StatelessWidget{
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home,),
-          backgroundColor: Colors.green,
           title: Text('Home'),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.delete,),
-          backgroundColor: Colors.green,
           title: Text('Dispose'),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.sync,),
-          backgroundColor: Colors.green,
           title: Text('Recycle'),
         ),
         BottomNavigationBarItem(
@@ -50,7 +48,6 @@ class BottomNav extends StatelessWidget{
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.info,),
-          backgroundColor: Colors.green,
           title: Text('Info'),
         ),
       ],
