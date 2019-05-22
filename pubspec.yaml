@@ -30,6 +30,7 @@ dependencies:
   shared_preferences: ^0.5.2
   geolocator: ^4.0.0
   firebase_auth:
+  flutter_secure_storage: ^3.2.1+1
 
 dev_dependencies:
   flutter_test:

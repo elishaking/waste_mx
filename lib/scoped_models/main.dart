@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'dart:math';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +9,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // import 'package:firebase_auth/firebase_auth.dart';
 
@@ -862,15 +864,23 @@ class TransactionModel extends ConnectedModel{
   }
 
   String _kurepayUrl = "https://wallet.kurepay.com/api/v2";
-  void register() async{
-    _isLoading = true;
-    notifyListeners();
+  void registerWallet() async{
+    toggleLoading(true);
+
+    Random _random = Random.secure();
+    String _password = String.fromCharCodes(List.generate(12, (index){
+      return _random.nextInt(33)+89;
+    }));
+    FlutterSecureStorage storage = FlutterSecureStorage();
+    await storage.write(key: "KurePayPassword", value: _password);
+
     Map<String, dynamic> data = {
       "fullname": _client.name,
       "email": _authenticatedUser.email,
-      "password": "123456789"
+      "password": _password
     };
     print(json.encode(data));
+
     http.Response response = await http.post("$_kurepayUrl/auth/register", body: json.encode(data));
     print(response.body);
 
@@ -882,10 +892,22 @@ class TransactionModel extends ConnectedModel{
       id: responseData['name'],
       fullname: _client.name,
       email: _authenticatedUser.email,
-      password: "123456789"
     );
 
-    _isLoading = false;
-    notifyListeners();
+    toggleLoading(false);
+  }
+
+  void loginWallet() async{
+    toggleLoading(true);
+
+    FlutterSecureStorage storage = FlutterSecureStorage();
+    String _password = await storage.read(key: "KurePayPassword");
+    Map<String, dynamic> data = {
+      "email": _authenticatedUser.email,
+      "password": _password
+    };
+
+    http.Response response = await http.post("$_kurepayUrl/auth/login", body: json.encode(data));
+    print(response.body);
   }
 }

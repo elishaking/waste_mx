@@ -28,7 +28,7 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     print(widget.model.client.name);
-    widget.model.register();
+    widget.model.registerWallet();
     super.initState();
   }
 

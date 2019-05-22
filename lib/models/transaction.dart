@@ -13,15 +13,13 @@ class Wallet{
   final String id;
   final String fullname;
   final String email;
-  final String password;
 
-  Wallet({this.id, this.fullname, this.email, this.password});
+  Wallet({this.id, this.fullname, this.email});
 
   Map<String, dynamic> toMap(){
     return {
       "fullname": fullname,
       "email": email,
-      "password": password
     };
   }
 }
