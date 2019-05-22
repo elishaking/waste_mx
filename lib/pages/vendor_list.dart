@@ -128,7 +128,7 @@ class _VendorListPageState extends State<VendorListPage> {
               leading: Hero(
                 tag: vendor.id,
                 child: CircleAvatar(
-                  backgroundImage: vendor.imageUrl == null ? null : AssetImage(vendor.imageUrl),
+                  backgroundImage: AssetImage(vendor.imageUrl == null ? 'assets/profile.png' : vendor.imageUrl),
                 ),
               ),
               title: Text(vendor.name),

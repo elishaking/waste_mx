@@ -43,7 +43,7 @@ class VendorPage extends StatelessWidget {
                 child: FadeInImage(
                   placeholder:
                       AssetImage('assets/profile.png'), //! some placeholder
-                  image: AssetImage(_vendor.imageUrl),
+                  image: AssetImage(_vendor.imageUrl == null ? 'assets/profile.png' : _vendor.imageUrl),
                   fit: BoxFit.cover,
                 ),
               ),
