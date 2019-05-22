@@ -6,50 +6,16 @@ import '../../models/offering.dart';
 // import '../widgets/bottom_navigation_bar.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/custom_text.dart' as customText;
+import '../../widgets/waste_category.dart';
 
 import '../../utils/responsive.dart';
-
-import '../select_offer_type.dart';
 
 class RecycleWastePage extends StatelessWidget {
 
   Widget _buildCategoryWidget(
       BuildContext context, String wasteType, String imageUrl,
       [dynamic route]) {
-    return RaisedButton(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-          side: BorderSide(color: Theme.of(context).primaryColor)),
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 30)),
-      child: Column(
-        children: <Widget>[
-          Image(
-            width: getSize(context, 90),
-            height: getSize(context, 90),
-            image: AssetImage(imageUrl),
-          ),
-          SizedBox(
-            height: getSize(context, 15),
-          ),
-          Container(
-            width: getSize(context, 140),
-            alignment: Alignment.center,
-            child: customText.BodyText(
-              text: wasteType,
-              textColor: Theme.of(context).primaryColor,
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-            ),
-          )
-        ],
-      ),
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => SelectOfferType(wasteType, OfferingType.recycle)));
-      },
-    );
+    return WasteCategory(imageUrl, wasteType, OfferingType.recycle);
   }
 
   Column _buildAllCategories(BuildContext context) {
