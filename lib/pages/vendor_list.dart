@@ -128,7 +128,7 @@ class _VendorListPageState extends State<VendorListPage> {
               leading: Hero(
                 tag: vendor.id,
                 child: CircleAvatar(
-                  // backgroundImage: AssetImage(vendor.imageUrl),
+                  backgroundImage: vendor.imageUrl == null ? null : AssetImage(vendor.imageUrl),
                 ),
               ),
               title: Text(vendor.name),
@@ -150,7 +150,7 @@ class _VendorListPageState extends State<VendorListPage> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  customText.BodyText(text: '${vendor.distance.toStringAsFixed(2)} km', textColor: Colors.green.shade700,)
+                  vendor.distance == null ? customText.BodyText(text: "Distance Unknown", textColor: Colors.grey,) : customText.BodyText(text: '${vendor.distance.toStringAsFixed(2)} km', textColor: Colors.green.shade700,)
                 ],
               ),
               trailing: customText.BodyText(
