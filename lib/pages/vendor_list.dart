@@ -108,101 +108,101 @@ class _VendorListPageState extends State<VendorListPage> {
 
   Card _buildVendor(BuildContext context, Vendor vendor) {
     return Card(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Hero(
-              tag: vendor.id,
-              child: CircleAvatar(
-                backgroundImage: AssetImage(vendor.imageUrl),
-              ),
-            ),
-            title: Text(
-              vendor.name,
-              style: TextStyle(fontSize: _getSize(18)),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildVendorRating(vendor.rating),
-                // SizedBox(height: 5,),
-                Container(
-                  margin: EdgeInsets.only(top: 7),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(100)),
-                  child: customText.BodyText(
-                    text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
-                    textColor: Colors.white,
-                  ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: Hero(
+                tag: vendor.id,
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(vendor.imageUrl),
                 ),
-                SizedBox(height: 10,),
-                customText.BodyText(text: '0 km', textColor: Colors.green.shade700,)
+              ),
+              title: Text(vendor.name),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildVendorRating(vendor.rating),
+                  // SizedBox(height: 5,),
+                  Container(
+                    margin: EdgeInsets.only(top: 7),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(100)),
+                    child: customText.BodyText(
+                      text: 'NGN ${vendor.rate.toString()} per ${_getUnit()}',
+                      textColor: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  customText.BodyText(text: '0 km', textColor: Colors.green.shade700,)
+                ],
+              ),
+              trailing: customText.BodyText(
+                text: vendor.verified ? 'Verified' : 'Not Verified',
+                textColor: vendor.verified ? Colors.green : Colors.red,
+              ),
+              // onTap: (){
+              //   Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (BuildContext context) => VendorPage(vendor)
+              //   ));
+              // },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                FlatButton(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.info_outline,
+                        color: Theme.of(context).primaryColor,
+                        size: _getSize(23),
+                      ),
+                      SizedBox(
+                        width: _getSize(10),
+                      ),
+                      customText.BodyText(
+                        text: 'DETAILS',
+                        textColor: Theme.of(context).primaryColor,
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => VendorPage(
+                            vendor, widget.wasteType, widget.offeringType)));
+                  },
+                ),
+                FlatButton(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.add_circle_outline,
+                        color: Theme.of(context).primaryColor,
+                        size: _getSize(23),
+                      ),
+                      SizedBox(
+                        width: _getSize(10),
+                      ),
+                      customText.BodyText(
+                        text: 'PLACE ORDER',
+                        textColor: Theme.of(context).primaryColor,
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => _getOfferingType()));
+                  },
+                ),
               ],
             ),
-            trailing: customText.BodyText(
-              text: vendor.verified ? 'Verified' : 'Not Verified',
-              textColor: vendor.verified ? Colors.green : Colors.red,
-            ),
-            // onTap: (){
-            //   Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (BuildContext context) => VendorPage(vendor)
-            //   ));
-            // },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FlatButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.info_outline,
-                      color: Theme.of(context).primaryColor,
-                      size: _getSize(23),
-                    ),
-                    SizedBox(
-                      width: _getSize(10),
-                    ),
-                    customText.BodyText(
-                      text: 'DETAILS',
-                      textColor: Theme.of(context).primaryColor,
-                    )
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => VendorPage(
-                          vendor, widget.wasteType, widget.offeringType)));
-                },
-              ),
-              FlatButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.add_circle_outline,
-                      color: Theme.of(context).primaryColor,
-                      size: _getSize(23),
-                    ),
-                    SizedBox(
-                      width: _getSize(10),
-                    ),
-                    customText.BodyText(
-                      text: 'PLACE ORDER',
-                      textColor: Theme.of(context).primaryColor,
-                    )
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => _getOfferingType()));
-                },
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
