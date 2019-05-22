@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
+import '../../utils/responsive.dart';
+
 import './onboarding.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -20,17 +22,37 @@ class WelcomePage extends StatelessWidget {
           padding: EdgeInsets.only(top: 50, bottom: 18, left: 10, right: 10),
           child: Column(
             children: <Widget>[
-              Row(
+              Row(),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18),
                     child:
-                        Image(height: 70, image: AssetImage('assets/logo.png')),
+                        Image(height: 70, image: AssetImage('assets/logo-white.png')),
                   ),
-                  customText.TitleText(
-                    text: 'Waste MX',
-                    textColor: Theme.of(context).accentColor,
+                  SizedBox(height: 10,),
+                  RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.title.merge(TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w900,
+                        // fontSize: getSize(context, 20),
+                        color: Colors.white,
+                        // letterSpacing: 2,
+                      )),
+                      children: [
+                        TextSpan(
+                          text: "Waste"
+                        ),
+                        TextSpan(
+                          text: "MX",
+                          style: TextStyle(
+                            color: Colors.amber
+                          )
+                        )
+                      ]
+                    ),
                   )
                 ],
               ),
@@ -39,7 +61,8 @@ class WelcomePage extends StatelessWidget {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.all(70),
-                      child: Image(image: AssetImage('assets/welcome-img.png')),
+                      child: Image(image: AssetImage('assets/welcome-img.png'),
+                      height: getSize(context, 230),),
                     ),
                     customText.TitleText(
                       text: 'Make money with waste',
