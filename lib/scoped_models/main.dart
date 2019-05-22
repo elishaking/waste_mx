@@ -239,7 +239,7 @@ class UserModel extends ConnectedModel {
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
       List<double> pos = [position.latitude, position.longitude];
-      userData[collectionName.substring(0, collectionName.length - 2) + "Pos"] = pos;
+      userData[collectionName.substring(0, collectionName.length - 1) + "Pos"] = pos;
 
       final http.Response response = await http.post(
           "$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}",
@@ -580,7 +580,7 @@ class OfferingModel extends ConnectedModel {
     });
     print(response.body);
     List<Vendor> _closestVendors = List<Vendor>();
-    Map<String, dynamic> _closestVendorsData = {}; // json.decode(response.body);
+    Map<String, dynamic> _closestVendorsData = json.decode(response.body);
     _closestVendorsData.forEach((String key, dynamic value){
       print(key);
       value.forEach((String key, dynamic value){
