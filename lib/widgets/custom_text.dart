@@ -91,3 +91,90 @@ class BodyText extends StatelessWidget {
     );
   }
 }
+
+class LogoTextWhite extends StatelessWidget {
+  const LogoTextWhite({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        style: Theme.of(context).textTheme.title.merge(TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w900,
+          // fontSize: getSize(context, 20),
+          color: Colors.white,
+          // letterSpacing: 2,
+        )),
+        children: [
+          TextSpan(
+            text: "Waste"
+          ),
+          TextSpan(
+            text: "MX",
+            style: TextStyle(
+              color: Colors.amber
+            )
+          )
+        ]
+      ),
+    );
+  }
+}
+
+class LogoText extends StatelessWidget {
+  const LogoText({
+    Key key,
+  }) : super(key: key);
+
+  static TextSpan textSpan(BuildContext context){
+    return TextSpan(
+      style: Theme.of(context).textTheme.title.merge(TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: FontWeight.w900,
+        // fontSize: getSize(context, 20),
+        color: Theme.of(context).primaryColor,
+        // letterSpacing: 2,
+      )),
+      children: [
+        TextSpan(
+          text: "Waste"
+        ),
+        TextSpan(
+          text: "MX",
+          style: TextStyle(
+            color: Colors.amber
+          )
+        )
+      ]
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        style: Theme.of(context).textTheme.title.merge(TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w900,
+          // fontSize: getSize(context, 20),
+          color: Colors.white,
+          // letterSpacing: 2,
+        )),
+        children: [
+          TextSpan(
+            text: "Waste"
+          ),
+          TextSpan(
+            text: "MX",
+            style: TextStyle(
+              color: Colors.amber
+            )
+          )
+        ]
+      ),
+    );
+  }
+}

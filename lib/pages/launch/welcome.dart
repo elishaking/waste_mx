@@ -32,28 +32,7 @@ class WelcomePage extends StatelessWidget {
                         Image(height: 70, image: AssetImage('assets/logo-white.png')),
                   ),
                   SizedBox(height: 10,),
-                  RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.title.merge(TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w900,
-                        // fontSize: getSize(context, 20),
-                        color: Colors.white,
-                        // letterSpacing: 2,
-                      )),
-                      children: [
-                        TextSpan(
-                          text: "Waste"
-                        ),
-                        TextSpan(
-                          text: "MX",
-                          style: TextStyle(
-                            color: Colors.amber
-                          )
-                        )
-                      ]
-                    ),
-                  )
+                  customText.LogoText()
                 ],
               ),
               Expanded(

@@ -52,7 +52,7 @@ class _SelectRolePageState extends State<SelectRolePage> {
                     )),
                     children: [
                       TextSpan(text: 'How would you like to use '),
-                      TextSpan(text: 'WasteMX', style: TextStyle(fontWeight: FontWeight.w700))
+                      customText.LogoText.textSpan(context)
                     ]
                   ),
                 ),
