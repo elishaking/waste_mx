@@ -3,9 +3,11 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../../scoped_models/main.dart';
 import '../../models/decluster_offering.dart';
+import '../../models/offering.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/waste_category.dart';
 
 import '../../utils/responsive.dart';
 
@@ -28,41 +30,7 @@ class DeclusterPage extends StatelessWidget{
   Widget _buildCategoryWidget(
       BuildContext context, MainModel model, String declusterType, String imageUrl,
       [dynamic route]) {
-    return RaisedButton(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-          side: BorderSide(color: Theme.of(context).primaryColor)),
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: getSize(context, 30), vertical: getSize(context, 30)),
-      child: Column(
-        children: <Widget>[
-          Image(
-            width: getSize(context, 90),
-            height: getSize(context, 90),
-            image: AssetImage(imageUrl),
-          ),
-          SizedBox(
-            height: getSize(context, 15),
-          ),
-          Container(
-            width: getSize(context, 130),
-            alignment: Alignment.center,
-            child: customText.BodyText(
-              text: declusterType,
-              textColor: Theme.of(context).primaryColor,
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-            ),
-          )
-        ],
-      ),
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => SubCategoryListPage(declusterType, _subCategories[declusterType])
-        ));
-      },
-    );
+    return WasteCategory(imageUrl, declusterType, OfferingType.decluster);
   }
 
   Widget _buildCategoriesSection(BuildContext context) {
