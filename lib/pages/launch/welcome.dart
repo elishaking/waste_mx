@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
                         Image(height: 70, image: AssetImage('assets/logo-white.png')),
                   ),
                   SizedBox(height: 10,),
-                  customText.LogoText()
+                  customText.LogoTextWhite()
                 ],
               ),
               Expanded(

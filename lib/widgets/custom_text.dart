@@ -160,7 +160,7 @@ class LogoText extends StatelessWidget {
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.w900,
           // fontSize: getSize(context, 20),
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
           // letterSpacing: 2,
         )),
         children: [
