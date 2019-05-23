@@ -52,7 +52,7 @@ class _WalletPageState extends State<WalletPage> {
               AnimatedOpacity(
                 opacity: _opacity,
                 duration: Duration(milliseconds: 500),
-                child: _buildWalletPageBody(context),
+                child: _buildWalletPageBody(context, model),
               ),
               AnimatedOpacity(
                 opacity: _loadingOpacity,
@@ -68,7 +68,7 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Container _buildWalletPageBody(BuildContext context) {
+  Container _buildWalletPageBody(BuildContext context, MainModel model) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
       child: Center(
@@ -79,15 +79,16 @@ class _WalletPageState extends State<WalletPage> {
               width: getSize(context, 200),
               image: AssetImage('assets/wallet-enclosed.png'),
             ),
+            SizedBox(height: getSize(context, 30),),
             customText.TitleText(
-              text: 'Waste MX Wallet Balance',
+              text: 'Wallet Balance',
               textColor: Theme.of(context).primaryColor,
             ),
             SizedBox(
               height: getSize(context, 15),
             ),
             customText.HeadlineText(
-              text: walletBalance.toString(),
+              text: model.wallet.balance.toString(),
               textColor: Colors.lightGreen,
             ),
             SizedBox(
