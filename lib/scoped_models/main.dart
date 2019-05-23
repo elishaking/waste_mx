@@ -858,6 +858,8 @@ class OfferingModel extends ConnectedModel {
 
 class TransactionModel extends ConnectedModel{
   Wallet _wallet;
+  String _authEmail = "test3@skyblazar.com";
+  String _walletToken;
 
   Wallet get wallet{
     return _wallet;
@@ -874,15 +876,22 @@ class TransactionModel extends ConnectedModel{
 
     Map<String, dynamic> data = {
       "fullname": _client.name,
-      "email": "test1@skyblazar.com",// _authenticatedUser.email,
-      "password": _password
+      "email": _authEmail, // _authenticatedUser.email,
+      "password": _password,
+      "activateEmail": 1,
+      "refId": 861699
     };
-    print(json.encode(data));
+    String dataString = jsonEncode(data);
+    print(dataString);
 
-    http.Response response = await http.post("$_kurepayUrl/auth/register", body: json.encode(data));
+    http.Response response = await http.post("$_kurepayUrl/auth/register", body: dataString,
+    headers: {
+      "Content-Type": "application/json",
+    });
     print(response.body);
 
-    
+    if(json.decode(response.body)["status"] == false) return;
+
     FlutterSecureStorage storage = FlutterSecureStorage();
     await storage.write(key: "KurePayPassword", value: _password);
 
@@ -893,7 +902,7 @@ class TransactionModel extends ConnectedModel{
     _wallet = Wallet(
       id: responseData['name'],
       fullname: _client.name,
-      email: "test1@skyblazar.com",// _authenticatedUser.email,
+      email: _authEmail,// _authenticatedUser.email,
     );
 
     toggleLoading(false);
@@ -903,16 +912,41 @@ class TransactionModel extends ConnectedModel{
     toggleLoading(true);
 
     FlutterSecureStorage storage = FlutterSecureStorage();
-    await storage.deleteAll();
     String _password = await storage.read(key: "KurePayPassword");
     if(_password == null) return registerWallet(false);
 
     Map<String, dynamic> data = {
-      "email": "test1@skyblazar.com",// _authenticatedUser.email,
+      "email": _authEmail,// _authenticatedUser.email,
       "password": _password
     };
 
-    http.Response response = await http.post("$_kurepayUrl/auth/login", body: json.encode(data));
+    http.Response response = await http.post("$_kurepayUrl/auth/login", body: json.encode(data), headers: {
+      "Content-Type": "application/json",
+    });
     print(response.body);
+    Map<String, dynamic> responseData = jsonDecode(response.body);
+    _walletToken = responseData["token"];
+    // _wallet = Wallet(
+    //   fullname: responseData["fullname"],
+    //   email: responseData["email"],
+    //   refId: responseData["refId"]
+    // );
+
+    http.Response dashboardResponse = await http.get("$_kurepayUrl/dashboard",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $_walletToken"
+    });
+    print(dashboardResponse.body);
+    Map<String, dynamic> dashboardData = jsonDecode(dashboardResponse.body)["data"];
+    _wallet = Wallet(
+      fullname: responseData["fullname"],
+      email: responseData["email"],
+      refId: responseData["refId"],
+      balance: dashboardData["balance"],
+      transactions: dashboardData["transactions"],
+      localCurrency: dashboardData["localCurrency"]
+    );
+    toggleLoading(false);
   }
 }
