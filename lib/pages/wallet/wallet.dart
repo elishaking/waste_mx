@@ -96,6 +96,7 @@ class _WalletPageState extends State<WalletPage> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 OutlineButton(
                   child: Text('View Statement'),

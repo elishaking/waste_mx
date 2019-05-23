@@ -1,8 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../../scoped_models/main.dart';
+import '../../models/wallet.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
-class CreditWalletPage extends StatelessWidget {
+class CreditWalletPage extends StatefulWidget {
+  @override
+  _CreditWalletPageState createState() => _CreditWalletPageState();
+}
+
+class _CreditWalletPageState extends State<CreditWalletPage> {
+  GlobalKey<FormState> _cardDetailsFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _amountFormKey = GlobalKey<FormState>();
+
+  Map<String, dynamic> _cardDetails = {
+    "name": "",
+    "number": "",
+    "expiryDate": "",
+    "cvv": ""
+  };
+
+  TextEditingController _expiryFieldController = TextEditingController();
+  
+  @override
+  void initState() {
+    _expiryFieldController.addListener((){
+      if(_expiryFieldController.text.length == 2){
+        // setState(() {
+        //   _expiryFieldController.
+        //  _expiryFieldController.text = _expiryFieldController.value.text + "/"; 
+        // });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,43 +44,135 @@ class CreditWalletPage extends StatelessWidget {
         title: Text('Credit Wallet'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
+            shrinkWrap: true,
+            // mainAxisSize: MainAxisSize.min,
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                'Add money to wallet',
+              customText.TitleText(
+                text: 'Card Details', textColor: Colors.black,
               ),
               SizedBox(
                 height: 15,
               ),
               Form(
+                key: _cardDetailsFormKey,
                 child: Column(
                   children: <Widget>[
                     TextFormField(
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.account_balance_wallet),
-                        labelText: 'amount',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                        labelText: "Name on Card",
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       ),
+                      validator: (String value){
+                        if(value.isEmpty) return "This field is required";
+                      },
+                      onSaved: (String value){
+                        _cardDetails["name"] = value;
+                      },
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    RaisedButton(
-                      child: customText.BodyText(
-                        text: 'Proceed',
-                        textColor: Colors.white,
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Card Number",
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      onPressed: () {},
+                      validator: (String value){
+                        if(value.isEmpty) return "This field is required";
+                        else if(int.tryParse(value) == null) return "Invalid Card Number";
+                      },
+                      keyboardType: TextInputType.number,
+                      onSaved: (String value){
+                        _cardDetails["number"] = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: TextFormField(
+                            controller: _expiryFieldController,
+                            decoration: InputDecoration(
+                              labelText: "Expiry Date",
+                              hintText: "09/19",
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            validator: (String value){
+                              if(value.isEmpty) return "This field is required";
+                              if(!value.contains("/")) return "Invalid Date";
+                              List<String> vals = value.split("/");
+                              if(int.tryParse(vals[0]) == null || int.tryParse(vals[1]) == null) return "Invalid Date";
+                            },
+                            onSaved: (String value){
+                              _cardDetails["expiry"] = value;
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 20,),
+                        Flexible(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "CVV",
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            validator: (String value){
+                              if(value.isEmpty) return "This field is required";
+                            },
+                            keyboardType: TextInputType.number,
+                            onSaved: (String value){
+                              _cardDetails["cvv"] = value;
+                            },
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),
               ),
               SizedBox(
                 height: 25,
+              ),
+              customText.TitleText(text: "Amount", textColor: Colors.black,),
+              SizedBox(
+                height: 15,
+              ),
+              Form(
+                key: _amountFormKey,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.account_balance_wallet),
+                    labelText: 'amount',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  validator: (String value){
+                    if(value.isEmpty) return "This field is required";
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Center(
+                child: RaisedButton(
+                  child: customText.BodyText(
+                    text: 'Proceed',
+                    textColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    if(_cardDetailsFormKey.currentState.validate() && _amountFormKey.currentState.validate()){
+                      _cardDetailsFormKey.currentState.save();
+                      _amountFormKey.currentState.save();
+                      
+                    }
+                  },
+                ),
               ),
               FlatButton(
                 child: Row(
@@ -66,5 +192,11 @@ class CreditWalletPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _expiryFieldController.dispose();
+    super.dispose();
   }
 }
