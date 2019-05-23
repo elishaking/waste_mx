@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../scoped_models/main.dart';
-import '../../models/wallet.dart';
+import '../../models/transaction.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
@@ -15,12 +15,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
   GlobalKey<FormState> _cardDetailsFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _amountFormKey = GlobalKey<FormState>();
 
-  Map<String, dynamic> _cardDetails = {
-    "name": "",
-    "number": "",
-    "expiryDate": "",
-    "cvv": ""
-  };
+  CardDetails _cardDetails = CardDetails();
 
   TextEditingController _expiryFieldController = TextEditingController();
   
@@ -70,7 +65,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                         if(value.isEmpty) return "This field is required";
                       },
                       onSaved: (String value){
-                        _cardDetails["name"] = value;
+                        _cardDetails.name = value;
                       },
                     ),
                     SizedBox(
@@ -87,7 +82,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                       },
                       keyboardType: TextInputType.number,
                       onSaved: (String value){
-                        _cardDetails["number"] = value;
+                        _cardDetails.number = value;
                       },
                     ),
                     SizedBox(
@@ -110,7 +105,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                               if(int.tryParse(vals[0]) == null || int.tryParse(vals[1]) == null) return "Invalid Date";
                             },
                             onSaved: (String value){
-                              _cardDetails["expiry"] = value;
+                              _cardDetails.expiryDate = value;
                             },
                           ),
                         ),
@@ -126,7 +121,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                             },
                             keyboardType: TextInputType.number,
                             onSaved: (String value){
-                              _cardDetails["cvv"] = value;
+                              _cardDetails.cvv = value;
                             },
                           ),
                         )
@@ -160,19 +155,11 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                 height: 25,
               ),
               Center(
-                child: RaisedButton(
-                  child: customText.BodyText(
-                    text: 'Proceed',
-                    textColor: Colors.white,
-                  ),
-                  onPressed: () {
-                    if(_cardDetailsFormKey.currentState.validate() && _amountFormKey.currentState.validate()){
-                      _cardDetailsFormKey.currentState.save();
-                      _amountFormKey.currentState.save();
-                      
-                    }
+                child: ScopedModelDescendant<MainModel>(
+                  builder: (BuildContext context, Widget child, MainModel model){
+                    return _buildSubmitButton(model);
                   },
-                ),
+                )
               ),
               FlatButton(
                 child: Row(
@@ -191,6 +178,23 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSubmitButton(MainModel model) {
+    return model.isLoading ? CircularProgressIndicator() : RaisedButton(
+      child: customText.BodyText(
+        text: 'Proceed',
+        textColor: Colors.white,
+      ),
+      onPressed: () {
+        model.creditWallet(100, _cardDetails);
+        // if(_cardDetailsFormKey.currentState.validate() && _amountFormKey.currentState.validate()){
+        //   _cardDetailsFormKey.currentState.save();
+        //   _amountFormKey.currentState.save();
+          
+        // }
+      },
     );
   }
 

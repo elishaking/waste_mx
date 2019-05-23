@@ -949,4 +949,30 @@ class TransactionModel extends ConnectedModel{
     );
     toggleLoading(false);
   }
+
+  Future creditWallet(double amount, CardDetails _cardDetails) async {
+    toggleLoading(true);
+    http.Response response = await http.post("https://payment.kurepay.com/api/charge-card",
+    body: jsonEncode({
+      "customerEmail": "ifeanyiosinakayah15@gmail.com",
+      "reference": "31hht23w00f2q1",
+      "number": "4242424242424242",
+      "expiry_month": "11",
+      "expiry_year": "19",
+      "cvv": "812",
+      "pin": "123",
+      "unit_cost": "1200",
+      "customerFirstName": "John",
+      "customerLastName": "Doe",
+      "phone": "+2348181818181",
+      "item": "Book Purchase",
+      "description": "Purchase for a motivational book"
+    }), //_cardDetails.toMap()
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $_walletToken"
+    });
+    print(response.body);
+    toggleLoading(false);
+  }
 }

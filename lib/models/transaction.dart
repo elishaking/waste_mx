@@ -28,3 +28,21 @@ class Wallet{
     };
   }
 }
+
+class CardDetails{
+  String name;
+  String number;
+  String expiryDate;
+  String cvv;
+
+  CardDetails({this.name, this.number, this.expiryDate, this.cvv});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "name": name,
+      "number": number,
+      "expiryDate": expiryDate,
+      "cvv": cvv
+    };
+  }
+}
