@@ -14,7 +14,7 @@ class Wallet{
   final String fullname;
   final String email;
   final String refId;
-  final double balance;
+  final int balance;
   final List transactions;
   final String localCurrency;
 

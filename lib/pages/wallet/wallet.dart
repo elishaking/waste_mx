@@ -88,11 +88,11 @@ class _WalletPageState extends State<WalletPage> {
               height: getSize(context, 15),
             ),
             customText.HeadlineText(
-              text: model.wallet.balance.toString(),
+              text: "${model.wallet.localCurrency} ${model.wallet.balance}",
               textColor: Colors.lightGreen,
             ),
             SizedBox(
-              height: getSize(context, 15),
+              height: getSize(context, 50),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -114,19 +114,17 @@ class _WalletPageState extends State<WalletPage> {
             SizedBox(
               height: getSize(context, 30),
             ),
-            RaisedButton(
+            widget.payable ? RaisedButton(
               child: customText.BodyText(
                 text: 'Make Payment',
                 textColor: Colors.white,
               ),
-              onPressed: widget.payable
-                  ? () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              WalletPayPage()));
-                    }
-                  : null,
-            )
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        WalletPayPage()));
+              }
+            ) : Container()
           ],
         ),
       ),
