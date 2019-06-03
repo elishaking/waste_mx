@@ -88,7 +88,7 @@ class _WalletPageState extends State<WalletPage> {
               height: getSize(context, 15),
             ),
             customText.HeadlineText(
-              text: "${model.wallet.localCurrency} ${model.wallet.balance}",
+              text: model.isLoading ? "0" : "${model.wallet.localCurrency} ${model.wallet.balance}",
               textColor: Colors.lightGreen,
             ),
             SizedBox(
@@ -102,6 +102,7 @@ class _WalletPageState extends State<WalletPage> {
                   child: Text('View Statement'),
                   onPressed: () {},
                 ),
+                SizedBox(width: 20,),
                 OutlineButton(
                   child: Text('Credit Wallet'),
                   onPressed: () {

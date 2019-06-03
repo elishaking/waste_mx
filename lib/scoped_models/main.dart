@@ -858,7 +858,7 @@ class OfferingModel extends ConnectedModel {
 
 class TransactionModel extends ConnectedModel{
   Wallet _wallet;
-  String _authEmail = "test3@skyblazar.com";
+  String _authEmail = "test4@skyblazar.com";
   String _walletToken;
 
   Wallet get wallet{
@@ -894,6 +894,8 @@ class TransactionModel extends ConnectedModel{
 
     FlutterSecureStorage storage = FlutterSecureStorage();
     await storage.write(key: "KurePayPassword", value: _password);
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("pbackup", _password);
 
     http.Response dbWalletResponse = await http.post("$_dbUrl/wallets/${_authenticatedUser.id}.json", 
       body: json.encode(data));
@@ -913,6 +915,7 @@ class TransactionModel extends ConnectedModel{
 
     FlutterSecureStorage storage = FlutterSecureStorage();
     String _password = await storage.read(key: "KurePayPassword");
+    print(_password);
     if(_password == null) return registerWallet(false);
 
     Map<String, dynamic> data = {
@@ -954,19 +957,19 @@ class TransactionModel extends ConnectedModel{
     toggleLoading(true);
     http.Response response = await http.post("https://payment.kurepay.com/api/charge-card",
     body: jsonEncode({
-      "customerEmail": "ifeanyiosinakayah15@gmail.com",
-      "reference": "31hht23w00f2q1",
-      "number": "4242424242424242",
+      "customerEmail": _authEmail,
+      "reference": DateTime.now().toIso8601String(),
+      "number": "50785078507850784",
       "expiry_month": "11",
       "expiry_year": "19",
-      "cvv": "812",
-      "pin": "123",
+      "cvv": "844",
+      "pin": "0000",
       "unit_cost": "1200",
-      "customerFirstName": "John",
-      "customerLastName": "Doe",
+      "customerFirstName": "King",
+      "customerLastName": "Test",
       "phone": "+2348181818181",
-      "item": "Book Purchase",
-      "description": "Purchase for a motivational book"
+      "item": "Credit Wallet",
+      "description": "Add money to KurePay wallet for WasteMX"
     }), //_cardDetails.toMap()
     headers: {
       "Content-Type": "application/json",
