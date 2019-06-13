@@ -52,13 +52,12 @@ class VendorPage extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               Container(
-                padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
-                child: Center(
-                  child: Column(
-//                      mainAxisAlignment: MainAxisAlignment.center,
+                padding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+                child: Column(
+                    //  mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           customText.BodyText(
                             text: 'Last Login: 15min',
@@ -69,20 +68,60 @@ class VendorPage extends StatelessWidget {
                                 vertical: 1, horizontal: 10),
                             margin: EdgeInsets.only(left: 20),
                             decoration: BoxDecoration(
-                                color: Colors.green,
+                                color: _vendor.verified ? Colors.green : Colors.red,
                                 borderRadius: BorderRadius.circular(100)),
                             child: customText.BodyText(
-                              text: 'Verified',
+                              text: _vendor.verified ? 'Verified' : "Not Verified",
                               textColor: Colors.white,
                             ),
                           )
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child:
-                            ratingWidget.RatingDisplay(rating: _vendor.rating),
+                      SizedBox(height: 20,),
+                      ratingWidget.RatingDisplay(rating: _vendor.rating),
+                      SizedBox(height: 20,),
+                      // Divider(),
+                      
+                      ListTile(
+                        contentPadding: EdgeInsets.all(0),
+                        title: Text("Phone"),
+                        subtitle: Text(_vendor.phone),
+                        trailing: Builder(
+                          builder: (context) {
+                            return IconButton(
+                              icon: Icon(Icons.phone),
+                              onPressed: (){
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Coming Soon"),
+                                  duration: Duration(seconds: 3),
+                                ));
+                              },
+                            );
+                          }
+                        ),
                       ),
+                      Divider(),
+                      ListTile(
+                        contentPadding: EdgeInsets.all(0),
+                        title: Text("Distance"),
+                        subtitle: Text("${_vendor.distance.toStringAsFixed(2)} km"),
+                      ),
+                      Divider(),
+                      if(_vendor.address != null && _vendor.address.length > 0)
+                        ...[
+                          ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: Text("Address"),
+                            subtitle: Text(_vendor.address),
+                          ),
+                          Divider()
+                        ],
+                      ListTile(
+                        contentPadding: EdgeInsets.all(0),
+                        title: Text("Rate"),
+                        subtitle: Text("NGN ${_vendor.rate}"),
+                      ),
+                      Divider(),
                       // Container(
                       //   child: Row(
                       //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -106,29 +145,29 @@ class VendorPage extends StatelessWidget {
                       //     ],
                       //   ),
                       // ),
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: customText.BodyText(
-                              text: "10 Wastes Collected",
-                            ),
-                          )
-                        ],
-                      )
+                      // Row(
+                      //   children: <Widget>[
+                      //     Padding(
+                      //       padding: EdgeInsets.symmetric(horizontal: 10),
+                      //       child: customText.BodyText(
+                      //         text: "10 Wastes Collected",
+                      //       ),
+                      //     )
+                      //   ],
+                      // )
                     ],
                   ),
-                ),
               )
             ]),
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(
           Icons.arrow_forward_ios,
           color: Colors.white,
         ),
+        label: Text("Proceed", style: TextStyle(color: Colors.white),),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => _getOfferingType())),
       ),

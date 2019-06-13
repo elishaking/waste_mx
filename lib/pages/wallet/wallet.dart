@@ -28,7 +28,7 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     print(widget.model.client.name);
-    widget.model.loginWallet();
+    // widget.model.loginWallet();
     super.initState();
   }
 
@@ -38,7 +38,9 @@ class _WalletPageState extends State<WalletPage> {
       appBar: AppBar(
         title: Text('Wallet'),
       ),
-      body: ScopedModelDescendant<MainModel>(
+      body: true ? Center(
+        child: Text("Wallet Temporarily Disabled"),
+      ) : ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model){
           if(model.isLoading){
             _opacity = 0;

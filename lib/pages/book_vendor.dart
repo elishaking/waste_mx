@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:waste_mx/book_vendor_image.dart';
 import '../scoped_models/main.dart';
 
 import '../models/dispose_offering.dart';
@@ -190,7 +191,11 @@ class _BookVendorPageState extends State<BookVendorPage> {
                           IconButton(
                             icon: Icon(Icons.remove_red_eye, color: Colors.white,),
                             onPressed: (){
-
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => BookVendorImagePage(_imageFiles[index])
+                                )
+                              );
                             },
                           ),
                           SizedBox(width: 10,),

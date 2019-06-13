@@ -10,13 +10,13 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(
           color: Theme.of(context).primaryColor
         ),
         elevation: 0,
         title: TextField(
-          
+          autofocus: true,
           style: TextStyle(
             fontSize: 20
           ),

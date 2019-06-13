@@ -13,7 +13,8 @@ class RatingDisplay extends StatelessWidget {
     return IconTheme(
       data: IconThemeData(color: Colors.grey, size: getSize(context, 25)),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        // mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           rating > 0
               ? Icon(Icons.star, color: fillColor)
