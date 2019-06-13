@@ -282,16 +282,23 @@ class _SignUpPageState extends State<SignUpPage> {
                                   padding: EdgeInsets.all(10),
                                     child: CircularProgressIndicator(),
                                   )
-                                : GestureDetector(
+                                : Builder(
+                                  builder: (BuildContext context) => GestureDetector(
                                     child: Icon(Icons.my_location),
                                     onTap: () {
                                       model.getLocation().then((String location){
+                                        if(location.length == 0)
+                                          Scaffold.of(context).showSnackBar(SnackBar(
+                                            content: Text("Can't obtain location at the moment"),
+                                            duration: Duration(seconds: 3)
+                                          ));
                                         setState(() {
                                           _locationFieldController.text = location;
                                         });
                                       });
                                     },
-                                  );
+                                  ),
+                                );
                             },
                           )),
                         validator: (String value) {

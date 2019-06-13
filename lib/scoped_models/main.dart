@@ -511,10 +511,10 @@ class OfferingModel extends ConnectedModel {
       }
       
       // String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&location_type=ROOFTOP&result_type=street_address&key=YOUR_API_KEY";
-      List<Placemark> placemark =  await geolocator.placemarkFromPosition(position)
-          .catchError((error){
-            print(error);
-          });
+      List<Placemark> placemark =  await geolocator.placemarkFromPosition(position);
+          // .catchError((error){
+          //   print(error);
+          // });
           // .timeout(Duration(seconds: 5), onTimeout: (){
           //   print('get location placement timeout');
           // });
