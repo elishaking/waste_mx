@@ -1,4 +1,4 @@
-package com.example.waste_mx;
+package skyblazar.com.waste_mx;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
