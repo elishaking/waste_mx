@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:async';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:waste_mx/book_vendor_image.dart';
 import '../../scoped_models/main.dart';
 
 import '../../models/recycle_offering.dart';
@@ -56,12 +58,21 @@ class _BookVendorPageState extends State<BookRecyclerPage> {
     super.initState();
   }
 
+  //! merge into one widget <--> book_vendor
   void _getImage(BuildContext context, ImageSource source) {
     ImagePicker.pickImage(source: source, maxWidth: 400).then((File image) {
       setState(() {
         _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
+
+      Timer(Duration(milliseconds: 500), () {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: new Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      });
     });
   }
 
@@ -104,6 +115,87 @@ class _BookVendorPageState extends State<BookRecyclerPage> {
         });
   }
 
+    Column _buildImages(double _fieldsGap, BuildContext context) {
+    return Column(
+      children: List.generate(
+        _imageFiles.length,
+        (int index) => Dismissible(
+          key: UniqueKey(),
+          onDismissed: (dir) {
+            setState(() {
+              _imageFiles.removeAt(index);
+            });
+          },
+          child: Container(
+            margin:
+                EdgeInsets.only(bottom: _fieldsGap),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  spreadRadius: 5
+                )
+              ]
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Stack(
+                children: <Widget>[
+                  Image.file(
+                    _imageFiles[index],
+                    fit: BoxFit.cover,
+                    height: 300,
+                    width: MediaQuery.of(context)
+                        .size
+                        .width,
+                    alignment: Alignment
+                        .topCenter, //! can change to center
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10)
+                        )
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.remove_red_eye, color: Colors.white,),
+                            onPressed: (){
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => BookVendorImagePage(_imageFiles[index])
+                                )
+                              );
+                            },
+                          ),
+                          SizedBox(width: 10,),
+                          IconButton(
+                            icon: Icon(Icons.delete_forever, color: Colors.white,),
+                            onPressed: (){
+                              setState(() {
+                                _imageFiles.removeAt(index);
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )),
+    );
+  }
+  
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -274,35 +366,7 @@ class _BookVendorPageState extends State<BookRecyclerPage> {
                       ),
                       _imageFiles.length == 0
                           ? Text('No Image(s)')
-                          : Column(
-                              children: List.generate(
-                                  _imageFiles.length,
-                                  (int index) => Container(
-                                        // decoration: BoxDecoration(
-                                        //   boxShadow: [BoxShadow()]
-                                        // ),
-                                        margin:
-                                            EdgeInsets.only(bottom: _fieldsGap),
-                                        child: Dismissible(
-                                          key: UniqueKey(),
-                                          onDismissed: (dir) {
-                                            setState(() {
-                                              _imageFiles.removeAt(index);
-                                            });
-                                          },
-                                          child: Image.file(
-                                            _imageFiles[index],
-                                            fit: BoxFit.cover,
-                                            height: 300,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            alignment: Alignment
-                                                .topCenter, //! can change to center
-                                          ),
-                                        ),
-                                      )),
-                            ),
+                          : _buildImages(_fieldsGap, context),
                       SizedBox(
                         height: _fieldsGap,
                       ),

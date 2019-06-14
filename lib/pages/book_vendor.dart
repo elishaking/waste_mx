@@ -7,8 +7,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/book_vendor_image.dart';
 import '../scoped_models/main.dart';
 
-import '../models/dispose_offering.dart';
-
 import '../widgets/custom_text.dart' as customText;
 
 import '../utils/responsive.dart';
@@ -64,6 +62,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
     super.initState();
   }
 
+  //! merge into one widget <--> book_recycler
   void _setImage(File image) {
     _formData['image'] = image;
   }
@@ -74,6 +73,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
         _imageFiles.insert(0, image);
       });
       Navigator.pop(context);
+
       Timer(Duration(milliseconds: 500), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
