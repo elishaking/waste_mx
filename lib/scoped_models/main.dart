@@ -22,7 +22,13 @@ import '../models/transaction.dart';
 
 import '../utils/data.dart';
 
-class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel {}
+class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel, PaymentModel {
+  static MainModel mainModel;
+  MainModel(){
+    if(mainModel == null)
+      mainModel = this;
+  }
+}
 
 class ConnectedModel extends Model {
   User _authenticatedUser;
@@ -79,6 +85,7 @@ class UserModel extends ConnectedModel {
         : UserType.Vendor;
   }
 
+  /// Automatically authenticates user
   void autoAuthenticate() async {
     _isLoading = true;
     notifyListeners();
@@ -344,6 +351,11 @@ class UserModel extends ConnectedModel {
 
     // _isLoading = false;
     // notifyListeners();
+    final bool paystackCustomerCreated = await MainModel.mainModel.createPaystackCustomer();
+    if(!paystackCustomerCreated){
+      toggleLoading(false);
+      return {'success': false, 'message': "Something wrong happened, Please try again"};
+    }
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
@@ -380,6 +392,7 @@ class UserModel extends ConnectedModel {
     return {'success': success, 'message': message};
   }
 
+  /// Log user in
   Future<Map<String, dynamic>> login(String email, String password, UserType userType) async {
     _isLoading = true;
     notifyListeners();
@@ -389,6 +402,8 @@ class UserModel extends ConnectedModel {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
+
+    
 
     // FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
     //   email: email,
@@ -482,6 +497,31 @@ class UserModel extends ConnectedModel {
       _isLoading = false;
       notifyListeners();
     });
+  }
+}
+
+class PaymentModel extends ConnectedModel{
+  String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
+  String _url = "https://api.paystack.co/";
+
+
+  /// create new paystack customer
+  Future<bool> createPaystackCustomer() async{
+    http.Response response = await http.post(
+      "$_url/customer",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        "Content-Type": "application/json"
+      },
+      body: {
+        "data": {
+          "email": _authenticatedUser.email, 
+          "first_name": _client.name ?? _vendor.name
+        }
+      }
+    );
+
+    return jsonDecode(response.body)["status"] == true;
   }
 }
 
