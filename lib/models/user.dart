@@ -37,15 +37,18 @@ class Client {
   final String username;
   final String address;
   final String dateCreated;
+  String subAccountCode;
 
-  Client(
-      {this.id,
-      this.name,
-      this.phone,
-      this.pos,
-      this.username,
-      this.address,
-      this.dateCreated});
+  Client({
+    this.id,
+    this.name,
+    this.phone,
+    this.pos,
+    this.username,
+    this.address,
+    this.dateCreated,
+    this.subAccountCode
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -55,6 +58,7 @@ class Client {
       'clientUsername': username,
       'clientAddress': address,
       'clientDateCreated': dateCreated,
+      'clientSubAccountCode': subAccountCode
     };
   }
 }
@@ -74,22 +78,25 @@ class Vendor {
   final int rate;
   final bool verified;
   final double distance;
+  String subAccountCode;
 
-  Vendor(
-      {this.id,
-      this.name,
-      this.imageUrl,
-      this.pos,
-      this.companyName,
-      this.companyAddress,
-      this.phone,
-      this.username,
-      this.address,
-      this.dateCreated,
-      this.rating,
-      this.rate,
-      this.verified,
-      this.distance});
+  Vendor({
+    this.id,
+    this.name,
+    this.imageUrl,
+    this.pos,
+    this.companyName,
+    this.companyAddress,
+    this.phone,
+    this.username,
+    this.address,
+    this.dateCreated,
+    this.rating,
+    this.rate,
+    this.verified,
+    this.distance,
+    this.subAccountCode
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -106,7 +113,8 @@ class Vendor {
       'vendorRating': rating,
       'vendorRate': rate,
       'vendorVerified': verified,
-      'distance': distance
+      'distance': distance,
+      'vendorSubAccountCode': subAccountCode
     };
   }
 }
