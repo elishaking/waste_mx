@@ -69,4 +69,14 @@ class PaystackSubAccount{
       "primary_contact_phone": this.primaryContactPhone
     };
   }
+
+  PaystackSubAccount.fromMap(Map<String, dynamic> data){
+    businessName = data["business_name"];
+    settlementBank = data["settlement_bank"];
+    accountNumber = data["account_number"];
+    percentageCharge = data["percentage_charge"];
+    primaryContactEmail = data["primary_contact_email"];
+    primaryContactName = data["primary_contact_name"];
+    primaryContactPhone = data["primary_contact_phone"];
+  }
 }

@@ -504,6 +504,7 @@ class PaymentModel extends ConnectedModel{
   String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
   String _url = "https://api.paystack.co/";
 
+  PaystackSubAccount _paystackSubAccount;
 
   /// create new paystack customer
   Future<bool> createPaystackCustomer() async{
@@ -566,6 +567,25 @@ class PaymentModel extends ConnectedModel{
         "Content-Type": "application/json"
       },
       body: jsonEncode(paystackSubAccount.toMap())
+    );
+
+    toggleLoading(false);
+
+    Map<String, dynamic> subAccountData =  jsonDecode(response.body);
+
+    return subAccountData["status"];
+  }
+
+  /// fetch paystack sub-account
+  Future<bool> fetchPaystackSubAccount() async{
+    toggleLoading(true);
+
+    http.Response response = await http.get(
+      "$_url/subaccount/${_client == null ? _client.subAccountCode : _vendor.subAccountCode}",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        // "Content-Type": "application/json"
+      }
     );
 
     toggleLoading(false);
