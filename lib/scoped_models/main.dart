@@ -503,6 +503,7 @@ class UserModel extends ConnectedModel {
 class PaymentModel extends ConnectedModel{
   String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
   String _url = "https://api.paystack.co/";
+  String _transactionAuthorizationUrl;
 
   PaystackSubAccount _paystackSubAccount;
 
@@ -591,8 +592,38 @@ class PaymentModel extends ConnectedModel{
     toggleLoading(false);
 
     Map<String, dynamic> subAccountData =  jsonDecode(response.body);
+    _paystackSubAccount = PaystackSubAccount.fromMap(subAccountData);
 
     return subAccountData["status"];
+  }
+
+  //? TRANSACTIONS
+
+  /// intialiaze transaction with paystack
+  Future<String> initializePaystackTransaction(double amount) async{
+    toggleLoading(true);
+
+    http.Response response = await http.post(
+      "$_url/transaction/initialize",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode({
+        "amount": amount,
+        "email": _authenticatedUser.email
+      })
+    );
+
+    toggleLoading(false);
+
+    Map<String, dynamic> transactionData =  jsonDecode(response.body);
+
+    if(transactionData["status"] == true){
+      _transactionAuthorizationUrl = transactionData["data"]["authorization_url"];
+    }
+
+    return transactionData["status"];
   }
 }
 
