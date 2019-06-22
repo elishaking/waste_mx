@@ -46,3 +46,27 @@ class CardDetails{
     };
   }
 }
+
+class PaystackSubAccount{
+  String businessName;
+  String settlementBank;
+  String accountNumber;
+  double percentageCharge;
+  String primaryContactEmail;
+  String primaryContactName;
+  String primaryContactPhone;
+
+  PaystackSubAccount({this.businessName, this.settlementBank, this.accountNumber, this.percentageCharge, this.primaryContactEmail, this.primaryContactName, this.primaryContactPhone});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "business_name": this.businessName,
+      "settlement_bank": this.settlementBank,
+      "account_number": this.accountNumber,
+      "percentage_charge": this.percentageCharge,
+      "primary_contact_email": this.primaryContactEmail,
+      "primary_contact_name": this.primaryContactName,
+      "primary_contact_phone": this.primaryContactPhone
+    };
+  }
+}

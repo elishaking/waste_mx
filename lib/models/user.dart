@@ -30,13 +30,13 @@ class User {
 }
 
 class Client {
-  final String id;
-  final String name;
-  final String phone;
-  final List<double> pos;
-  final String username;
-  final String address;
-  final String dateCreated;
+  String id;
+  String name;
+  String phone;
+  List<double> pos;
+  String username;
+  String address;
+  String dateCreated;
   String subAccountCode;
 
   Client({
@@ -49,6 +49,14 @@ class Client {
     this.dateCreated,
     this.subAccountCode
   });
+
+  void update({String name, String phone, List<double> pos, String username, String address}){
+    this.name = name ?? this.name;
+    this.phone = phone ?? this.phone;
+    this.pos = pos ?? this.pos;
+    this.username = username ?? this.username;
+    this.address = address ?? this.address;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -64,20 +72,20 @@ class Client {
 }
 
 class Vendor {
-  final String id;
-  final String name;
-  final String imageUrl;
-  final List<double> pos;
-  final String companyName;
-  final String companyAddress;
-  final String phone;
-  final String username;
-  final String address;
-  final String dateCreated;
-  final int rating;
-  final int rate;
-  final bool verified;
-  final double distance;
+  String id;
+  String name;
+  String imageUrl;
+  List<double> pos;
+  String companyName;
+  String companyAddress;
+  String phone;
+  String username;
+  String address;
+  String dateCreated;
+  int rating;
+  int rate;
+  bool verified;
+  double distance;
   String subAccountCode;
 
   Vendor({
@@ -97,6 +105,19 @@ class Vendor {
     this.distance,
     this.subAccountCode
   });
+
+  void update({String name, String phone, List<double> pos, String username, String address, String companyName, String companyAddress, int rating, int rate, double distance}){
+    this.name = name ?? this.name;
+    this.phone = phone ?? this.phone;
+    this.pos = pos ?? this.pos;
+    this.username = username ?? this.username;
+    this.address = address ?? this.address;
+    this.companyName = companyName ?? this.companyName;
+    this.companyAddress = companyAddress ?? this.companyAddress;
+    this.rating = rating ?? this.rating;
+    this.rate = rate ?? this.rate;
+    this.distance = distance ?? this.distance;
+  }
 
   Map<String, dynamic> toMap() {
     return {

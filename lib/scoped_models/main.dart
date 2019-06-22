@@ -522,22 +522,24 @@ class PaymentModel extends ConnectedModel{
     return jsonDecode(response.body)["status"];
   }
 
+  //? SUB-ACCOUNTS
+
   /// create new paystack sub-account
   Future<bool> createPaystackSubAccount(String accountNumber, String bankName) async{
     toggleLoading(true);
 
     http.Response response = await http.post(
-      "$_url/customer",
+      "$_url/subaccount",
       headers: {
         "Authorization": "Bearer $_paystackKey",
         "Content-Type": "application/json"
       },
-      body: {
+      body: jsonEncode({
         "business_name": _client == null ? _vendor.companyName : "${_client.name} Waste MX", 
         "settlement_bank": accountNumber, 
         "account_number": bankName, 
         "percentage_charge": 3
-      }
+      })
     );
 
     toggleLoading(false);
@@ -549,6 +551,26 @@ class PaymentModel extends ConnectedModel{
       else
         _vendor.subAccountCode = subAccountData["data"]["subaccount_code"];
     }
+
+    return subAccountData["status"];
+  }
+
+  /// update paystack sub-account
+  Future<bool> updatePaystackSubAccount(PaystackSubAccount paystackSubAccount) async{
+    toggleLoading(true);
+
+    http.Response response = await http.post(
+      "$_url/subaccount/${_client == null ? _client.subAccountCode : _vendor.subAccountCode}",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(paystackSubAccount.toMap())
+    );
+
+    toggleLoading(false);
+
+    Map<String, dynamic> subAccountData =  jsonDecode(response.body);
 
     return subAccountData["status"];
   }
