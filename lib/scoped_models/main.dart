@@ -22,7 +22,7 @@ import '../models/transaction.dart';
 
 import '../utils/data.dart';
 
-class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel, PaymentModel {
+class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, PaymentModel {
   static MainModel mainModel;
   MainModel(){
     if(mainModel == null)
@@ -524,6 +524,25 @@ class PaymentModel extends ConnectedModel{
     return jsonDecode(response.body)["status"];
   }
 
+  /// fetch paystack customer
+  Future<bool> fetchPaystackCustomer() async{
+    http.Response response = await http.get(
+      "$_url/customer/${_authenticatedUser.email}",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        // "Content-Type": "application/json"
+      },
+    );
+
+    print(response.body);
+    Map<String, dynamic> customerData = jsonDecode(response.body);
+    if(customerData["status"]){
+      // todo: sum up all transactions to get wallet total
+    }
+
+    return customerData["status"];
+  }
+
   //? SUB-ACCOUNTS
 
   /// create new paystack sub-account
@@ -998,6 +1017,7 @@ class OfferingModel extends ConnectedModel {
   //? make sure to add ?auth=<idToken> in the urls
 }
 
+/*
 class TransactionModel extends ConnectedModel{
   Wallet _wallet;
   String _authEmail = "test4@skyblazar.com";
@@ -1121,3 +1141,4 @@ class TransactionModel extends ConnectedModel{
     toggleLoading(false);
   }
 }
+*/

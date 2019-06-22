@@ -38,7 +38,7 @@ class _WalletPageState extends State<WalletPage> {
       appBar: AppBar(
         title: Text('Wallet'),
       ),
-      body: true ? Center(
+      body: false ? Center(
         child: Text("Wallet Temporarily Disabled"),
       ) : ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model){
