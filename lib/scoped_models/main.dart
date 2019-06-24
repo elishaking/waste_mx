@@ -503,6 +503,7 @@ class UserModel extends ConnectedModel {
 class PaymentModel extends ConnectedModel{
   String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
   String _url = "https://api.paystack.co/";
+  List _customertransactions = new List();
   String _transactionAuthorizationUrl;
 
   PaystackSubAccount _paystackSubAccount;
@@ -521,7 +522,12 @@ class PaymentModel extends ConnectedModel{
       }
     );
 
-    return jsonDecode(response.body)["status"];
+    Map<String, dynamic> customerData = jsonDecode(response.body);
+    if(customerData["status"]){
+      _customertransactions = customerData["data"]["transactions"];
+    }
+
+    return customerData["status"];
   }
 
   /// fetch paystack customer

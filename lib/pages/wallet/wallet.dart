@@ -29,6 +29,8 @@ class _WalletPageState extends State<WalletPage> {
   void initState() {
     print(widget.model.client.name);
     // widget.model.loginWallet();
+    widget.model.createPaystackCustomer();
+    
     super.initState();
   }
 
@@ -90,7 +92,7 @@ class _WalletPageState extends State<WalletPage> {
               height: getSize(context, 15),
             ),
             customText.HeadlineText(
-              text: model.isLoading ? "0" : "${model.wallet.localCurrency} ${model.wallet.balance}",
+              text: model.isLoading ? "0" : "0.0",//"${model.wallet.localCurrency} ${model.wallet.balance}",
               textColor: Colors.lightGreen,
             ),
             SizedBox(
