@@ -295,14 +295,15 @@ class UserModel extends ConnectedModel {
   }
 
   Future<bool> updateUser(String collectionName, {Client client, Vendor vendor}) async{
+    toggleLoading(true);
+    
     try {
       final http.Response response = await http.put(
           "$_dbUrl/$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
           body: json.encode(vendor == null ? client.toMap() : vendor.toMap()));
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        _isLoading = false;
-        notifyListeners();
+        toggleLoading(false);
         return false;
       }
       // final Map<String, dynamic> responseData = json.decode(response.body);
