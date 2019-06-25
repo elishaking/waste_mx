@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/pages/home.dart';
+import 'package:waste_mx/pages/wallet/wallet.dart';
 import 'package:waste_mx/scoped_models/main.dart';
 import 'package:waste_mx/widgets/custom_text.dart';
 
@@ -44,16 +47,25 @@ class _VerifyPaymentPageState extends State<VerifyPaymentPage> {
       body: ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model){
           return model.isLoading ? Center(child: CircularProgressIndicator(),) 
-            : Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  //todo: add successful/failed image graphic
-                  HeadlineText(text: "${_verificationMessage ?? "Verification Unsuccessful"}", textColor: Theme.of(context).primaryColor,
-                  textAlign: TextAlign.center,)
-                ],
-              ),
-            );
+            : (){
+              if(model.transactionSuccess){
+                Timer(Duration(seconds: 3), (){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) => WalletPage(model, true)
+                  ));
+                });
+              }
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    //todo: add successful/failed image graphic
+                    HeadlineText(text: "${_verificationMessage ?? "Verification Unsuccessful"}", textColor: Theme.of(context).primaryColor,
+                    textAlign: TextAlign.center,)
+                  ],
+                ),
+              );
+            }();
         },
       ),
     );

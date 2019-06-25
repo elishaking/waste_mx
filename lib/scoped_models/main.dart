@@ -475,6 +475,9 @@ class PaymentModel extends ConnectedModel{
   String _url = "https://api.paystack.co/";
   String _transactionAuthorizationUrl;
   String _transactionReference;
+  bool _transactionSuccess = false;
+
+  double _walletBalance;
 
   PaystackSubAccount _paystackSubAccount;
 
@@ -482,8 +485,18 @@ class PaymentModel extends ConnectedModel{
     return _transactionAuthorizationUrl;
   }
 
+  double get walletBalance{
+    return _walletBalance;
+  }
+
+  bool get transactionSuccess{
+    return _transactionSuccess;
+  }
+
   /// create new paystack customer
   Future<bool> createPaystackCustomer() async{
+    toggleLoading(true);
+
     http.Response response = await http.post(
       "$_url/customer",
       headers: {
@@ -500,9 +513,10 @@ class PaymentModel extends ConnectedModel{
 
     Map<String, dynamic> customerData = jsonDecode(response.body);
     if(customerData["status"]){
-
+      _walletBalance = await fetchWalletBalance();
     }
 
+    toggleLoading(false);
     return customerData["status"];
   }
 
@@ -641,14 +655,24 @@ class PaymentModel extends ConnectedModel{
       },
     );
 
-    toggleLoading(false);
-
     print(response.body);
     Map<String, dynamic> transactionData =  jsonDecode(response.body);
 
+    bool walletUpdated = false;
+
     if(transactionData["status"] == true){
-      print(transactionData["data"]["gateway_response"]);
+      print(transactionData["data"]["status"]);
+      if(transactionData["data"]["status"] == "success"){
+        _transactionSuccess = true;
+        //! make sure that this process completes: very crucial
+        //todo: make sure that this process completes: very crucial
+        walletUpdated = await storeWalletBalance(transactionData["data"]["amount"].toDouble());
+      } else{
+        _transactionSuccess = false;
+      }
     }
+
+    toggleLoading(false);
 
     return transactionData["data"]["gateway_response"];
   }
