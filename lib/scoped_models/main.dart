@@ -294,46 +294,27 @@ class UserModel extends ConnectedModel {
     }
   }
 
-  Future<bool> updateUser(Map<String, dynamic> userData, String collectionName) async{
+  Future<bool> updateUser(String collectionName, {Client client, Vendor vendor}) async{
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await http.put(
           "$_dbUrl/$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
-          body: json.encode(userData));
+          body: json.encode(vendor == null ? client.toMap() : vendor.toMap()));
+
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
         notifyListeners();
         return false;
       }
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      if (collectionName == "clients") {
-        _client = Client(
-            id: responseData['name'],
-            name: userData[Datakeys.clientName],
-            phone: userData[Datakeys.clientPhone],
-            username: userData[Datakeys.clientUsername],
-            address: userData[Datakeys.clientAddress],
-            dateCreated: userData[Datakeys.clientDateCreated]);
-        print(json.encode(_client.toMap()));
-      } else {
-        _vendor = Vendor(
-            id: responseData['name'],
-            name: userData[Datakeys.vendorName],
-            companyName: userData[Datakeys.vendorCompanyName],
-            companyAddress: userData[Datakeys.vendorCompanyAddress],
-            phone: userData[Datakeys.vendorPhone],
-            username: userData[Datakeys.vendorUsername],
-            address: userData[Datakeys.vendorAddress],
-            dateCreated: userData[Datakeys.vendorDateCreated]);
-      }
-      userData['id'] = responseData['name'];
-      await _saveUserData(userData);
-      _isLoading = false;
-      notifyListeners();
+      // final Map<String, dynamic> responseData = json.decode(response.body);
+      // userData['id'] = responseData['name'];
+      await _saveUserData(vendor == null ? client.toMap() : vendor.toMap());
+      
+      toggleLoading(false);
       return true;
     } catch (error) {
-      _isLoading = false;
-      notifyListeners();
       print(error);
+
+      toggleLoading(false);
       return false;
     }
   }
@@ -503,16 +484,10 @@ class UserModel extends ConnectedModel {
 class PaymentModel extends ConnectedModel{
   String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
   String _url = "https://api.paystack.co/";
-  List _customertransactions = new List();
-  double _walletBalance = 0.0;
   String _transactionAuthorizationUrl;
   String _transactionReference;
 
   PaystackSubAccount _paystackSubAccount;
-
-  double get walletBalance{
-    return _walletBalance;
-  }
 
   String get transactionAuthorizationUrl{
     return _transactionAuthorizationUrl;
@@ -532,14 +507,11 @@ class PaymentModel extends ConnectedModel{
       })
     );
 
+    print(response.body);
+
     Map<String, dynamic> customerData = jsonDecode(response.body);
     if(customerData["status"]){
-      _customertransactions = customerData["data"]["transactions"];
-      if(_customertransactions != null && _customertransactions.length > 0){
-        _customertransactions.forEach((dynamic transaction) {
-          _walletBalance += 1;
-        });
-      }
+
     }
 
     return customerData["status"];

@@ -39,16 +39,8 @@ class Client {
   String dateCreated;
   String subAccountCode;
 
-  Client({
-    this.id,
-    this.name,
-    this.phone,
-    this.pos,
-    this.username,
-    this.address,
-    this.dateCreated,
-    this.subAccountCode
-  });
+  Client({this.id, this.name, this.phone, this.pos, this.username, this.address,
+    this.dateCreated, this.subAccountCode});
 
   void update({String name, String phone, List<double> pos, String username, String address}){
     this.name = name ?? this.name;
@@ -88,23 +80,9 @@ class Vendor {
   double distance;
   String subAccountCode;
 
-  Vendor({
-    this.id,
-    this.name,
-    this.imageUrl,
-    this.pos,
-    this.companyName,
-    this.companyAddress,
-    this.phone,
-    this.username,
-    this.address,
-    this.dateCreated,
-    this.rating,
-    this.rate,
-    this.verified,
-    this.distance,
-    this.subAccountCode
-  });
+  Vendor({this.id, this.name, this.imageUrl, this.pos, this.companyName, this.companyAddress, this.phone,
+    this.username, this.address, this.dateCreated, this.rating, this.rate, this.verified, this.distance,
+    this.subAccountCode});
 
   void update({String name, String phone, List<double> pos, String username, String address, String companyName, String companyAddress, int rating, int rate, double distance}){
     this.name = name ?? this.name;
