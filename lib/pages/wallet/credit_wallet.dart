@@ -91,16 +91,19 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                       Icon(Icons.arrow_forward_ios, size: 17, color: Colors.white,)
                     ],),
                     onPressed: (){
-                      model.initializePaystackTransaction(_amount).then((bool initSuccess){
-                        if(initSuccess){
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => CardDetailsPage(model.transactionAuthorizationUrl)
-                          ));
-                        } else{
-                          print("error init");
-                          // todo: display snackbar
-                        }
-                      });
+                      if(_formKey.currentState.validate()){
+                        _formKey.currentState.save();
+                        model.initializePaystackTransaction(_amount).then((bool initSuccess){
+                          if(initSuccess){
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => CardDetailsPage(model.transactionAuthorizationUrl)
+                            ));
+                          } else{
+                            print("error init");
+                            // todo: display snackbar
+                          }
+                        });
+                      }
                     },
                   );
                 },

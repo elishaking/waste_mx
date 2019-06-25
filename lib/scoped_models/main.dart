@@ -642,6 +642,8 @@ class PaymentModel extends ConnectedModel{
   Future<bool> initializePaystackTransaction(double amount) async{
     toggleLoading(true);
 
+    print(amount);
+
     http.Response response = await http.post(
       "$_url/transaction/initialize",
       headers: {
@@ -656,6 +658,7 @@ class PaymentModel extends ConnectedModel{
 
     toggleLoading(false);
 
+    print(response.body);
     Map<String, dynamic> transactionData =  jsonDecode(response.body);
 
     if(transactionData["status"] == true){
