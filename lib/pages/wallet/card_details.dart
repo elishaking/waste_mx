@@ -54,9 +54,9 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                   label: Text("Proceed"),
                   icon: Icon(Icons.arrow_forward_ios),
                   onPressed: (){
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (BuildContext context) => VerifyPaymentPage(model)
-                    ), (Route route) => false);
+                    ));
                   },
                 );
               },

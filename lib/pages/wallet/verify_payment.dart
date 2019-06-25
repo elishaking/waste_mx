@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:waste_mx/pages/home.dart';
 import 'package:waste_mx/scoped_models/main.dart';
+import 'package:waste_mx/widgets/custom_text.dart';
 
 class VerifyPaymentPage extends StatefulWidget {
   final MainModel model;
@@ -28,6 +30,16 @@ class _VerifyPaymentPageState extends State<VerifyPaymentPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Payment Status"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.home),
+            onPressed: (){
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                builder: (BuildContext context) => HomePage()
+              ), (Route route) => false);
+            },
+          )
+        ],
       ),
       body: ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model){
@@ -37,7 +49,8 @@ class _VerifyPaymentPageState extends State<VerifyPaymentPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   //todo: add successful/failed image graphic
-                  Text("$_verificationMessage")
+                  HeadlineText(text: "${_verificationMessage ?? "Verification Unsuccessful"}", textColor: Theme.of(context).primaryColor,
+                  textAlign: TextAlign.center,)
                 ],
               ),
             );

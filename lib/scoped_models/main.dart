@@ -689,7 +689,7 @@ class PaymentModel extends ConnectedModel{
       print(transactionData["data"]["gateway_response"]);
     }
 
-    return transactionData["message"];
+    return transactionData["data"]["gateway_response"];
   }
 
   Future creditMXWallet(double amount, details) async{
