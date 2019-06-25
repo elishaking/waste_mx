@@ -205,7 +205,7 @@ class UserModel extends ConnectedModel {
     } else {
       if(prefs.getString(Datakeys.clientId) == null){
         http.Response response = await http
-          .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+          .get('$_dbUrl/vendors/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
         print(responseData);
         String key = responseData.keys.toList()[0];
@@ -269,7 +269,7 @@ class UserModel extends ConnectedModel {
       return true;
     } catch (error) {
       print(error);
-      
+
       return false;
     }
   }
@@ -655,6 +655,37 @@ class PaymentModel extends ConnectedModel{
 
   Future creditMXWallet(double amount, details) async{
 
+  }
+
+  //? WALLET BALANCE
+
+  ///fetch user wallet balance
+  Future<double> fetchWalletBalance() async{
+    http.Response response = await http
+      .get('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+
+    Map<String, dynamic> responseData = json.decode(response.body);
+    print(responseData);
+    String key = responseData.keys.toList()[0];
+    double _walletBalance = responseData[key]["walletBalance"] ?? 0;
+
+    return _walletBalance;
+  }
+
+  ///store user wallet balance
+  Future<bool> storeWalletBalance(double amount) async{
+    double _walletBalance = await fetchWalletBalance();
+
+    _walletBalance += amount;
+    var userData = _vendor == null ? _client.toMap() : _vendor.toMap();
+    userData["walletBalance"] = _walletBalance;
+
+    http.Response response = await http
+      .post('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}',
+      body: jsonEncode(userData));
+
+    var responseData = jsonDecode(response.body);
+    return responseData != null && responseData.keys.toList()[0] != null;
   }
 }
 
