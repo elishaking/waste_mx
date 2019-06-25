@@ -241,7 +241,6 @@ class UserModel extends ConnectedModel {
 
   Future<bool> _addUser(
       Map<String, dynamic> userData, String collectionName, String userId) async {
-    toggleLoading(true);
     try {
       Geolocator geolocator = Geolocator();
         Position position = await geolocator
@@ -254,49 +253,30 @@ class UserModel extends ConnectedModel {
           "$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}",
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
-        toggleLoading(false);
         return false;
       }
-      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      // final Map<String, dynamic> responseData = json.decode(response.body);
       if (collectionName == "clients") {
-        _client = Client(
-            id: responseData['name'],
-            name: userData[Datakeys.clientName],
-            pos: pos,
-            phone: userData[Datakeys.clientPhone],
-            username: userData[Datakeys.clientUsername],
-            address: userData[Datakeys.clientAddress],
-            dateCreated: userData[Datakeys.clientDateCreated]);
+        _client.update(pos: pos);
         print(json.encode(_client.toMap()));
       } else {
-        _vendor = Vendor(
-            id: responseData['name'],
-            name: userData[Datakeys.vendorName],
-            pos: pos,
-            companyName: userData[Datakeys.vendorCompanyName],
-            companyAddress: userData[Datakeys.vendorCompanyAddress],
-            phone: userData[Datakeys.vendorPhone],
-            username: userData[Datakeys.vendorUsername],
-            address: userData[Datakeys.vendorAddress],
-            verified: userData[Datakeys.vendorVerified],
-            rate: userData[Datakeys.vendorRating],
-            rating: userData[Datakeys.vendorRating],
-            dateCreated: userData[Datakeys.vendorDateCreated]);
+        _vendor.update(pos: pos);
       }
-      userData['id'] = responseData['name'];
-      await _saveUserData(userData);
-      toggleLoading(false);
+
+      await _saveUserData(vendor == null ? _client.toMap() : _vendor.toMap());
+
       return true;
     } catch (error) {
-      toggleLoading(false);
       print(error);
+      
       return false;
     }
   }
 
   Future<bool> updateUser(String collectionName, {Client client, Vendor vendor}) async{
     toggleLoading(true);
-    
+
     try {
       final http.Response response = await http.put(
           "$_dbUrl/$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
@@ -306,6 +286,14 @@ class UserModel extends ConnectedModel {
         toggleLoading(false);
         return false;
       }
+
+      if (collectionName == "clients") {
+        _client = client;
+        print(json.encode(_client.toMap()));
+      } else {
+        _vendor = vendor;
+      }
+
       // final Map<String, dynamic> responseData = json.decode(response.body);
       // userData['id'] = responseData['name'];
       await _saveUserData(vendor == null ? client.toMap() : vendor.toMap());
@@ -333,11 +321,11 @@ class UserModel extends ConnectedModel {
 
     // _isLoading = false;
     // notifyListeners();
-    final bool paystackCustomerCreated = await MainModel.mainModel.createPaystackCustomer();
-    if(!paystackCustomerCreated){
-      toggleLoading(false);
-      return {'success': false, 'message': "Something wrong happened, Please try again"};
-    }
+    // final bool paystackCustomerCreated = await MainModel.mainModel.createPaystackCustomer();
+    // if(!paystackCustomerCreated){
+    //   toggleLoading(false);
+    //   return {'success': false, 'message': "Something wrong happened, Please try again"};
+    // }
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
