@@ -525,10 +525,10 @@ class PaymentModel extends ConnectedModel{
         "Authorization": "Bearer $_paystackKey",
         "Content-Type": "application/json"
       },
-      body: {
+      body: jsonEncode({
         "email": _authenticatedUser.email, 
         "first_name": _client.name ?? _vendor.name
-      }
+      })
     );
 
     Map<String, dynamic> customerData = jsonDecode(response.body);

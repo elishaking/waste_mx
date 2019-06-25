@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/pages/wallet/card_details.dart';
 import 'package:waste_mx/utils/assets.dart';
+import 'package:waste_mx/utils/responsive.dart';
 
 import '../../scoped_models/main.dart';
 import '../../models/transaction.dart';
@@ -49,57 +50,64 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
       appBar: AppBar(
         title: Text('Credit Wallet'),
       ),
-      body: ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget child, MainModel model){
-          return model.isLoading ? Center(child: CircularProgressIndicator()) 
-            : ListView(
-              children: <Widget>[
-                Image(
-                  image: AssetImage(ImageAssets.logo),
+      body: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Image(
+              image: AssetImage(ImageAssets.logo),
+              height: getSize(context, 150),
+            ),
+            SizedBox(height: 60,),
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: "Amount",
+                  hintText: "10000"
                 ),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Amount",
-                      hintText: "10000"
-                    ),
-                    validator: (String value){
-                      if(value.isEmpty) return "Please enter a valid amount";
+                validator: (String value){
+                  if(value.isEmpty) return "Please enter a valid amount";
+                },
+                onSaved: (String value){
+                  _amount = double.parse(value);
+                },
+              ),
+            ),
+            SizedBox(height: 30,),
+            Center(
+              child: ScopedModelDescendant(
+                builder: (BuildContext context, Widget child, MainModel model){
+                  return model.isLoading ? CircularProgressIndicator()
+                    : RaisedButton(
+                      padding: EdgeInsets.symmetric(horizontal: 23, vertical: 13),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                      Text("Proceed", style: TextStyle(color: Colors.white),),
+                      SizedBox(width: 5,),
+                      Icon(Icons.arrow_forward_ios, size: 17, color: Colors.white,)
+                    ],),
+                    onPressed: (){
+                      model.initializePaystackTransaction(_amount).then((bool initSuccess){
+                        if(initSuccess){
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => CardDetailsPage(model.transactionAuthorizationUrl)
+                          ));
+                        } else{
+                          print("error init");
+                          // todo: display snackbar
+                        }
+                      });
                     },
-                    onSaved: (String value){
-                      _amount = double.parse(value);
-                    },
-                  ),
-                ),
-                SizedBox(height: 20,),
-                ScopedModelDescendant(
-                  builder: (BuildContext context, Widget child, MainModel model){
-                    return model.isLoading ? Center(child: CircularProgressIndicator(),)
-                     : RaisedButton(
-                      child: Row(children: <Widget>[
-                        Text("Proceed"),
-                        SizedBox(width: 5,),
-                        Icon(Icons.arrow_forward_ios)
-                      ],),
-                      onPressed: (){
-                        model.initializePaystackTransaction(_amount).then((bool initSuccess){
-                          if(initSuccess){
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => CardDetailsPage(model.transactionAuthorizationUrl)
-                            ));
-                          } else{
-                            print("error init");
-                            // todo: display snackbar
-                          }
-                        });
-                      },
-                    );
-                  },
-                )
-              ],
-            );
-        },
+                  );
+                },
+              ),
+            )
+          ],
+        )
       ),
     );
   }
