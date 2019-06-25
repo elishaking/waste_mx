@@ -506,6 +506,7 @@ class PaymentModel extends ConnectedModel{
   List _customertransactions = new List();
   double _walletBalance = 0.0;
   String _transactionAuthorizationUrl;
+  String _transactionReference;
 
   PaystackSubAccount _paystackSubAccount;
 
@@ -663,9 +664,32 @@ class PaymentModel extends ConnectedModel{
 
     if(transactionData["status"] == true){
       _transactionAuthorizationUrl = transactionData["data"]["authorization_url"];
+      _transactionReference = transactionData["data"]["reference"];
     }
 
     return transactionData["status"];
+  }
+
+  Future<String> verifyPaystackTransaction() async{
+    toggleLoading(true);
+
+    http.Response response = await http.get(
+      "$_url/transaction/verify/$_transactionReference",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+      },
+    );
+
+    toggleLoading(false);
+
+    print(response.body);
+    Map<String, dynamic> transactionData =  jsonDecode(response.body);
+
+    if(transactionData["status"] == true){
+      print(transactionData["data"]["gateway_response"]);
+    }
+
+    return transactionData["message"];
   }
 
   Future creditMXWallet(double amount, details) async{
