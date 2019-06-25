@@ -188,7 +188,8 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
         textColor: Colors.white,
       ),
       onPressed: () {
-        model.creditWallet(100, _cardDetails);
+        model.creditMXWallet(0, _cardDetails);
+
         // if(_cardDetailsFormKey.currentState.validate() && _amountFormKey.currentState.validate()){
         //   _cardDetailsFormKey.currentState.save();
         //   _amountFormKey.currentState.save();

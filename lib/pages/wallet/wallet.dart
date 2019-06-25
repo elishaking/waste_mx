@@ -21,9 +21,9 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
-  final double walletBalance = 5000.0;
+  final double walletBalance = 0.0;
 
-  double _opacity = 0, _loadingOpacity = 1;
+  double _mainOpacity = 0, _loadingOpacity = 1;
 
   @override
   void initState() {
@@ -40,21 +40,24 @@ class _WalletPageState extends State<WalletPage> {
       appBar: AppBar(
         title: Text('Wallet'),
       ),
-      body: false ? Center(
-        child: Text("Wallet Temporarily Disabled"),
-      ) : ScopedModelDescendant<MainModel>(
+      body: 
+      // false ? Center(
+      //   child: Text("Wallet Temporarily Disabled"),
+      // ) : 
+      ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model){
+          //todo: implement paystack error Stack Child
           if(model.isLoading){
-            _opacity = 0;
+            _mainOpacity = 0;
             _loadingOpacity = 1;
           } else{
-            _opacity = 1;
+            _mainOpacity = 1;
             _loadingOpacity = 0;
           }
           return Stack(
             children: <Widget>[
               AnimatedOpacity(
-                opacity: _opacity,
+                opacity: _mainOpacity,
                 duration: Duration(milliseconds: 500),
                 child: _buildWalletPageBody(context, model),
               ),
@@ -92,7 +95,7 @@ class _WalletPageState extends State<WalletPage> {
               height: getSize(context, 15),
             ),
             customText.HeadlineText(
-              text: model.isLoading ? "0" : "0.0",//"${model.wallet.localCurrency} ${model.wallet.balance}",
+              text: "NGN ${model.walletBalance}",//"${model.wallet.localCurrency} ${model.wallet.balance}",
               textColor: Colors.lightGreen,
             ),
             SizedBox(

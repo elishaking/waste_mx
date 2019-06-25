@@ -504,9 +504,14 @@ class PaymentModel extends ConnectedModel{
   String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
   String _url = "https://api.paystack.co/";
   List _customertransactions = new List();
+  double _walletBalance = 0.0;
   String _transactionAuthorizationUrl;
 
   PaystackSubAccount _paystackSubAccount;
+
+  double get walletBalance{
+    return _walletBalance;
+  }
 
   /// create new paystack customer
   Future<bool> createPaystackCustomer() async{
@@ -525,6 +530,11 @@ class PaymentModel extends ConnectedModel{
     Map<String, dynamic> customerData = jsonDecode(response.body);
     if(customerData["status"]){
       _customertransactions = customerData["data"]["transactions"];
+      if(_customertransactions != null && _customertransactions.length > 0){
+        _customertransactions.forEach((dynamic transaction) {
+          _walletBalance += 1;
+        });
+      }
     }
 
     return customerData["status"];
@@ -649,6 +659,10 @@ class PaymentModel extends ConnectedModel{
     }
 
     return transactionData["status"];
+  }
+
+  Future creditMXWallet(double amount, details) async{
+
   }
 }
 
