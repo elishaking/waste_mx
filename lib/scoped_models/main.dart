@@ -513,6 +513,10 @@ class PaymentModel extends ConnectedModel{
     return _walletBalance;
   }
 
+  String get transactionAuthorizationUrl{
+    return _transactionAuthorizationUrl;
+  }
+
   /// create new paystack customer
   Future<bool> createPaystackCustomer() async{
     http.Response response = await http.post(
@@ -635,7 +639,7 @@ class PaymentModel extends ConnectedModel{
   //? TRANSACTIONS
 
   /// intialiaze transaction with paystack
-  Future<String> initializePaystackTransaction(double amount) async{
+  Future<bool> initializePaystackTransaction(double amount) async{
     toggleLoading(true);
 
     http.Response response = await http.post(
