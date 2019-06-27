@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
-import 'dart:math';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
@@ -177,18 +176,17 @@ class UserModel extends ConnectedModel {
     if (_authenticatedUser.userType == UserType.Client) {
       if(prefs.getString(Datakeys.clientId) == null){
         http.Response response = await http
-          .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+          .get('$_dbUrl/clients/${_client.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
         print(responseData);
-        String key = responseData.keys.toList()[0];
         _client = Client(
-          id: key,
-          name: responseData[key][Datakeys.clientName],
-          pos: responseData[key][Datakeys.clientPos].map<double>((x) {return double.parse(x.toString());}).toList(),
-          phone: responseData[key][Datakeys.clientPhone],
-          username: responseData[key][Datakeys.clientUsername],
-          address: responseData[key][Datakeys.clientAddress],
-          dateCreated: responseData[key][Datakeys.clientDateCreated]
+          id: responseData["id"],
+          name: responseData[Datakeys.clientName],
+          pos: responseData[Datakeys.clientPos].map<double>((x) {return double.parse(x.toString());}).toList(),
+          phone: responseData[Datakeys.clientPhone],
+          username: responseData[Datakeys.clientUsername],
+          address: responseData[Datakeys.clientAddress],
+          dateCreated: responseData[Datakeys.clientDateCreated]
         );
       } else{
         String pos = prefs.getString(Datakeys.clientPos);
@@ -203,25 +201,24 @@ class UserModel extends ConnectedModel {
         print(_client.pos);
       }
     } else {
-      if(prefs.getString(Datakeys.clientId) == null){
+      if(prefs.getString(Datakeys.vendorId) == null){
         http.Response response = await http
-          .get('$_dbUrl/vendors/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+          .get('$_dbUrl/vendors/${_vendor.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
         print(responseData);
-        String key = responseData.keys.toList()[0];
         _vendor = Vendor(
-          id: key,
-          name: responseData[key][Datakeys.vendorName],
-          phone: responseData[key][Datakeys.vendorPhone],
-          pos: responseData[key][Datakeys.vendorPos],
-          companyName: responseData[key][Datakeys.vendorCompanyName],
-          companyAddress: responseData[key][Datakeys.vendorCompanyAddress],
-          username: responseData[key][Datakeys.vendorUsername],
-          address: responseData[key][Datakeys.vendorAddress],
-          verified: responseData[key][Datakeys.vendorVerified],
-          rate: responseData[key][Datakeys.vendorRate],
-          rating: responseData[key][Datakeys.vendorRating],
-          dateCreated: responseData[key][Datakeys.vendorDateCreated]
+          id: responseData["id"],
+          name: responseData[Datakeys.vendorName],
+          phone: responseData[Datakeys.vendorPhone],
+          pos: responseData[Datakeys.vendorPos],
+          companyName: responseData[Datakeys.vendorCompanyName],
+          companyAddress: responseData[Datakeys.vendorCompanyAddress],
+          username: responseData[Datakeys.vendorUsername],
+          address: responseData[Datakeys.vendorAddress],
+          verified: responseData[Datakeys.vendorVerified],
+          rate: responseData[Datakeys.vendorRate],
+          rating: responseData[Datakeys.vendorRating],
+          dateCreated: responseData[Datakeys.vendorDateCreated]
         );
       } else{
         _vendor = Vendor(
@@ -334,10 +331,10 @@ class UserModel extends ConnectedModel {
       bool userAdded = false;
       if (vendor == null) {
         await _saveAuthUser(responseData, UserType.Client);
-        userAdded = await _addUser(client.toMap(), 'clients', _authenticatedUser.id);
+        userAdded = await _addUser(client.toMap(), 'clients', _client.id);
       } else {
         await _saveAuthUser(responseData, UserType.Vendor);
-        userAdded = await _addUser(vendor.toMap(), 'vendors', _authenticatedUser.id);
+        userAdded = await _addUser(vendor.toMap(), 'vendors', _vendor.id);
       }
       success = userAdded;
       if (!success) message = 'Failed to upload user data';
@@ -576,7 +573,7 @@ class PaymentModel extends ConnectedModel{
   Future<bool> updatePaystackSubAccount(PaystackSubAccount paystackSubAccount) async{
     toggleLoading(true);
 
-    http.Response response = await http.post(
+    http.Response response = await http.put(
       "$_url/subaccount/${_client == null ? _client.subAccountCode : _vendor.subAccountCode}",
       headers: {
         "Authorization": "Bearer $_paystackKey",
@@ -686,17 +683,16 @@ class PaymentModel extends ConnectedModel{
   ///fetch user wallet balance
   Future<double> fetchWalletBalance() async{
     http.Response response = await http
-      .get('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+      .get('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_client.id}.json?auth=${_authenticatedUser.token}');
 
     Map<String, dynamic> responseData = json.decode(response.body);
     print(responseData);
-    String key = responseData.keys.toList()[0];
-    double _walletBalance = responseData[key]["walletBalance"] ?? 0;
+    double _walletBalance = responseData["walletBalance"] ?? 0;
 
     return _walletBalance;
   }
 
-  ///store user wallet balance
+  ///update user wallet balance
   Future<bool> storeWalletBalance(double amount) async{
     double _walletBalance = await fetchWalletBalance();
 
@@ -705,7 +701,7 @@ class PaymentModel extends ConnectedModel{
     userData["walletBalance"] = _walletBalance;
 
     http.Response response = await http
-      .post('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}',
+      .put('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_vendor == null ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}',
       body: jsonEncode(userData));
 
     var responseData = jsonDecode(response.body);
@@ -813,25 +809,23 @@ class OfferingModel extends ConnectedModel {
     Map<String, dynamic> _closestVendorsData = json.decode(response.body);
     _closestVendorsData.forEach((String key, dynamic value){
       print(key);
-      value.forEach((String key, dynamic value){
+      value.forEach((String key, dynamic vendorData){
         print(key);
-        value.forEach((String key, dynamic vendorData){
-          _closestVendors.add(
-            Vendor(
-              id: key,
-              name: vendorData[Datakeys.vendorName],
-              username: vendorData[Datakeys.vendorUsername],
-              phone: vendorData[Datakeys.vendorPhone],
-              address: vendorData[Datakeys.vendorAddress],
-              dateCreated: vendorData[Datakeys.vendorDateCreated],
-              pos: vendorData[Datakeys.vendorPos].map<double>((x) {return double.parse(x.toString());}).toList(),
-              verified: vendorData[Datakeys.vendorVerified],
-              rating: vendorData[Datakeys.vendorRating],
-              rate: vendorData[Datakeys.vendorRate],
-              distance: vendorData["distance"]
-            )
-          );
-        });
+        _closestVendors.add(
+          Vendor(
+            id: key,
+            name: vendorData[Datakeys.vendorName],
+            username: vendorData[Datakeys.vendorUsername],
+            phone: vendorData[Datakeys.vendorPhone],
+            address: vendorData[Datakeys.vendorAddress],
+            dateCreated: vendorData[Datakeys.vendorDateCreated],
+            pos: vendorData[Datakeys.vendorPos].map<double>((x) {return double.parse(x.toString());}).toList(),
+            verified: vendorData[Datakeys.vendorVerified],
+            rating: vendorData[Datakeys.vendorRating],
+            rate: vendorData[Datakeys.vendorRate],
+            distance: vendorData["distance"]
+          )
+        );
       });
     });
     // toggleLoading(false);
