@@ -153,6 +153,7 @@ class UserModel extends ConnectedModel {
         token: responseData['idToken'],
         userType: userType);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear(); //! comment out
     prefs.setString('token', responseData['idToken']);
     prefs.setString("refreshToken", responseData["refreshToken"]);
     prefs.setString('userEmail', responseData['email']);
@@ -186,7 +187,7 @@ class UserModel extends ConnectedModel {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (_authenticatedUser.userType == UserType.Client) {
-      if(prefs.getString(Datakeys.clientId) == null){
+      if(prefs.getString(Datakeys.clientId) == data["clientId"]){
         _client = Client.fromMap(data);
       } else{
         String pos = prefs.getString(Datakeys.clientPos);
@@ -201,7 +202,7 @@ class UserModel extends ConnectedModel {
         // print(_client.pos);
       }
     } else {
-      if(prefs.getString(Datakeys.vendorId) == null){
+      if(prefs.getString(Datakeys.vendorId) != data["vendorId"]){
         http.Response response = await http
           .get('$_dbUrl/vendors/${_vendor.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
