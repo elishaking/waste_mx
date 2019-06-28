@@ -154,6 +154,7 @@ class UserModel extends ConnectedModel {
         userType: userType);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', responseData['idToken']);
+    prefs.setString("refreshToken", responseData["refreshToken"]);
     prefs.setString('userEmail', responseData['email']);
     prefs.setString('userId', responseData['localId']);
     prefs.setString('userType', userType.toString());
@@ -172,22 +173,21 @@ class UserModel extends ConnectedModel {
   }
 
   Future<bool> _getUserData() async {
+    http.Response response = await http
+      .get('$_dbUrl/clients/${_authenticatedUser.userType == UserType.Client ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}');
+    
+    Map<String, dynamic> responseData = json.decode(response.body);
+    await _initializeUser(responseData);
+
+    return true;
+  }
+
+  Future<bool> _initializeUser(Map<String, dynamic> data) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (_authenticatedUser.userType == UserType.Client) {
       if(prefs.getString(Datakeys.clientId) == null){
-        http.Response response = await http
-          .get('$_dbUrl/clients/${_client.id}.json?auth=${_authenticatedUser.token}');
-        Map<String, dynamic> responseData = json.decode(response.body);
-        print(responseData);
-        _client = Client(
-          id: responseData["id"],
-          name: responseData[Datakeys.clientName],
-          pos: responseData[Datakeys.clientPos].map<double>((x) {return double.parse(x.toString());}).toList(),
-          phone: responseData[Datakeys.clientPhone],
-          username: responseData[Datakeys.clientUsername],
-          address: responseData[Datakeys.clientAddress],
-          dateCreated: responseData[Datakeys.clientDateCreated]
-        );
+        _client = Client.fromMap(data);
       } else{
         String pos = prefs.getString(Datakeys.clientPos);
         _client = Client(
@@ -198,28 +198,15 @@ class UserModel extends ConnectedModel {
           username: prefs.getString(Datakeys.clientUsername),
           address: prefs.getString(Datakeys.clientAddress),
           dateCreated: prefs.getString(Datakeys.clientDateCreated));
-        print(_client.pos);
+        // print(_client.pos);
       }
     } else {
       if(prefs.getString(Datakeys.vendorId) == null){
         http.Response response = await http
           .get('$_dbUrl/vendors/${_vendor.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
-        print(responseData);
-        _vendor = Vendor(
-          id: responseData["id"],
-          name: responseData[Datakeys.vendorName],
-          phone: responseData[Datakeys.vendorPhone],
-          pos: responseData[Datakeys.vendorPos],
-          companyName: responseData[Datakeys.vendorCompanyName],
-          companyAddress: responseData[Datakeys.vendorCompanyAddress],
-          username: responseData[Datakeys.vendorUsername],
-          address: responseData[Datakeys.vendorAddress],
-          verified: responseData[Datakeys.vendorVerified],
-          rate: responseData[Datakeys.vendorRate],
-          rating: responseData[Datakeys.vendorRating],
-          dateCreated: responseData[Datakeys.vendorDateCreated]
-        );
+        // print(responseData);
+        Vendor.fromMap(responseData);
       } else{
         _vendor = Vendor(
           id: prefs.getString(Datakeys.vendorId),
@@ -236,8 +223,7 @@ class UserModel extends ConnectedModel {
     return true;
   }
 
-  Future<bool> _addUser(
-      Map<String, dynamic> userData, String collectionName, String userId) async {
+  Future<bool> _saveUser(Map<String, dynamic> userData, String collectionName) async {
     try {
       Geolocator geolocator = Geolocator();
         Position position = await geolocator
@@ -247,19 +233,16 @@ class UserModel extends ConnectedModel {
       userData[collectionName.substring(0, collectionName.length - 1) + "Pos"] = pos;
 
       final http.Response response = await http.post(
-          "$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}",
+          "$_dbUrl/$collectionName.json?auth=${_authenticatedUser.token}",
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
         return false;
       }
 
-      // final Map<String, dynamic> responseData = json.decode(response.body);
-      if (collectionName == "clients") {
-        _client.update(pos: pos);
-        print(json.encode(_client.toMap()));
-      } else {
-        _vendor.update(pos: pos);
-      }
+      String idString = _authenticatedUser.userType == UserType.Client ? "clientId" : "vendorId";
+      userData[idString] = jsonDecode(response.body)["name"];
+
+      await _initializeUser(userData);
 
       await _saveUserData(vendor == null ? _client.toMap() : _vendor.toMap());
 
@@ -324,6 +307,7 @@ class UserModel extends ConnectedModel {
     //   return {'success': false, 'message': "Something wrong happened, Please try again"};
     // }
 
+    // print(response.body);
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
     String message = 'Authentication Success';
@@ -331,10 +315,10 @@ class UserModel extends ConnectedModel {
       bool userAdded = false;
       if (vendor == null) {
         await _saveAuthUser(responseData, UserType.Client);
-        userAdded = await _addUser(client.toMap(), 'clients', _client.id);
+        userAdded = await _saveUser(client.toMap(), 'clients');
       } else {
         await _saveAuthUser(responseData, UserType.Vendor);
-        userAdded = await _addUser(vendor.toMap(), 'vendors', _vendor.id);
+        userAdded = await _saveUser(vendor.toMap(), 'vendors');
       }
       success = userAdded;
       if (!success) message = 'Failed to upload user data';
@@ -682,8 +666,9 @@ class PaymentModel extends ConnectedModel{
 
   ///fetch user wallet balance
   Future<double> fetchWalletBalance() async{
-    http.Response response = await http
-      .get('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_client.id}.json?auth=${_authenticatedUser.token}');
+    String url = _vendor == null ? "$_dbUrl/clients/${_client.id}.json?auth=${_authenticatedUser.token}" : "$_dbUrl/vendors/${_vendor.id}.json?auth=${_authenticatedUser.token}";
+
+    http.Response response = await http.get(url);
 
     Map<String, dynamic> responseData = json.decode(response.body);
     print(responseData);

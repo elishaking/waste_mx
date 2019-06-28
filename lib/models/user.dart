@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waste_mx/utils/data.dart';
 
 enum UserType { Client, Vendor }
 
@@ -42,12 +43,13 @@ class Client {
   Client({this.id, this.name, this.phone, this.pos, this.username, this.address,
     this.dateCreated, this.subAccountCode});
 
-  void update({String name, String phone, List<double> pos, String username, String address}){
+  void update({String name, String phone, List<double> pos, String username, String address, String subAccountCode}){
     this.name = name ?? this.name;
     this.phone = phone ?? this.phone;
     this.pos = pos ?? this.pos;
     this.username = username ?? this.username;
     this.address = address ?? this.address;
+    this.subAccountCode = subAccountCode ?? this.subAccountCode;
   }
 
   Map<String, dynamic> toMap() {
@@ -60,6 +62,17 @@ class Client {
       'clientDateCreated': dateCreated,
       'clientSubAccountCode': subAccountCode
     };
+  }
+
+  Client.fromMap(Map<String, dynamic> data){
+    id = data["clientId"];
+    name = data[Datakeys.clientName];
+    pos = data[Datakeys.clientPos] == null ? this.pos : data[Datakeys.clientPos].map<double>((x) {return double.parse(x.toString());}).toList();
+    phone = data[Datakeys.clientPhone];
+    username = data[Datakeys.clientUsername];
+    address = data[Datakeys.clientAddress];
+    dateCreated = data[Datakeys.clientDateCreated];
+    subAccountCode = data["clientSubAccountCode"];
   }
 }
 
@@ -84,8 +97,9 @@ class Vendor {
     this.username, this.address, this.dateCreated, this.rating, this.rate, this.verified, this.distance,
     this.subAccountCode});
 
-  void update({String name, String phone, List<double> pos, String username, String address, String companyName, String companyAddress, int rating, int rate, double distance}){
+  void update({String name, String phone, String imageUrl, List<double> pos, String username, String address, String companyName, String companyAddress, int rating, int rate, double distance, bool verified, String subAccountCode}){
     this.name = name ?? this.name;
+    this.imageUrl = imageUrl ?? this.imageUrl;
     this.phone = phone ?? this.phone;
     this.pos = pos ?? this.pos;
     this.username = username ?? this.username;
@@ -95,6 +109,8 @@ class Vendor {
     this.rating = rating ?? this.rating;
     this.rate = rate ?? this.rate;
     this.distance = distance ?? this.distance;
+    this.verified = verified ?? this.verified;
+    this.subAccountCode = subAccountCode ?? this.subAccountCode;
   }
 
   Map<String, dynamic> toMap() {
@@ -115,5 +131,22 @@ class Vendor {
       'distance': distance,
       'vendorSubAccountCode': subAccountCode
     };
+  }
+
+  Vendor.fromMap(Map<String, dynamic> data){
+    id = data["vendorId"];
+    name = data[Datakeys.vendorName];
+    phone = data[Datakeys.vendorPhone];
+    pos = data[Datakeys.vendorPos];
+    imageUrl = data["vendorimageUrl"];
+    companyName = data[Datakeys.vendorCompanyName];
+    companyAddress = data[Datakeys.vendorCompanyAddress];
+    username = data[Datakeys.vendorUsername];
+    address = data[Datakeys.vendorAddress];
+    verified = data[Datakeys.vendorVerified];
+    rate = data[Datakeys.vendorRate];
+    rating = data[Datakeys.vendorRating];
+    dateCreated = data[Datakeys.vendorDateCreated];
+    subAccountCode = data["vendorSubAccountCode"];
   }
 }
