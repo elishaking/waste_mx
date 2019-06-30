@@ -86,96 +86,119 @@ class UserModel extends ConnectedModel {
 
   /// Automatically authenticates user
   void autoAuthenticate() async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token');
+
+    final bool markedForDelete = prefs.getBool("markedForDelete");
+    final String idToken = prefs.getString("userIdToken");
+    if(markedForDelete){
+      final bool authUserDeleted = await _deleteAuthUser(idToken);
+      return;
+    }
+
+    final String refreshToken = prefs.getString('userRefreshToken');
     final UserType userType = _getUserType(prefs.getString('userType'));
-    final String expiryTimeString = prefs.getString('expiryTime');
+    // final String expiryTimeString = prefs.getString('expiryTime');
     _authResponse = ResponseInfo(false, 'User not Saved', -1);
 
-    if (token != null) {
+    if (refreshToken != null) {
       // print(token);
-      final DateTime now = DateTime.now();
-      final parsedExpiryTime = expiryTimeString == null
-          ? DateTime.now().subtract(Duration(days: 1))
-          : DateTime.parse(expiryTimeString);
-      if (parsedExpiryTime.isBefore(now)) {
-        final http.Response response = await http.post(
-          "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey",
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({'token': token, 'returnSecureToken': true}))
-          .catchError((error) {
-            print(error.toString());
-            _isLoading = false;
-            notifyListeners();
-            _authResponse = ResponseInfo(false, error, -1);
-          });
-            // .timeout(Duration(seconds: _httpTimeout), 
-            // onTimeout: (){
-            //   _authenticatedUser = null;
-            //   _isLoading = false;
-            //   notifyListeners();
-            // });
-        if(response == null) return;
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        // print(response.body);
-        if (responseData.containsKey('idToken')) {
-          await _saveAuthUser(responseData, userType);
-        } else {
-          _authResponse = ResponseInfo(true, 'Could not save User info', -1);
-          _authenticatedUser = null;
+      // final DateTime now = DateTime.now();
+      // final parsedExpiryTime = expiryTimeString == null
+      //     ? DateTime.now().subtract(Duration(days: 1))
+      //     : DateTime.parse(expiryTimeString);
+      // if (parsedExpiryTime.isBefore(now)) {
+      final http.Response response = await http.post(
+        "https://securetoken.googleapis.com/v1/token?key=$_apiKey",
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'grant_type': 'refresh_token', 'refresh_token': refreshToken}))
+        .catchError((error) {
+          print(error.toString());
           _isLoading = false;
           notifyListeners();
-        }
+          _authResponse = ResponseInfo(false, error, -1);
+        });
+          // .timeout(Duration(seconds: _httpTimeout), 
+          // onTimeout: (){
+          //   _authenticatedUser = null;
+          //   _isLoading = false;
+          //   notifyListeners();
+          // });
+      if(response == null) return;
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      // print(response.body);
+      if (responseData.containsKey('idToken')) {
+        await _initializeAuthUser(responseData, userType);
+        await _saveAuthUser(responseData);
+      } else {
+        _authResponse = ResponseInfo(true, 'Could not authenticate', -1);
+        _authenticatedUser = null;
+        
+        toggleLoading(false);
       }
+      // }
 
       final String userEmail = prefs.getString('userEmail');
       final String userId = prefs.getString('userId');
       _authenticatedUser =
-          User(id: userId, email: userEmail, token: token, userType: userType);
+          User(id: userId, email: userEmail, token: idToken, userType: userType);
       
-      await _getUserData();
+      await _getUserDataOnLogin();
       _authResponse = ResponseInfo(true, 'Successful Authentication', -1);
-      _isLoading = false;
-      notifyListeners();
+      
+      toggleLoading(false);
     } else{
       _authResponse = ResponseInfo(true, 'User not created', -1);
-      _isLoading = false;
-      notifyListeners();
+      
+      toggleLoading(false);
     }
   }
 
-  Future _saveAuthUser(responseData, UserType userType) async {
+  Future _initializeAuthUser(responseData, UserType userType) async {
     _authenticatedUser = User(
         id: responseData['localId'],
         email: responseData['email'],
         token: responseData['idToken'],
         userType: userType);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear(); //! comment out
-    prefs.setString('token', responseData['idToken']);
-    prefs.setString("refreshToken", responseData["refreshToken"]);
-    prefs.setString('userEmail', responseData['email']);
-    prefs.setString('userId', responseData['localId']);
-    prefs.setString('userType', userType.toString());
-
-    final DateTime now = DateTime.now();
-    final DateTime expiryTime =
-        now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
-    prefs.setString('expiryTime', expiryTime.toIso8601String());
   }
 
-  Future _saveUserData(Map<String, dynamic> data) async {
+  Future _saveAuthUser(responseData) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.clear(); //! comment out
+    prefs.setString('userIdToken', _authenticatedUser.token);
+    prefs.setString("userRefreshToken", responseData["refreshToken"]);
+    prefs.setString('userEmail', _authenticatedUser.email);
+    prefs.setString('userId', _authenticatedUser.id);
+    prefs.setString('userType', _authenticatedUser.userType.toString());
+    prefs.setString("userProfileId", _authenticatedUser.profileId);
+    prefs.setBool("userMarkedForDelete", _authenticatedUser.markedForDelete);
+
+    // final DateTime now = DateTime.now();
+    // // responseData['expiresIn'];
+    // final DateTime expiryTime =
+    //     now.add(Duration(seconds: int.parse(responseData["expiresIn"])));
+    // prefs.setString('expiryTime', expiryTime.toIso8601String());
+  }
+
+  Future _saveUserProfileData(Map<String, dynamic> data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     data.forEach((key, value) {
       prefs.setString(key, value.toString());
     });
   }
 
-  Future<bool> _getUserData() async {
+  // Future _deleteUserData(Map<String, dynamic> data) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   data.forEach((key, value) {
+  //     //todo: delete
+  //   });
+  // }
+
+  /// gets user data either from the cloud or from disk
+  Future<bool> _getUserDataOnLogin() async {
     http.Response response = await http
-      .get('$_dbUrl/clients/${_authenticatedUser.userType == UserType.Client ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}');
+      .get('$_dbUrl/clients/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}');
     
     Map<String, dynamic> responseData = json.decode(response.body);
     await _initializeUser(responseData);
@@ -187,7 +210,7 @@ class UserModel extends ConnectedModel {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (_authenticatedUser.userType == UserType.Client) {
-      if(prefs.getString(Datakeys.clientId) == data["clientId"]){
+      if(prefs.getString(Datakeys.clientId) != data["clientId"]){
         _client = Client.fromMap(data);
       } else{
         String pos = prefs.getString(Datakeys.clientPos);
@@ -224,7 +247,8 @@ class UserModel extends ConnectedModel {
     return true;
   }
 
-  Future<bool> _saveUser(Map<String, dynamic> userData, String collectionName) async {
+  /// saves user to firebase and on disk immediately after signup
+  Future<bool> _saveUserOnSignUp(Map<String, dynamic> userData, String collectionName) async {
     try {
       Geolocator geolocator = Geolocator();
         Position position = await geolocator
@@ -237,15 +261,17 @@ class UserModel extends ConnectedModel {
           "$_dbUrl/$collectionName.json?auth=${_authenticatedUser.token}",
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
+        _authenticatedUser.markedForDelete = true;
         return false;
       }
 
-      String idString = _authenticatedUser.userType == UserType.Client ? "clientId" : "vendorId";
-      userData[idString] = jsonDecode(response.body)["name"];
+      _authenticatedUser.profileId = jsonDecode(response.body)["name"];
+      // String idString = _authenticatedUser.userType == UserType.Client ? "clientId" : "vendorId";
+      // userData[idString] = jsonDecode(response.body)["name"];
 
       await _initializeUser(userData);
 
-      await _saveUserData(vendor == null ? _client.toMap() : _vendor.toMap());
+      await _saveUserProfileData(vendor == null ? _client.toMap() : _vendor.toMap());
 
       return true;
     } catch (error) {
@@ -277,7 +303,7 @@ class UserModel extends ConnectedModel {
 
       // final Map<String, dynamic> responseData = json.decode(response.body);
       // userData['id'] = responseData['name'];
-      await _saveUserData(vendor == null ? client.toMap() : vendor.toMap());
+      await _saveUserProfileData(vendor == null ? client.toMap() : vendor.toMap());
       
       toggleLoading(false);
       return true;
@@ -287,6 +313,20 @@ class UserModel extends ConnectedModel {
       toggleLoading(false);
       return false;
     }
+  }
+
+  Future<bool> _deleteAuthUser(String idToken) async{
+    final http.Response deleteResponse = await http.post(
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/deleteAccount?key=$_apiKey",
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'idToken': idToken}));
+
+    if(jsonDecode(deleteResponse.body).contains("kind")){
+      _authenticatedUser = null;
+    } else{
+      return false;
+    }
+    return true;
   }
   
   Future<Map<String, dynamic>> signup(String email, String password,
@@ -315,13 +355,20 @@ class UserModel extends ConnectedModel {
     if (responseData.containsKey('idToken')) {
       bool userAdded = false;
       if (vendor == null) {
-        await _saveAuthUser(responseData, UserType.Client);
-        userAdded = await _saveUser(client.toMap(), 'clients');
+        await _initializeAuthUser(responseData, UserType.Client);
+        userAdded = await _saveUserOnSignUp(client.toMap(), 'clients');
       } else {
-        await _saveAuthUser(responseData, UserType.Vendor);
-        userAdded = await _saveUser(vendor.toMap(), 'vendors');
+        await _initializeAuthUser(responseData, UserType.Vendor);
+        userAdded = await _saveUserOnSignUp(vendor.toMap(), 'vendors');
       }
       success = userAdded;
+
+      if(userAdded){
+        _saveAuthUser(responseData);
+      } else{
+        await _deleteAuthUser(responseData['idToken']);
+      }
+
       if (!success) message = 'Failed to upload user data';
     } else {
       switch (responseData['error']['message']) {
@@ -375,8 +422,9 @@ class UserModel extends ConnectedModel {
     int code = -1;
     if (responseData.containsKey('idToken')) {
     // if(user.){
-      await _saveAuthUser(responseData, userType);
-      await _getUserData(); //! prevent login if data not saved locally
+      await _initializeAuthUser(responseData, userType);
+      await _saveAuthUser(responseData);
+      await _getUserDataOnLogin(); //! prevent login if data not saved locally
       success = true;
     } else {
       switch (responseData['error']['message']) {

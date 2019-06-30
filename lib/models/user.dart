@@ -5,14 +5,17 @@ enum UserType { Client, Vendor }
 
 class User {
   final String id;
+  String profileId;
   final String token;
   // final String phone;
   final String email;
   final UserType userType;
   // final String username;
+  bool markedForDelete = false;
 
   User({
     @required this.id,
+    this.profileId,
     @required this.token,
     // @required this.phone,
     @required this.email,
@@ -23,9 +26,11 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       'userId': id,
+      'userProfileId': profileId,
       'userEmail': email,
       'userUserType': userType.toString(),
       'userToken': token,
+      'userMarkedForDelete': markedForDelete
     };
   }
 }
