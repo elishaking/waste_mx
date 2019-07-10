@@ -21,6 +21,7 @@ class User {
     @required this.email,
     // @required this.username,
     @required this.userType,
+    this.markedForDelete
   });
 
   Map<String, dynamic> toMap() {

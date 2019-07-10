@@ -156,16 +156,20 @@ class UserModel extends ConnectedModel {
   }
 
   Future _initializeAuthUser(responseData, UserType userType) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    
     _authenticatedUser = User(
         id: responseData['localId'],
         email: responseData['email'],
         token: responseData['idToken'],
-        userType: userType);
+        profileId: pref.getString("userProfileId"),
+        userType: userType,
+        markedForDelete: pref.getBool("userMarkedForDelete"));
   }
 
   Future _saveAuthUser(responseData) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.clear(); //! comment out
+    prefs.clear(); //! comment out
     prefs.setString('userIdToken', _authenticatedUser.token);
     prefs.setString("userRefreshToken", responseData["refreshToken"]);
     prefs.setString('userEmail', _authenticatedUser.email);
@@ -393,16 +397,13 @@ class UserModel extends ConnectedModel {
 
   /// Log user in
   Future<Map<String, dynamic>> login(String email, String password, UserType userType) async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
 
     final http.Response response = await http.post(
         "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey",
         headers: {'Content-Type': 'application/json'},
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': true}));
-
-    
 
     // FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
     //   email: email,
@@ -418,11 +419,15 @@ class UserModel extends ConnectedModel {
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
-    String message = 'Authentication Success';
+    String message = 'Authentication Failed';
     int code = -1;
     if (responseData.containsKey('idToken')) {
     // if(user.){
       await _initializeAuthUser(responseData, userType);
+      if(_authenticatedUser.markedForDelete){
+        final bool userDeleted = await _deleteAuthUser(responseData['idToken']);
+        return userDeleted ? {'success': success, 'message': 'Your email is not registered', 'code': 0} : {'success': success, 'message': message, 'code': code};
+      }
       await _saveAuthUser(responseData);
       await _getUserDataOnLogin(); //! prevent login if data not saved locally
       success = true;
@@ -715,7 +720,7 @@ class PaymentModel extends ConnectedModel{
 
   ///fetch user wallet balance
   Future<double> fetchWalletBalance() async{
-    String url = _vendor == null ? "$_dbUrl/clients/${_client.id}.json?auth=${_authenticatedUser.token}" : "$_dbUrl/vendors/${_vendor.id}.json?auth=${_authenticatedUser.token}";
+    String url = "$_dbUrl/clients/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}";
 
     http.Response response = await http.get(url);
 
