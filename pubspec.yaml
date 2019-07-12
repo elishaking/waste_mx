@@ -33,6 +33,9 @@ dependencies:
   flutter_secure_storage: ^3.2.1+1
   flutter_webview_plugin: ^0.3.5
 
+  firebase_core: ^0.4.0+6
+  firebase_auth: ^0.11.1+8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -56,53 +59,53 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-  - assets/facebook.png
-  - assets/google.png
-  - assets/twitter.png
-  - assets/waste_home.jpg
-  - assets/dispose.jpg
-  - assets/profile.png
-  - assets/obd-1.png
-  - assets/obd-2.png
-  - assets/obd-3.png
-  - assets/obd-4.png
-  - assets/logo.png
-  - assets/logo-white.png
-  - assets/welcome-img.png
-  - assets/success.png
-  - assets/fail.png
-  - assets/organic.png
-  - assets/intro.png
-  - assets/recycling-bin.png
-  - assets/eco-factory.png
-  - assets/target.png
-  - assets/sewage.png
-  - assets/analysis.png
-  - assets/creative.png
-  - assets/garbage-can.png
-  - assets/house.png
-  - assets/industrial.png
-  - assets/harvest.png
-  - assets/bulk.png
-  - assets/nuclear-plant.png
-  - assets/throw-to-paper-bin.png
-  - assets/wallet-enclosed.png
-  - assets/wallet.png
-  - assets/clean_bin_angle.png
-  - assets/eco-factory-solid.png
-  - assets/glass.png
-  - assets/incineration.png
-  - assets/stacked-print-products.png
-  - assets/plastic-bottle.png
-  - assets/thick-magnet.png
-  - assets/no-network.png
-  - assets/decluster/vehicles.png
-  - assets/decluster/bottles.png
-  - assets/decluster/clothes.png
-  - assets/decluster/appliances.png
-  - assets/decluster/furniture.png
-  - assets/decluster/household.png
-  - assets/decluster/stationery.png
+    - assets/facebook.png
+    - assets/google.png
+    - assets/twitter.png
+    - assets/waste_home.jpg
+    - assets/dispose.jpg
+    - assets/profile.png
+    - assets/obd-1.png
+    - assets/obd-2.png
+    - assets/obd-3.png
+    - assets/obd-4.png
+    - assets/logo.png
+    - assets/logo-white.png
+    - assets/welcome-img.png
+    - assets/success.png
+    - assets/fail.png
+    - assets/organic.png
+    - assets/intro.png
+    - assets/recycling-bin.png
+    - assets/eco-factory.png
+    - assets/target.png
+    - assets/sewage.png
+    - assets/analysis.png
+    - assets/creative.png
+    - assets/garbage-can.png
+    - assets/house.png
+    - assets/industrial.png
+    - assets/harvest.png
+    - assets/bulk.png
+    - assets/nuclear-plant.png
+    - assets/throw-to-paper-bin.png
+    - assets/wallet-enclosed.png
+    - assets/wallet.png
+    - assets/clean_bin_angle.png
+    - assets/eco-factory-solid.png
+    - assets/glass.png
+    - assets/incineration.png
+    - assets/stacked-print-products.png
+    - assets/plastic-bottle.png
+    - assets/thick-magnet.png
+    - assets/no-network.png
+    - assets/decluster/vehicles.png
+    - assets/decluster/bottles.png
+    - assets/decluster/clothes.png
+    - assets/decluster/appliances.png
+    - assets/decluster/furniture.png
+    - assets/decluster/household.png
+    - assets/decluster/stationery.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -127,12 +130,12 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   fonts:
-  - family: Montserrat
-    fonts:
-    - asset: assets/fonts/Montserrat-Regular.ttf
-  - family: Lato
-    fonts:
-    - asset: assets/fonts/Lato-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
