@@ -8,6 +8,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // import 'package:firebase_auth/firebase_auth.dart';
 
@@ -21,11 +22,11 @@ import '../models/transaction.dart';
 import '../utils/data.dart';
 
 class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, PaymentModel {
-  static MainModel mainModel;
-  MainModel(){
-    if(mainModel == null)
-      mainModel = this;
-  }
+  // static MainModel mainModel;
+  // MainModel(){
+  //   if(mainModel == null)
+  //     mainModel = this;
+  // }
 }
 
 class ConnectedModel extends Model {
@@ -163,7 +164,7 @@ class UserModel extends ConnectedModel {
         token: responseData['idToken'],
         profileId: pref.getString("userProfileId"),
         userType: userType,
-        markedForDelete: pref.getBool("userMarkedForDelete"));
+        markedForDelete: pref.getBool("userMarkedForDelete") ?? false);
   }
 
   Future _saveAuthUser(responseData) async{
@@ -204,6 +205,11 @@ class UserModel extends ConnectedModel {
       .get('$_dbUrl/clients/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}');
     
     Map<String, dynamic> responseData = json.decode(response.body);
+    if(responseData == null){
+      await _deleteAuthUser(_authenticatedUser.token);
+      return false;
+    }
+
     await _initializeUser(responseData);
 
     return true;
@@ -257,7 +263,7 @@ class UserModel extends ConnectedModel {
         Position position = await geolocator
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-      List<double> pos = [position.latitude, position.longitude];
+      List<double> pos = position == null ? null : [position.latitude, position.longitude];
       userData[collectionName.substring(0, collectionName.length - 1) + "Pos"] = pos;
 
       final http.Response response = await http.post(
@@ -324,7 +330,8 @@ class UserModel extends ConnectedModel {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'idToken': idToken}));
 
-    if(jsonDecode(deleteResponse.body).contains("kind")){
+    Map<String, dynamic> deleteResponseData = jsonDecode(deleteResponse.body);
+    if(deleteResponseData.containsKey("kind")){
       _authenticatedUser = null;
     } else{
       return false;
@@ -428,8 +435,14 @@ class UserModel extends ConnectedModel {
         return userDeleted ? {'success': success, 'message': 'Your email is not registered', 'code': 0} : {'success': success, 'message': message, 'code': code};
       }
       await _saveAuthUser(responseData);
-      await _getUserDataOnLogin(); //! prevent login if data not saved locally
-      success = true;
+      bool userDataLoaded =  await _getUserDataOnLogin(); //! prevent login if data not saved locally
+
+      if(userDataLoaded)
+        success = true;
+      else {
+        message = "User does not exist, Please sign up";
+        code = 0;
+      }
     } else {
       switch (responseData['error']['message']) {
         case 'EMAIL_NOT_FOUND':
