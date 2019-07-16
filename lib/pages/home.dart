@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -379,6 +381,12 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            ScopedModelDescendant(
+              builder: (BuildContext context, Widget child, MainModel model){
+                print(jsonEncode(model.client.toMap()));
+                return Container();
+              },
+            ),
             _buildTopSection(context),
             // _buildBottomSection(),
             _buildCategoriesSection(context),

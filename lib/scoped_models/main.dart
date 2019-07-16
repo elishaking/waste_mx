@@ -218,13 +218,15 @@ class UserModel extends ConnectedModel {
   Future<bool> _initializeUser(Map<String, dynamic> data) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    data["clientId"] = _authenticatedUser.profileId;
+
     if (_authenticatedUser.userType == UserType.Client) {
-      if(prefs.getString(Datakeys.clientId) != data["clientId"]){
+      if(prefs.getString(Datakeys.clientId) != _authenticatedUser.profileId){
         _client = Client.fromMap(data);
       } else{
         String pos = prefs.getString(Datakeys.clientPos);
         _client = Client(
-          id: prefs.getString(Datakeys.clientId),
+          id: prefs.getString(_authenticatedUser.profileId),
           name: prefs.getString(Datakeys.clientName),
           pos: json.decode(pos == null ? "[0,0]" : pos).map<double>((x) {return double.parse(x.toString());}).toList(),
           phone: prefs.getString(Datakeys.clientPhone),
@@ -467,8 +469,7 @@ class UserModel extends ConnectedModel {
       }
     }
 
-    _isLoading = false;
-    notifyListeners();
+    toggleLoading(false);
 
     return {'success': success, 'message': message, 'code': code};
   }
