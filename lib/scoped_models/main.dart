@@ -1141,7 +1141,9 @@ class TransactionModel extends ConnectedModel{
   Future<bool> addTransaction(Transaction transaction) async{
     toggleLoading(true);
 
-    http.Response response = await http.post("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}");
+    http.Response response = await http.post("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}",
+    body: jsonEncode(transaction.toMap()));
+    
     if (response.statusCode != 200 && response.statusCode != 201) {
       toggleLoading(false);
       return false;
@@ -1151,6 +1153,20 @@ class TransactionModel extends ConnectedModel{
     toggleLoading(false);
     return true;
   }
+
+  // Future<bool> fetchTransactions() async{
+  //   toggleLoading(true);
+
+  //   http.Response response = await http.get("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}");
+  //   if (response.statusCode != 200 && response.statusCode != 201) {
+  //     toggleLoading(false);
+  //     return false;
+  //   }
+
+  //   _transactions.add(transaction);
+  //   toggleLoading(false);
+  //   return true;
+  // }
 }
 
 /*
