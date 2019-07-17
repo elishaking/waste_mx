@@ -169,3 +169,24 @@ class PaystackSubAccount{
     primaryContactPhone = data["primary_contact_phone"];
   }
 }
+
+class Escrow{
+  final String id;
+  final double amount;
+
+  Escrow({this.id, this.amount});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "id": id,
+      "amount": amount
+    };
+  }
+
+  static Escrow fromMap(Map<String, dynamic> data){
+    return Escrow(
+      id: data["id"],
+      amount: data["amount"]
+    );
+  }
+}

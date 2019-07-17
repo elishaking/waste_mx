@@ -1161,6 +1161,7 @@ class TransactionModel extends ConnectedModel{
     return true;
   }
 
+  /// fetch all [Transactions] associated with user
   Future<bool> fetchTransactions() async{
     toggleLoading(true);
 
@@ -1176,6 +1177,23 @@ class TransactionModel extends ConnectedModel{
       _transactions.add(Transaction.fromMap(data));
     });
 
+    toggleLoading(false);
+    return true;
+  }
+
+  /// move pending [Transaction] amount to [Escrow]
+  Future<bool> addEscrow(Escrow escrow) async{
+    toggleLoading(true);
+
+    http.Response response = await http.post("$_dbUrl/escrows/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}",
+    body: jsonEncode(escrow.toMap()));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      toggleLoading(false);
+      return false;
+    }
+
+    // _escrows.add(escrow);
     toggleLoading(false);
     return true;
   }
