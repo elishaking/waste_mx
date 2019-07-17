@@ -1,23 +1,36 @@
+class TransactionType{
+  static final String wallet = "Wallet Transaction";
+  static final String dispose = "Dispose Waste";
+  static final String recycle = "Recycle Waste";
+  static final String decluster = "De-cluster";
+}
+
+// class TransactionSubType{
+//   static final String household = "Household Waste";
+// }
+
 class VendorTransaction {
   final bool pending;
   final String type;
+  final String subType;
   final String clientId;
   final String clientName;
   final String amount;
 
   VendorTransaction(
-      {this.pending, this.type, this.clientId, this.clientName, this.amount});
+      {this.pending, this.type, this.subType, this.clientId, this.clientName, this.amount});
 }
 
 class ClientTransaction {
   final bool pending;
   final String type;
+  final String subType;
   final String vendorId;
   final String vendorName;
   final String amount;
 
   ClientTransaction(
-      {this.pending, this.type, this.vendorId, this.vendorName, this.amount});
+      {this.pending, this.type, this.subType, this.vendorId, this.vendorName, this.amount});
 }
 
 class Wallet{
