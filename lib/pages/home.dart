@@ -299,6 +299,7 @@ class HomePage extends StatelessWidget {
               leading: Icon(Icons.format_list_bulleted),
               title: Text('Transactions'),
               onTap: () {
+                Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => TrackTransactionsPage()));
                 //  Navigator.pushNamed(context, 'profile');
@@ -318,6 +319,7 @@ class HomePage extends StatelessWidget {
                   leading: Icon(Icons.account_balance_wallet),
                   title: Text('Wallet'),
                   onTap: () {
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => WalletPage(model, false)));
                     //  Navigator.pushNamed(context, 'profile');

@@ -42,7 +42,7 @@ class _WalletPageState extends State<WalletPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: (){
-            Navigator.of(context).popUntil((Route route) => true);
+            Navigator.of(context).popUntil((Route route) => route.isFirst);
           },
         ),
       ),
