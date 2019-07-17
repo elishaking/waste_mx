@@ -18,7 +18,7 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
     Transaction(
       pending: true,
       type: 'Household Waste',
-      amount: '5000',
+      amount: 5000,
       initiatedByClient: true,
       clientDetails: ClientDetails(
         clientId: '22sks',
@@ -28,7 +28,7 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
     Transaction(
         pending: false,
         type: 'Household Waste',
-        amount: '3000',
+        amount: 3000,
         initiatedByClient: true,
         clientDetails: ClientDetails(
         clientId: '22sks',
@@ -38,7 +38,7 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
     Transaction(
         pending: true,
         type: 'Household Waste',
-        amount: '5000',
+        amount: 5000,
         initiatedByClient: true,
         clientDetails: ClientDetails(
         clientId: '22sks',

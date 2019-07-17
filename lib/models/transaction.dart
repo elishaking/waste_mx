@@ -5,15 +5,15 @@ class TransactionType{
   static final String decluster = "De-cluster";
 }
 
-// class TransactionSubType{
-//   static final String household = "Household Waste";
-// }
+class TransactionSubType{
+  static final String credit = "Credit Wallet";
+}
 
 class Transaction{
   final bool pending;
   final String type;
   final String subType;
-  final String amount;
+  final double amount;
   final bool initiatedByVendor;
   final bool initiatedByClient;
   final VendorDetails vendorDetails;

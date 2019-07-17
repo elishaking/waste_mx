@@ -6,8 +6,9 @@ import 'package:waste_mx/scoped_models/main.dart';
 
 class CheckoutPage extends StatefulWidget {
   final String authorizationUrl;
+  final double amount;
 
-  CheckoutPage(this.authorizationUrl);
+  CheckoutPage(this.authorizationUrl, this.amount);
 
   @override
   _CheckoutPageState createState() => _CheckoutPageState();
@@ -55,7 +56,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   icon: Icon(Icons.arrow_forward_ios),
                   onPressed: (){
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (BuildContext context) => VerifyPaymentPage(model)
+                      builder: (BuildContext context) => VerifyPaymentPage(model, widget.amount)
                     ));
                   },
                 );

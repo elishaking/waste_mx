@@ -97,7 +97,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                         model.initializePaystackTransaction(_amount * 100).then((bool initSuccess){
                           if(initSuccess){
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => CheckoutPage(model.transactionAuthorizationUrl)
+                              builder: (BuildContext context) => CheckoutPage(model.transactionAuthorizationUrl, _amount)
                             ));
                           } else{
                             print("error init");

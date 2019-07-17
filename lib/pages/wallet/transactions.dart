@@ -17,7 +17,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     Transaction(
       pending: true,
       type: 'Household Waste',
-      amount: '5000',
+      amount: 5000,
       initiatedByClient: true,
       clientDetails: ClientDetails(
         clientId: '22sks',
@@ -31,7 +31,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     Transaction(
         pending: false,
         type: 'Household Waste',
-        amount: '3000',
+        amount: 3000,
         initiatedByClient: true,
         clientDetails: ClientDetails(
         clientId: '22sks',
@@ -45,7 +45,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     Transaction(
         pending: true,
         type: 'Household Waste',
-        amount: '5000',
+        amount: 5000,
         initiatedByClient: true,
         clientDetails: ClientDetails(
         clientId: '22sks',

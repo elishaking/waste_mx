@@ -21,7 +21,7 @@ import '../models/transaction.dart';
 
 import '../utils/data.dart';
 
-class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, PaymentModel {
+class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, PaymentModel, TransactionModel {
   // static MainModel mainModel;
   // MainModel(){
   //   if(mainModel == null)
