@@ -1143,7 +1143,7 @@ class TransactionModel extends ConnectedModel{
 
     http.Response response = await http.post("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}",
     body: jsonEncode(transaction.toMap()));
-    
+
     if (response.statusCode != 200 && response.statusCode != 201) {
       toggleLoading(false);
       return false;
@@ -1154,19 +1154,24 @@ class TransactionModel extends ConnectedModel{
     return true;
   }
 
-  // Future<bool> fetchTransactions() async{
-  //   toggleLoading(true);
+  Future<bool> fetchTransactions() async{
+    toggleLoading(true);
 
-  //   http.Response response = await http.get("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}");
-  //   if (response.statusCode != 200 && response.statusCode != 201) {
-  //     toggleLoading(false);
-  //     return false;
-  //   }
+    http.Response response = await http.get("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}");
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      toggleLoading(false);
+      return false;
+    }
 
-  //   _transactions.add(transaction);
-  //   toggleLoading(false);
-  //   return true;
-  // }
+    List<Map<String, dynamic>> responseData = jsonDecode(response.body);
+    _transactions = []; // reset transactions
+    responseData.forEach((Map<String, dynamic> data){
+      _transactions.add(Transaction.fromMap(data));
+    });
+
+    toggleLoading(false);
+    return true;
+  }
 }
 
 /*

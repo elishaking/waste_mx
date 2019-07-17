@@ -33,6 +33,27 @@ class Transaction{
       "clientDetails": clientDetails
     };
   }
+
+  static Transaction fromMap(Map<String, dynamic> data){
+    return Transaction(
+      pending: data["pending"],
+      type: data["type"],
+      subType: data["subType"],
+      amount: data["amount"],
+      initiatedByVendor: data["initiatedByVendor"],
+      initiatedByClient: data["initiatedByClient"],
+      clientDetails: data["clientDetails"],
+      vendorDetails: data["vendorDetails"]
+    );
+    // pending = data["pending"];
+    // type = data["type"];
+    // subType = data["subType"];
+    // amount = data["amount"];
+    // initiatedByVendor = data["initiatedByVendor"];
+    // initiatedByClient = data["initiatedByClient"];
+    // vendorDetails = data["vendorDetails"];
+    // clientDetails = data["clientDetails"];
+  }
 }
 
 class VendorDetails {
