@@ -3,6 +3,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/models/dispose_offering.dart';
 import 'package:waste_mx/models/offering.dart';
 import 'package:waste_mx/models/transaction.dart';
+import 'package:waste_mx/models/user.dart';
+import 'package:waste_mx/pages/wallet/transactions.dart';
 import 'package:waste_mx/scoped_models/main.dart';
 
 import '../../widgets/custom_text.dart' as customText;
@@ -113,7 +115,38 @@ class _PaymentButtonState extends State<PaymentButton> {
               //   vendorId: 
               // ),
               pending: true,
-            ));
+            )).then((bool transactionCreated){
+              if(transactionCreated){
+                model.updateWalletBalance(-1 * double.parse(offer.price)).then((bool walletUpdated){
+                  if(walletUpdated) {
+                    model.addEscrow(Escrow(
+                      amount: double.parse(offer.price)
+                    ));
+                    
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                      builder: (BuildContext context) => TransactionsPage(model)
+                    ), (Route route) => route.isFirst);
+                  } else{
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text("Error"),
+                        content: Text("Something went wrong"),
+                      )
+                    );
+                  }
+                });
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: Text("Error"),
+                    content: Text("Cannot create Offer at the moment. Please try again"),
+                  )
+                );
+              }
+            });
+
             // Navigator.of(context).pushReplacement(MaterialPageRoute(
             //     builder: (BuildContext context) =>
             //         PaymentConfirmedPage(1000)));
