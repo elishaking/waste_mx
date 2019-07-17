@@ -413,11 +413,17 @@ class UserModel extends ConnectedModel {
   Future<Map<String, dynamic>> login(String email, String password, UserType userType) async {
     toggleLoading(true);
 
-    final http.Response response = await http.post(
-        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey",
+    http.Response response;
+
+    try{
+      response = await http.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey",
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(
-            {'email': email, 'password': password, 'returnSecureToken': true}));
+        body: json.encode({'email': email, 'password': password, 'returnSecureToken': true}));
+    } catch(err){
+      print(err);
+      toggleLoading(false);
+      return {'success': false, 'message': "Could not connect", 'code': -1};
+    }
 
     // FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
     //   email: email,
