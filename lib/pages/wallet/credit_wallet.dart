@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:waste_mx/pages/wallet/card_details.dart';
+import 'package:waste_mx/pages/wallet/checkout.dart';
 import 'package:waste_mx/utils/assets.dart';
 import 'package:waste_mx/utils/responsive.dart';
 
@@ -96,7 +96,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                         model.initializePaystackTransaction(_amount).then((bool initSuccess){
                           if(initSuccess){
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => CardDetailsPage(model.transactionAuthorizationUrl)
+                              builder: (BuildContext context) => CheckoutPage(model.transactionAuthorizationUrl)
                             ));
                           } else{
                             print("error init");

@@ -39,6 +39,12 @@ class _WalletPageState extends State<WalletPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Wallet'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).popUntil((Route route) => true);
+          },
+        ),
       ),
       body: 
       // false ? Center(

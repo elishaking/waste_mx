@@ -4,16 +4,16 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/pages/wallet/verify_payment.dart';
 import 'package:waste_mx/scoped_models/main.dart';
 
-class CardDetailsPage extends StatefulWidget {
+class CheckoutPage extends StatefulWidget {
   final String authorizationUrl;
 
-  CardDetailsPage(this.authorizationUrl);
+  CheckoutPage(this.authorizationUrl);
 
   @override
-  _CardDetailsPageState createState() => _CardDetailsPageState();
+  _CheckoutPageState createState() => _CheckoutPageState();
 }
 
-class _CardDetailsPageState extends State<CardDetailsPage> {
+class _CheckoutPageState extends State<CheckoutPage> {
   FlutterWebviewPlugin _flutterWebviewPlugin = FlutterWebviewPlugin();
 
   @override
@@ -42,7 +42,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
       url: widget.authorizationUrl,
       withJavascript: true,
       appBar: AppBar(
-        title: Text("Card Details"),
+        title: Text("Checkout"),
       ),
       persistentFooterButtons: <Widget>[
         Container(
