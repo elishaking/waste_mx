@@ -1137,6 +1137,7 @@ class OfferingModel extends ConnectedModel {
 
 class TransactionModel extends ConnectedModel{
 
+  /// add new [Transaction]
   Future<bool> addTransaction(Transaction transaction) async{
     toggleLoading(true);
 
