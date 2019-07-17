@@ -137,7 +137,7 @@ class _WalletPageState extends State<WalletPage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        WalletPayPage()));
+                        WalletPayPage(walletBalance)));
               }
             ) : Container()
           ],

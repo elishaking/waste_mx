@@ -8,6 +8,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:waste_mx/models/offering.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -768,9 +769,14 @@ class PaymentModel extends ConnectedModel{
 
 class OfferingModel extends ConnectedModel {
   Map<String, List> _offerings = Map<String, List>();
+  String _currentOfferingType;
 
   Map<String, List> get allOfferings {
     return Map.from(_offerings);
+  }
+
+  String get currentOfferingType{
+    return _currentOfferingType;
   }
 
   Future<String> getLocation() async {
@@ -1027,7 +1033,7 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future<bool> addOffering(
+  Future<bool> addDisposeOffering(
       DisposeOffering offering, List<File> imageFiles) async {
     _isLoading = true;
     notifyListeners();
@@ -1085,7 +1091,8 @@ class OfferingModel extends ConnectedModel {
         userId: _authenticatedUser.id,
         imagePaths: _uploadImagePaths,
       );
-      _offerings['Dispose Offerings'].add(newDisposeOffering);
+      _currentOfferingType = OfferingType.dispose;
+      _offerings[OfferingType.dispose].insert(0, newDisposeOffering);
       _isLoading = false;
       notifyListeners();
       return true;

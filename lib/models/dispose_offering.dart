@@ -1,4 +1,4 @@
-class WasteType {
+class DisposeWasteType {
   static const String householdWaste = "Household Waste";
   static const String industrialWaste = "Industrial Waste";
   static const String agricWaste = "Agric Waste";

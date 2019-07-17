@@ -95,8 +95,8 @@ class DisposeWastePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, WasteType.householdWaste, 'assets/house.png'),
-            _buildCategoryWidget(context, WasteType.industrialWaste,
+                context, DisposeWasteType.householdWaste, 'assets/house.png'),
+            _buildCategoryWidget(context, DisposeWasteType.industrialWaste,
                 'assets/industrial.png')
           ],
         ),
@@ -107,9 +107,9 @@ class DisposeWastePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildCategoryWidget(
-                context, WasteType.agricWaste, 'assets/harvest.png'),
+                context, DisposeWasteType.agricWaste, 'assets/harvest.png'),
             _buildCategoryWidget(
-                context, WasteType.bulkWaste, 'assets/bulk.png')
+                context, DisposeWasteType.bulkWaste, 'assets/bulk.png')
           ],
         ),
         SizedBox(
@@ -118,9 +118,9 @@ class DisposeWastePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCategoryWidget(context, WasteType.nuclearWaste,
+            _buildCategoryWidget(context, DisposeWasteType.nuclearWaste,
                 'assets/nuclear-plant.png'),
-            _buildCategoryWidget(context, WasteType.otherWaste,
+            _buildCategoryWidget(context, DisposeWasteType.otherWaste,
                 'assets/throw-to-paper-bin.png')
           ],
         ),
