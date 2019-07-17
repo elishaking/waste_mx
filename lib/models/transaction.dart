@@ -20,6 +20,19 @@ class Transaction{
   final ClientDetails clientDetails;
 
   Transaction({this.pending, this.type, this.subType, this.amount, this.initiatedByVendor, this.initiatedByClient, this.vendorDetails, this.clientDetails});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "pending": pending,
+      "type": type,
+      "subType": subType,
+      "amount": amount,
+      "initiatedByVendor": initiatedByVendor,
+      "initiatedByClient": initiatedByClient,
+      "vendorDetails": vendorDetails,
+      "clientDetails": clientDetails
+    };
+  }
 }
 
 class VendorDetails {

@@ -1136,7 +1136,12 @@ class OfferingModel extends ConnectedModel {
 }
 
 class TransactionModel extends ConnectedModel{
-  
+
+  // Future<bool> addTransaction(Transaction transaction) async{
+  //   toggleLoading(true);
+
+  //   http.Response response = await http.post("$_dbUrl/");
+  // }
 }
 
 /*
