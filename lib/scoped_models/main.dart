@@ -1148,6 +1148,7 @@ class TransactionModel extends ConnectedModel{
     }
 
     _transactions.add(transaction);
+    toggleLoading(false);
     return true;
   }
 }
