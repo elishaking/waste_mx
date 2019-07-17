@@ -9,28 +9,31 @@ class TransactionType{
 //   static final String household = "Household Waste";
 // }
 
-class VendorTransaction {
+class Transaction{
   final bool pending;
   final String type;
   final String subType;
-  final String clientId;
-  final String clientName;
   final String amount;
+  final bool initiatedByVendor;
+  final bool initiatedByClient;
+  final VendorDetails vendorDetails;
+  final ClientDetails clientDetails;
 
-  VendorTransaction(
-      {this.pending, this.type, this.subType, this.clientId, this.clientName, this.amount});
+  Transaction({this.pending, this.type, this.subType, this.amount, this.initiatedByVendor, this.initiatedByClient, this.vendorDetails, this.clientDetails});
 }
 
-class ClientTransaction {
-  final bool pending;
-  final String type;
-  final String subType;
+class VendorDetails {
   final String vendorId;
   final String vendorName;
-  final String amount;
 
-  ClientTransaction(
-      {this.pending, this.type, this.subType, this.vendorId, this.vendorName, this.amount});
+  VendorDetails({this.vendorId, this.vendorName});
+}
+
+class ClientDetails {
+  final String clientId;
+  final String clientName;
+
+  ClientDetails({this.clientId, this.clientName});
 }
 
 class Wallet{

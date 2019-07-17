@@ -15,24 +15,36 @@ class TrackTransactionsPage extends StatefulWidget {
 
 class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
   final transactions = [
-    VendorTransaction(
-        pending: true,
-        type: 'Household Waste',
-        amount: '5000',
+    Transaction(
+      pending: true,
+      type: 'Household Waste',
+      amount: '5000',
+      initiatedByClient: true,
+      clientDetails: ClientDetails(
         clientId: '22sks',
-        clientName: 'Johnson Doeman'),
-    VendorTransaction(
+        clientName: 'Johnson Doeman'
+      )
+    ),
+    Transaction(
         pending: false,
         type: 'Household Waste',
         amount: '3000',
+        initiatedByClient: true,
+        clientDetails: ClientDetails(
         clientId: '22sks',
-        clientName: 'Johnson Doeman'),
-    VendorTransaction(
+        clientName: 'Johnson Doeman'
+      )
+    ),
+    Transaction(
         pending: true,
         type: 'Household Waste',
         amount: '5000',
+        initiatedByClient: true,
+        clientDetails: ClientDetails(
         clientId: '22sks',
-        clientName: 'Johnson Doeman'),
+        clientName: 'Johnson Doeman'
+      )
+    ),
   ];
 
   double _targetWidth = 0;

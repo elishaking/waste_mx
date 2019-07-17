@@ -38,6 +38,7 @@ class ConnectedModel extends Model {
   bool _gettingLocation = false;
   String _dbUrl = "https://waste-mx.firebaseio.com";
   int _httpTimeout = 5;
+  List<Transaction> _transactions = List<Transaction>();
 
   ResponseInfo get authResponse{
     return _authResponse;
@@ -49,6 +50,10 @@ class ConnectedModel extends Model {
 
   bool get gettingLocation{
     return _gettingLocation;
+  }
+
+  List<Transaction> get transactions{
+    return _transactions;
   }
 
   void toggleLoading(bool value){
@@ -714,7 +719,7 @@ class PaymentModel extends ConnectedModel{
         _transactionSuccess = true;
         //! make sure that this process completes: very crucial
         //todo: make sure that this process completes: very crucial
-        walletUpdated = await storeWalletBalance(transactionData["data"]["amount"].toDouble());
+        walletUpdated = await updateWalletBalance(transactionData["data"]["amount"].toDouble());
       } else{
         _transactionSuccess = false;
       }
@@ -745,7 +750,7 @@ class PaymentModel extends ConnectedModel{
   }
 
   ///update user wallet balance
-  Future<bool> storeWalletBalance(double amount) async{
+  Future<bool> updateWalletBalance(double amount) async{
     double _walletBalance = await fetchWalletBalance();
 
     _walletBalance += amount;
@@ -1128,6 +1133,10 @@ class OfferingModel extends ConnectedModel {
   //TODO: implement update
   //TODO: implement delete
   //? make sure to add ?auth=<idToken> in the urls
+}
+
+class TransactionModel extends ConnectedModel{
+  
 }
 
 /*
