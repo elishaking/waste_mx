@@ -66,7 +66,8 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
               child: TextFormField(
                 decoration: InputDecoration(
                   labelText: "Amount",
-                  hintText: "10000"
+                  hintText: "10000",
+                  border: OutlineInputBorder()
                 ),
                 validator: (String value){
                   if(value.isEmpty) return "Please enter a valid amount";
@@ -93,7 +94,7 @@ class _CreditWalletPageState extends State<CreditWalletPage> {
                     onPressed: (){
                       if(_formKey.currentState.validate()){
                         _formKey.currentState.save();
-                        model.initializePaystackTransaction(_amount).then((bool initSuccess){
+                        model.initializePaystackTransaction(_amount * 100).then((bool initSuccess){
                           if(initSuccess){
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => CheckoutPage(model.transactionAuthorizationUrl)
