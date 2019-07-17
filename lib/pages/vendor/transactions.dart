@@ -201,7 +201,7 @@ class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(transactions[index].clientName),
+                              Text(transactions[index].clientDetails.clientName),
                               Container(
                                 margin: EdgeInsets.only(top: 7),
                                 padding: const EdgeInsets.symmetric(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waste_mx/models/transaction.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
@@ -12,25 +13,49 @@ class TransactionsPage extends StatefulWidget {
 }
 
 class _TransactionsPageState extends State<TransactionsPage> {
-  final transactions = [
-    {
-      'pending': true,
-      'type': 'Household Waste',
-      'vendor': 'Json Martinz Partners',
-      'amount': 1000,
-    },
-    {
-      'pending': false,
-      'type': 'Office Waste',
-      'vendor': 'Json Martinz Bilikizzz',
-      'amount': 3000,
-    },
-    {
-      'pending': true,
-      'type': 'Household Waste',
-      'vendor': 'Json Martinz Partners',
-      'amount': 1000,
-    },
+  final List<Transaction> transactions = [
+    Transaction(
+      pending: true,
+      type: 'Household Waste',
+      amount: '5000',
+      initiatedByClient: true,
+      clientDetails: ClientDetails(
+        clientId: '22sks',
+        clientName: 'Johnson Doeman'
+      ),
+      vendorDetails: VendorDetails(
+        vendorId: "sjsns",
+        vendorName: "Jackson John"
+      )
+    ),
+    Transaction(
+        pending: false,
+        type: 'Household Waste',
+        amount: '3000',
+        initiatedByClient: true,
+        clientDetails: ClientDetails(
+        clientId: '22sks',
+        clientName: 'Johnson Doeman'
+      ),
+      vendorDetails: VendorDetails(
+        vendorId: "sjsns",
+        vendorName: "Jackson John"
+      )
+    ),
+    Transaction(
+        pending: true,
+        type: 'Household Waste',
+        amount: '5000',
+        initiatedByClient: true,
+        clientDetails: ClientDetails(
+        clientId: '22sks',
+        clientName: 'Johnson Doeman'
+      ),
+      vendorDetails: VendorDetails(
+        vendorId: "sjsns",
+        vendorName: "Jackson John"
+      )
+    ),
   ];
 
   double _targetWidth = 0;
@@ -44,7 +69,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: transactions[index]['pending']
+        children: transactions[index].pending
             ? <Widget>[
                 Icon(
                   Icons.sync_problem,
@@ -80,7 +105,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget _buildActionButtons(BuildContext context, int index) {
     return ButtonTheme.bar(
       child: ButtonBar(
-          children: transactions[index]['pending']
+          children: transactions[index].pending
               ? [
                   // FlatButton(
                   //   child: Row(
@@ -233,11 +258,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               image: AssetImage('assets/profile.png'),
                             ),
                           ),
-                          title: Text(transactions[index]['type']),
+                          title: Text(transactions[index].type),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(transactions[index]['vendor']),
+                              Text(transactions[index].vendorDetails.vendorName),
                               Container(
                                 margin: EdgeInsets.only(top: 7),
                                 padding: const EdgeInsets.symmetric(
@@ -249,7 +274,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     borderRadius: BorderRadius.circular(100)),
                                 child: customText.BodyText(
                                   text:
-                                      'NGN ${transactions[index]['amount'].toString()}',
+                                      'NGN ${transactions[index].amount}',
                                   textColor: Colors.white,
                                 ),
                               )

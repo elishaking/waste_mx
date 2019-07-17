@@ -29,8 +29,8 @@ class Transaction{
       "amount": amount,
       "initiatedByVendor": initiatedByVendor,
       "initiatedByClient": initiatedByClient,
-      "vendorDetails": vendorDetails,
-      "clientDetails": clientDetails
+      "vendorDetails": vendorDetails.toMap(),
+      "clientDetails": clientDetails.toMap()
     };
   }
 
@@ -42,8 +42,8 @@ class Transaction{
       amount: data["amount"],
       initiatedByVendor: data["initiatedByVendor"],
       initiatedByClient: data["initiatedByClient"],
-      clientDetails: data["clientDetails"],
-      vendorDetails: data["vendorDetails"]
+      clientDetails: ClientDetails.fromMap(data["clientDetails"]),
+      vendorDetails: VendorDetails.fromMap(data["vendorDetails"])
     );
     // pending = data["pending"];
     // type = data["type"];
@@ -61,6 +61,20 @@ class VendorDetails {
   final String vendorName;
 
   VendorDetails({this.vendorId, this.vendorName});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "vendorId": vendorId,
+      "vendorName": vendorName
+    };
+  }
+
+  static VendorDetails fromMap(Map<String, dynamic> data){
+    return VendorDetails(
+      vendorId: data["vendorId"],
+      vendorName: data["vendorName"]
+    );
+  }
 }
 
 class ClientDetails {
@@ -68,6 +82,20 @@ class ClientDetails {
   final String clientName;
 
   ClientDetails({this.clientId, this.clientName});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "clientId": clientId,
+      "clientName": clientName
+    };
+  }
+
+  static ClientDetails fromMap(Map<String, dynamic> data){
+    return ClientDetails(
+      clientId: data["clientId"],
+      clientName: data["clientName"]
+    );
+  }
 }
 
 class Wallet{
