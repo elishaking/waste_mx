@@ -1137,11 +1137,18 @@ class OfferingModel extends ConnectedModel {
 
 class TransactionModel extends ConnectedModel{
 
-  // Future<bool> addTransaction(Transaction transaction) async{
-  //   toggleLoading(true);
+  Future<bool> addTransaction(Transaction transaction) async{
+    toggleLoading(true);
 
-  //   http.Response response = await http.post("$_dbUrl/");
-  // }
+    http.Response response = await http.post("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}");
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      toggleLoading(false);
+      return false;
+    }
+
+    _transactions.add(transaction);
+    return true;
+  }
 }
 
 /*
