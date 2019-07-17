@@ -9,6 +9,17 @@ class VendorTransaction {
       {this.pending, this.type, this.clientId, this.clientName, this.amount});
 }
 
+class ClientTransaction {
+  final bool pending;
+  final String type;
+  final String vendorId;
+  final String vendorName;
+  final String amount;
+
+  ClientTransaction(
+      {this.pending, this.type, this.vendorId, this.vendorName, this.amount});
+}
+
 class Wallet{
   final String id;
   final String fullname;

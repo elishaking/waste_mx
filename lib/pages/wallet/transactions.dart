@@ -4,14 +4,14 @@ import '../../widgets/custom_text.dart' as customText;
 
 import '../home.dart';
 
-class TrackTransactionsPage extends StatefulWidget {
+class TransactionsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _TrackTransactionsPageState();
+    return _TransactionsPageState();
   }
 }
 
-class _TrackTransactionsPageState extends State<TrackTransactionsPage> {
+class _TransactionsPageState extends State<TransactionsPage> {
   final transactions = [
     {
       'pending': true,

@@ -14,7 +14,7 @@ import './dispose/dispose_waste.dart';
 import './recycle/recycle_waste.dart';
 import './decluster/decluster.dart';
 import './wallet/wallet.dart';
-import './wallet/track_transactions.dart';
+import './wallet/transactions.dart';
 
 class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
@@ -301,7 +301,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => TrackTransactionsPage()));
+                    builder: (BuildContext context) => TransactionsPage()));
                 //  Navigator.pushNamed(context, 'profile');
               },
             ),

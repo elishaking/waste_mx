@@ -4,7 +4,7 @@ import '../../models/dispose_offering.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
-import './track_transactions.dart';
+import './transactions.dart';
 
 class OfferingAcceptedPage extends StatelessWidget {
   final DisposeOffering offering;
