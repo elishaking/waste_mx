@@ -81,8 +81,31 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Container _buildWalletPageBody(BuildContext context, MainModel model) {
-    return Container(
+  Widget _buildWalletPageBody(BuildContext context, MainModel model) {
+    return model.walletBalance == null ? Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          customText.TitleText(text: "Cannot Connect at the moment",),
+          SizedBox(height: getSize(context, 30),),
+          RaisedButton(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Icon(Icons.redo),
+                SizedBox(width: getSize(context, 5),),
+                customText.BodyText(text: "Retry",)
+              ],
+            ),
+            onPressed: (){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => WalletPage(model, widget.payable)
+              ));
+            },
+          )
+        ],
+      ),
+    ) : Container(
       padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
       child: Center(
         child: Column(

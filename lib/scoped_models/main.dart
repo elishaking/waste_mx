@@ -551,17 +551,25 @@ class PaymentModel extends ConnectedModel{
   Future<bool> createPaystackCustomer() async{
     toggleLoading(true);
 
-    http.Response response = await http.post(
-      "$_url/customer",
-      headers: {
-        "Authorization": "Bearer $_paystackKey",
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode({
-        "email": _authenticatedUser.email, 
-        "first_name": _client.name ?? _vendor.name
-      })
-    );
+    http.Response response;
+
+    try{
+      response = await http.post(
+        "$_url/customer",
+        headers: {
+          "Authorization": "Bearer $_paystackKey",
+          "Content-Type": "application/json"
+        },
+        body: jsonEncode({
+          "email": _authenticatedUser.email, 
+          "first_name": _client.name ?? _vendor.name
+        })
+      );
+    } catch(err){
+      print(err);
+      toggleLoading(false);
+      return false;
+    }
 
     print(response.body);
 
