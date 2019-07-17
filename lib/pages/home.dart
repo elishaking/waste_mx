@@ -295,14 +295,18 @@ class HomePage extends StatelessWidget {
               },
               selected: true,
             ),
-            ListTile(
-              leading: Icon(Icons.format_list_bulleted),
-              title: Text('Transactions'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => TransactionsPage()));
-                //  Navigator.pushNamed(context, 'profile');
+            ScopedModelDescendant<MainModel>(
+              builder: (BuildContext context, Widget child, MainModel model){
+                return ListTile(
+                  leading: Icon(Icons.format_list_bulleted),
+                  title: Text('Transactions'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => TransactionsPage(model)));
+                    //  Navigator.pushNamed(context, 'profile');
+                  },
+                );
               },
             ),
             ListTile(

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/models/transaction.dart';
+import 'package:waste_mx/scoped_models/main.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
 import '../home.dart';
 
 class TransactionsPage extends StatefulWidget {
+  final MainModel model;
+
+  TransactionsPage(this.model);
+
   @override
   State<StatefulWidget> createState() {
     return _TransactionsPageState();
@@ -58,6 +64,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
     ),
   ];
 
+  @override
+  void initState(){
+    widget.model.fetchTransactions();
+
+    super.initState();
+  }
+  
   double _targetWidth = 0;
 
   double _getSize(final double default_1440) {
@@ -243,49 +256,57 @@ class _TransactionsPageState extends State<TransactionsPage> {
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
-        child: ListView(
-          children: List.generate(
-              transactions.length,
-              (int index) => Card(
-                    child: Column(
-                      children: <Widget>[
-                        _buildStatus(index),
-                        ListTile(
-                          leading: CircleAvatar(
-                            child: Image(
-                              image: AssetImage('assets/profile.png'),
-                            ),
-                          ),
-                          title: Text(transactions[index].type),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(transactions[index].vendorDetails.vendorName),
-                              Container(
-                                margin: EdgeInsets.only(top: 7),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 3),
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.8),
-                                    borderRadius: BorderRadius.circular(100)),
-                                child: customText.BodyText(
-                                  text:
-                                      'NGN ${transactions[index].amount}',
-                                  textColor: Colors.white,
-                                ),
-                              )
-                            ],
+      body: ScopedModelDescendant<MainModel>(
+        builder: (BuildContext context, Widget child, MainModel model){
+          return model.isLoading ? Center(
+            child: CircularProgressIndicator(),
+          ) : (model.transactions != null && model.transactions.length > 0) ? Container(
+            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+            child: ListView(
+              children: List.generate(
+                transactions.length,
+                (int index) => Card(
+                  child: Column(
+                    children: <Widget>[
+                      _buildStatus(index),
+                      ListTile(
+                        leading: CircleAvatar(
+                          child: Image(
+                            image: AssetImage('assets/profile.png'),
                           ),
                         ),
-                        _buildActionButtons(context, index)
-                      ],
-                    ),
-                  )),
-        ),
+                        title: Text(transactions[index].type),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(transactions[index].vendorDetails.vendorName),
+                            Container(
+                              margin: EdgeInsets.only(top: 7),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 3),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: customText.BodyText(
+                                text:
+                                    'NGN ${transactions[index].amount}',
+                                textColor: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      _buildActionButtons(context, index)
+                    ],
+                  ),
+                )),
+            ),
+          ) : Center(
+            child: customText.TitleText(text: "No Transactions",), // todo: add image
+          );
+        },
       ),
     );
   }

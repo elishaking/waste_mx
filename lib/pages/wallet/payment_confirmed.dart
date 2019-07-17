@@ -68,9 +68,9 @@ class PaymentConfirmedPage extends StatelessWidget {
                   child: customText.BodyText(
                       text: 'Track Payments', textColor: Colors.white),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            TransactionsPage()));
+                    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //     builder: (BuildContext context) =>
+                    //         TransactionsPage()));
                   },
                 )
               ],
