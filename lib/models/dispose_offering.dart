@@ -13,14 +13,14 @@ class DisposeOffering {
   String id;
   final String name;
   final String iconUrl;
-  final List<UploadImageData> imageData;
+  List<UploadImageData> imageData;
   final String price;
   final String rate;
   final String numberOfBins;
+  final String clientId;
   final String clientName;
   final String clientLocation;
   final String date;
-  final String userId;
 
   DisposeOffering(
       {this.id,
@@ -30,40 +30,40 @@ class DisposeOffering {
       this.price,
       this.rate,
       this.numberOfBins,
+      this.clientId,
       this.clientName,
       this.clientLocation,
-      this.date,
-      this.userId});
+      this.date});
 
   Map<String, dynamic> toMap(){
     return {
       "id": id,
       "name": name,
       "iconUrl": iconUrl,
-      "imageData": imageData,
+      "imageData": imageData.map((UploadImageData data) => data.toMap()),
       "price": price,
       "rate": rate,
       "numberOfBins": numberOfBins,
+      "clientId": clientId,
       "clientName": clientName,
       "clientLocation": clientLocation,
       "date": date,
-      "userId": userId,
     };
   }
 
-  DisposeOffering fromMap(Map<String, dynamic> data){
+  static DisposeOffering fromMap(Map<String, dynamic> data){
     return DisposeOffering(
       id: data["id"],
       name: data["name"],
-      imageData: data[''],
+      imageData: data["imageData"].map((imgData) => UploadImageData.fromMap(imgData)),
       iconUrl: data["iconUrl"],
       price: data["price"],
       rate: data["rate"],
       numberOfBins: data["numberOfBins"],
+      clientId: data["clientId"],
       clientName: data["clientName"],
       clientLocation: data["clientLocation"],
       date: data["date"],
-      userId: data["userId"],
     );
   }
 }

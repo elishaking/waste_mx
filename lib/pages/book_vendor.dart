@@ -402,6 +402,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                           price: _wastePrice,
                                           rate: rate.toString(),
                                           numberOfBins: _formData['numberOfBins'],
+                                          clientId: model.client.id,
                                           clientName: 'new',
                                           clientLocation: _formData['location']
                                         ), _imageFiles).then((_) {

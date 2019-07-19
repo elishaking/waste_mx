@@ -1085,11 +1085,11 @@ class OfferingModel extends ConnectedModel {
     toggleLoading(true);
     
     List<UploadImageData> uploadImageData = await uploadImages(imageFiles);
-
     if (uploadImageData == null) {
       print('Upload Failed');
       return false;
     }
+    offering.imageData = uploadImageData;
     
     _currentOfferingAmount = double.parse(offering.price);
 
@@ -1098,8 +1098,8 @@ class OfferingModel extends ConnectedModel {
           '$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}',
           body: json.encode(offering.toMap()));
       if (response.statusCode != 200 && response.statusCode != 201) {
-        _isLoading = false;
-        notifyListeners();
+        toggleLoading(false);
+
         return false;
       }
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -1120,36 +1120,24 @@ class OfferingModel extends ConnectedModel {
   }
 
   void fetchOfferings() async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
+
     http.Response response1 = await http
         .get('$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}');
     // print(response1.body);
     // http.Response response2 = await http.get('$_dbUrl/recycle_offerings.json?auth=${_authenticatedUser.token}');
-    _isLoading = false;
-    notifyListeners();
+    
     final List<DisposeOffering> disposeOfferings = [];
     final Map<String, dynamic> offeringsData = json.decode(response1.body);
     if (offeringsData != null) {
       offeringsData.forEach((String offeringId, dynamic offeringData) {
-        final DisposeOffering offering = DisposeOffering(
-          id: offeringId,
-          name: "house", //offeringData['title'],
-          iconUrl: 'assets/throw-to-paper-bin.png',
-          imageUrls: offeringData['imageUrls'],
-          price: offeringData['price'],
-          rate: offeringData['imageUrl'],
-          numberOfBins: offeringData['numberOfBins'],
-          clientName: offeringData[Datakeys.clientName],
-          clientLocation: offeringData['clientLocation'],
-          userId: _authenticatedUser.id,
-          imagePaths: offeringData['imagePaths'],
-          date: DateTime.now().month.toString()
-        );
+        final DisposeOffering offering = DisposeOffering.fromMap(offeringData);
         disposeOfferings.add(offering);
       });
       _offerings['Dispose Offerings'] = disposeOfferings;
     }
+
+    toggleLoading(false);
   }
 
   //TODO: implement update

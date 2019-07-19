@@ -17,7 +17,7 @@ class UploadImageData{
     };
   }
 
-  UploadImageData fromMap(Map<String, dynamic> data){
+  static UploadImageData fromMap(Map<String, dynamic> data){
     return UploadImageData(
       imageUrl: data["imageUrl"],
       imagePath: data["imagePath"]
