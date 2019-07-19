@@ -53,7 +53,7 @@ class _VerifyPaymentPageState extends State<VerifyPaymentPage> {
               if(model.transactionSuccess){
                 Timer(Duration(seconds: 3), (){
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (BuildContext context) => WalletPage(model, true)
+                    builder: (BuildContext context) => WalletPage(model, model.offeringPayable)
                   ));
                 });
                 model.addTransaction(Transaction(

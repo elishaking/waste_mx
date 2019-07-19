@@ -784,6 +784,8 @@ class PaymentModel extends ConnectedModel{
 class OfferingModel extends ConnectedModel {
   Map<String, List> _offerings = Map<String, List>();
   String _currentOfferingType;
+  double _currentOfferingAmount;
+  bool _offeringPayable = false;
 
   Map<String, List> get allOfferings {
     return Map.from(_offerings);
@@ -791,6 +793,18 @@ class OfferingModel extends ConnectedModel {
 
   String get currentOfferingType{
     return _currentOfferingType;
+  }
+
+  double get currentOfferingAmount{
+    return _currentOfferingAmount;
+  }
+
+  bool get offeringPayable{
+    return _offeringPayable;
+  }
+
+  toggleOfferingPayable(bool value){
+    _offeringPayable = value;
   }
 
   Future<String> getLocation() async {
@@ -932,6 +946,8 @@ class OfferingModel extends ConnectedModel {
       return false;
     }
 
+    _currentOfferingAmount = double.parse(offering.price);
+
     final Map<String, dynamic> offeringData = {
       'name': offering.name,
       'imageUrls': _uploadImageUrls,
@@ -999,6 +1015,8 @@ class OfferingModel extends ConnectedModel {
       print('Upload Failed');
       return false;
     }
+
+    _currentOfferingAmount = double.parse(offering.price);
 
     final Map<String, dynamic> offeringData = {
       'name': offering.name,
@@ -1069,6 +1087,8 @@ class OfferingModel extends ConnectedModel {
       print('Upload Failed');
       return false;
     }
+    
+    _currentOfferingAmount = double.parse(offering.price);
 
     final Map<String, dynamic> offeringData = {
       'name': offering.name,

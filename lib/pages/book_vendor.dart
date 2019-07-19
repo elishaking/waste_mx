@@ -405,6 +405,7 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                           clientName: 'new',
                                           clientLocation: _formData['location']
                                         ), _imageFiles).then((_) {
+                                        model.toggleOfferingPayable(true);
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (BuildContext context) => WalletPage(model, true))

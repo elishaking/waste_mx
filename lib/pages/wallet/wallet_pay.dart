@@ -12,10 +12,10 @@ import '../../widgets/custom_text.dart' as customText;
 import './payment_confirmed.dart';
 
 class WalletPayPage extends StatelessWidget {
-  final double walletBalance;
+  final MainModel model;
   final double transactionFee = 50;
 
-  WalletPayPage(this.walletBalance);
+  WalletPayPage(this.model);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class WalletPayPage extends StatelessWidget {
               children: <Widget>[
                 Text('Wallet Balance'),
                 customText.HeadlineText(
-                  text: 'N ${walletBalance.toString()}',
+                  text: 'N ${model.walletBalance}',
                   textColor: Theme.of(context).primaryColor,
                 ),
                 SizedBox(
@@ -48,7 +48,7 @@ class WalletPayPage extends StatelessWidget {
                 ),
                 TextFormField(
                   enabled: false,
-                  initialValue: '1000',
+                  initialValue: '${model.currentOfferingAmount}',
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.account_balance_wallet),
                     labelText: 'amount',
