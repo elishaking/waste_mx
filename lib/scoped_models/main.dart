@@ -734,7 +734,7 @@ class PaymentModel extends ConnectedModel{
         _transactionSuccess = true;
         //! make sure that this process completes: very crucial
         //todo: make sure that this process completes: very crucial
-        walletUpdated = await updateWalletBalance(transactionData["data"]["amount"].toDouble());
+        walletUpdated = await updateWalletBalance(transactionData["data"]["amount"].toDouble() / 100);
       } else{
         _transactionSuccess = false;
       }
