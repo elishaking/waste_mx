@@ -34,4 +34,37 @@ class DisposeOffering {
       this.date,
       this.userId,
       this.imagePaths});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "id": id,
+      "name": name,
+      "iconUrl": iconUrl,
+      "imageUrls": imageUrls,
+      "price": price,
+      "rate": rate,
+      "numberOfBins": numberOfBins,
+      "clientName": clientName,
+      "clientLocation": clientLocation,
+      "date": date,
+      "userId": userId,
+      "imagePaths": imagePaths
+    };
+  }
+
+  DisposeOffering fromMap(Map<String, dynamic> data){
+    return DisposeOffering(
+      id: data["id"],
+      name: data["name"],
+      iconUrl: data["iconUrl"],
+      price: data["price"],
+      rate: data["rate"],
+      numberOfBins: data["numberOfBins"],
+      clientName: data["clientName"],
+      clientLocation: data["clientLocation"],
+      date: data["date"],
+      userId: data["userId"],
+      imagePaths: data["imagePaths"]
+    );
+  }
 }
