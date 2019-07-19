@@ -1,3 +1,5 @@
+import 'package:waste_mx/models/offering.dart';
+
 class DisposeWasteType {
   static const String householdWaste = "Household Waste";
   static const String industrialWaste = "Industrial Waste";
@@ -8,10 +10,10 @@ class DisposeWasteType {
 }
 
 class DisposeOffering {
-  final String id;
+  String id;
   final String name;
   final String iconUrl;
-  final List<dynamic> imageUrls;
+  final List<UploadImageData> imageData;
   final String price;
   final String rate;
   final String numberOfBins;
@@ -19,28 +21,26 @@ class DisposeOffering {
   final String clientLocation;
   final String date;
   final String userId;
-  final List<dynamic> imagePaths;
 
   DisposeOffering(
       {this.id,
       this.name,
       this.iconUrl,
-      this.imageUrls,
+      this.imageData,
       this.price,
       this.rate,
       this.numberOfBins,
       this.clientName,
       this.clientLocation,
       this.date,
-      this.userId,
-      this.imagePaths});
+      this.userId});
 
   Map<String, dynamic> toMap(){
     return {
       "id": id,
       "name": name,
       "iconUrl": iconUrl,
-      "imageUrls": imageUrls,
+      "imageData": imageData,
       "price": price,
       "rate": rate,
       "numberOfBins": numberOfBins,
@@ -48,7 +48,6 @@ class DisposeOffering {
       "clientLocation": clientLocation,
       "date": date,
       "userId": userId,
-      "imagePaths": imagePaths
     };
   }
 
@@ -56,6 +55,7 @@ class DisposeOffering {
     return DisposeOffering(
       id: data["id"],
       name: data["name"],
+      imageData: data[''],
       iconUrl: data["iconUrl"],
       price: data["price"],
       rate: data["rate"],
@@ -64,7 +64,6 @@ class DisposeOffering {
       clientLocation: data["clientLocation"],
       date: data["date"],
       userId: data["userId"],
-      imagePaths: data["imagePaths"]
     );
   }
 }

@@ -855,7 +855,7 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future<Map<String, dynamic>> uploadImage(File image,
+  Future<UploadImageData> uploadImage(File image,
       {String imagePath}) async {
     final mimeTypeData = lookupMimeType(image.path).split('/');
     final imageUploadRequest = http.MultipartRequest(
@@ -879,11 +879,27 @@ class OfferingModel extends ConnectedModel {
         return null;
       }
       final responseData = json.decode(response.body);
-      return responseData;
+      return UploadImageData(
+        imageUrl: responseData['imageUrl'],
+        imagePath: responseData['imagePath']
+      );
     } catch (error) {
       print(error);
       return null;
     }
+  }
+
+  Future<List<UploadImageData>> uploadImages(List<File> imageFiles) async{
+    // print(imageFiles[0].uri);
+    final List<UploadImageData> uploadImageData = new List(imageFiles.length);
+    
+    for (int i = 0; i < imageFiles.length; i++) {
+      UploadImageData uploadImageDataOne = await uploadImage(imageFiles[i]);
+      // print(uploadImageDataOne);
+      uploadImageData.add(uploadImageDataOne);
+    }
+
+    return uploadImageData;
   }
 
   Future<List<Vendor>> fetchClosestVendors() async{
@@ -1065,23 +1081,10 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future<bool> addDisposeOffering(
-      DisposeOffering offering, List<File> imageFiles) async {
-    _isLoading = true;
-    notifyListeners();
-    // print(imageFiles[0].uri);
-    final List uploadImageData = new List(imageFiles.length);
-    final List _uploadImageUrls = new List(imageFiles.length);
-    final List _uploadImagePaths = new List(imageFiles.length);
-    // imageFiles.forEach((File imageFile) {
-    //   uploadImageData.add(await uploadImage(imageFile));
-    // });
-    for (int i = 0; i < imageFiles.length; i++) {
-      uploadImageData[i] = await uploadImage(imageFiles[i]);
-      print(uploadImageData[i]);
-      _uploadImageUrls[i] = uploadImageData[i]['imageUrl'];
-      _uploadImagePaths[i] = uploadImageData[i]['imagePath'];
-    }
+  Future<bool> addDisposeOffering(DisposeOffering offering, List<File> imageFiles) async {
+    toggleLoading(true);
+    
+    List<UploadImageData> uploadImageData = await uploadImages(imageFiles);
 
     if (uploadImageData == null) {
       print('Upload Failed');
@@ -1090,50 +1093,28 @@ class OfferingModel extends ConnectedModel {
     
     _currentOfferingAmount = double.parse(offering.price);
 
-    final Map<String, dynamic> offeringData = {
-      'name': offering.name,
-      'imageUrls': _uploadImageUrls,
-      'price': offering.price,
-      'rate': offering.rate,
-      'numberOfBins': offering.numberOfBins,
-      Datakeys.clientName: offering.clientName,
-      'clientLocation': offering.clientLocation,
-      'userId': _authenticatedUser.id,
-      'imagePath': _uploadImagePaths,
-    };
-
     try {
       final http.Response response = await http.post(
           '$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}',
-          body: json.encode(offeringData));
+          body: json.encode(offering.toMap()));
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
         notifyListeners();
         return false;
       }
       final Map<String, dynamic> responseData = json.decode(response.body);
-      //? save uploaded offering locally
-      final DisposeOffering newDisposeOffering = DisposeOffering(
-        id: responseData['name'],
-        name: offering.name,
-        imageUrls: _uploadImageUrls,
-        price: offering.price,
-        rate: offering.rate,
-        numberOfBins: offering.numberOfBins,
-        clientName: offering.clientName,
-        clientLocation: offering.clientLocation,
-        userId: _authenticatedUser.id,
-        imagePaths: _uploadImagePaths,
-      );
+      //todo: save uploaded offering locally
+      offering.id = responseData["name"];
+
       _currentOfferingType = OfferingType.dispose;
-      _offerings[OfferingType.dispose].insert(0, newDisposeOffering);
-      _isLoading = false;
-      notifyListeners();
+      _offerings[OfferingType.dispose].insert(0, offering);
+      
+      toggleLoading(false);
       return true;
     } catch (error) {
-      _isLoading = false;
-      notifyListeners();
       print(error);
+      
+      toggleLoading(false);
       return false;
     }
   }
