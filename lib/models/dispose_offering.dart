@@ -40,7 +40,7 @@ class DisposeOffering {
       "id": id,
       "name": name,
       "iconUrl": iconUrl,
-      "imageData": imageData.map((UploadImageData data) => data.toMap()),
+      "imageData": imageData.map((UploadImageData data) => data.toMap()).toList(),
       "price": price,
       "rate": rate,
       "numberOfBins": numberOfBins,
@@ -55,7 +55,7 @@ class DisposeOffering {
     return DisposeOffering(
       id: data["id"],
       name: data["name"],
-      imageData: data["imageData"].map((imgData) => UploadImageData.fromMap(imgData)),
+      imageData: data["imageData"].map((imgData) => UploadImageData.fromMap(imgData)).toList(),
       iconUrl: data["iconUrl"],
       price: data["price"],
       rate: data["rate"],

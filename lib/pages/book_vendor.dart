@@ -404,8 +404,9 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                           numberOfBins: _formData['numberOfBins'],
                                           clientId: model.client.id,
                                           clientName: 'new',
-                                          clientLocation: _formData['location']
-                                        ), _imageFiles).then((_) {
+                                          clientLocation: _formData['location'],
+                                          date: DateTime.now().toIso8601String()
+                                        ), _imageFiles).then((bool offeringAdded) {
                                         model.toggleOfferingPayable(true);
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(

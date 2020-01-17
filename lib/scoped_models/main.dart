@@ -1093,6 +1093,7 @@ class OfferingModel extends ConnectedModel {
     
     _currentOfferingAmount = double.parse(offering.price);
 
+    _offerings[OfferingType.dispose] = [];
     try {
       final http.Response response = await http.post(
           '$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}',
