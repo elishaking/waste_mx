@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -12,7 +14,7 @@ import './dispose/dispose_waste.dart';
 import './recycle/recycle_waste.dart';
 import './decluster/decluster.dart';
 import './wallet/wallet.dart';
-import './wallet/track_transactions.dart';
+import './wallet/transactions.dart';
 
 class HomePage extends StatelessWidget {
   final double pad_vertical = 13.0;
@@ -293,13 +295,18 @@ class HomePage extends StatelessWidget {
               },
               selected: true,
             ),
-            ListTile(
-              leading: Icon(Icons.format_list_bulleted),
-              title: Text('Transactions'),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => TrackTransactionsPage()));
-                //  Navigator.pushNamed(context, 'profile');
+            ScopedModelDescendant<MainModel>(
+              builder: (BuildContext context, Widget child, MainModel model){
+                return ListTile(
+                  leading: Icon(Icons.format_list_bulleted),
+                  title: Text('Transactions'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => TransactionsPage(model)));
+                    //  Navigator.pushNamed(context, 'profile');
+                  },
+                );
               },
             ),
             ListTile(
@@ -316,6 +323,7 @@ class HomePage extends StatelessWidget {
                   leading: Icon(Icons.account_balance_wallet),
                   title: Text('Wallet'),
                   onTap: () {
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => WalletPage(model, false)));
                     //  Navigator.pushNamed(context, 'profile');
@@ -379,6 +387,12 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            // ScopedModelDescendant(
+            //   builder: (BuildContext context, Widget child, MainModel model){
+            //     print(jsonEncode(model.client.toMap()));
+            //     return Container();
+            //   },
+            // ),
             _buildTopSection(context),
             // _buildBottomSection(),
             _buildCategoriesSection(context),

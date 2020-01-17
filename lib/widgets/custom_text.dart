@@ -22,7 +22,7 @@ class HeadlineText extends StatelessWidget {
         fontWeight: FontWeight.w900,
         fontSize: getSize(context, fontSize),
         color: textColor,
-        letterSpacing: 1.3,
+        letterSpacing: 0.3,
       ),
       textAlign: textAlign,
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/custom_text.dart' as customText;
 
-import './track_transactions.dart';
+import './transactions.dart';
 
 class PaymentConfirmedPage extends StatelessWidget {
   final double amount;
@@ -68,9 +68,9 @@ class PaymentConfirmedPage extends StatelessWidget {
                   child: customText.BodyText(
                       text: 'Track Payments', textColor: Colors.white),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            TrackTransactionsPage()));
+                    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //     builder: (BuildContext context) =>
+                    //         TransactionsPage()));
                   },
                 )
               ],

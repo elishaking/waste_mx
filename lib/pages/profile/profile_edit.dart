@@ -111,13 +111,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 onPressed: (){
                   if(_formKey.currentState.validate()){
                     _formKey.currentState.save();
-                    model.updateUser(Client(
+                    model.client.update(
                       name: _formData['name'],
                       phone: _formData['phone'],
                       address: _formData['location'],
-                      username: model.client.username,
-                      dateCreated: model.client.dateCreated
-                    ).toMap(), 'clients').then((done){
+                    );
+                    model.updateUser('clients', client: model.client).then((done){
                       Navigator.of(context).pop(done);
                     });
                   }

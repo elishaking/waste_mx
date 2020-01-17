@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:waste_mx/book_vendor_image.dart';
+import 'package:waste_mx/models/dispose_offering.dart';
 import '../scoped_models/main.dart';
 
 import '../widgets/custom_text.dart' as customText;
@@ -395,20 +396,23 @@ class _BookVendorPageState extends State<BookVendorPage> {
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
-                                      // model.addOffering(
-                                      //   DisposeOffering(
-                                      //     name: widget.wasteType,
-                                      //     price: _wastePrice,
-                                      //     rate: rate.toString(),
-                                      //     numberOfBins: _formData['numberOfBins'],
-                                      //     clientName: 'new',
-                                      //     clientLocation: _formData['location']
-                                      //   ), _imageFiles).then((_) {
-                                      //   Navigator.of(context).pushReplacement(
-                                      //     MaterialPageRoute(
-                                      //         builder: (BuildContext context) => WalletPage(model, true))
-                                      //     );
-                                      //   });
+                                      model.addDisposeOffering(
+                                        DisposeOffering(
+                                          name: widget.wasteType,
+                                          price: _wastePrice,
+                                          rate: rate.toString(),
+                                          numberOfBins: _formData['numberOfBins'],
+                                          clientId: model.client.id,
+                                          clientName: 'new',
+                                          clientLocation: _formData['location'],
+                                          date: DateTime.now().toIso8601String()
+                                        ), _imageFiles).then((bool offeringAdded) {
+                                        model.toggleOfferingPayable(true);
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) => WalletPage(model, true))
+                                          );
+                                        });
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (BuildContext context) => WalletPage(model, true)

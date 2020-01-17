@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
-import 'dart:math';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +8,8 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:waste_mx/models/offering.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // import 'package:firebase_auth/firebase_auth.dart';
 
@@ -22,7 +22,13 @@ import '../models/transaction.dart';
 
 import '../utils/data.dart';
 
-class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, TransactionModel {}
+class MainModel extends Model with ConnectedModel, UserModel, OfferingModel, PaymentModel, TransactionModel {
+  // static MainModel mainModel;
+  // MainModel(){
+  //   if(mainModel == null)
+  //     mainModel = this;
+  // }
+}
 
 class ConnectedModel extends Model {
   User _authenticatedUser;
@@ -33,6 +39,7 @@ class ConnectedModel extends Model {
   bool _gettingLocation = false;
   String _dbUrl = "https://waste-mx.firebaseio.com";
   int _httpTimeout = 5;
+  List<Transaction> _transactions = List<Transaction>();
 
   ResponseInfo get authResponse{
     return _authResponse;
@@ -44,6 +51,10 @@ class ConnectedModel extends Model {
 
   bool get gettingLocation{
     return _gettingLocation;
+  }
+
+  List<Transaction> get transactions{
+    return _transactions;
   }
 
   void toggleLoading(bool value){
@@ -79,143 +90,164 @@ class UserModel extends ConnectedModel {
         : UserType.Vendor;
   }
 
+  /// Automatically authenticates user
   void autoAuthenticate() async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token');
+
+    final bool markedForDelete = prefs.getBool("markedForDelete");
+    final String idToken = prefs.getString("userIdToken");
+    if(markedForDelete){
+      final bool authUserDeleted = await _deleteAuthUser(idToken);
+      return;
+    }
+
+    final String refreshToken = prefs.getString('userRefreshToken');
     final UserType userType = _getUserType(prefs.getString('userType'));
-    final String expiryTimeString = prefs.getString('expiryTime');
+    // final String expiryTimeString = prefs.getString('expiryTime');
     _authResponse = ResponseInfo(false, 'User not Saved', -1);
 
-    if (token != null) {
+    if (refreshToken != null) {
       // print(token);
-      final DateTime now = DateTime.now();
-      final parsedExpiryTime = expiryTimeString == null
-          ? DateTime.now().subtract(Duration(days: 1))
-          : DateTime.parse(expiryTimeString);
-      if (parsedExpiryTime.isBefore(now)) {
-        final http.Response response = await http.post(
-          "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=$_apiKey",
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({'token': token, 'returnSecureToken': true}))
-          .catchError((error) {
-            print(error.toString());
-            _isLoading = false;
-            notifyListeners();
-            _authResponse = ResponseInfo(false, error, -1);
-          });
-            // .timeout(Duration(seconds: _httpTimeout), 
-            // onTimeout: (){
-            //   _authenticatedUser = null;
-            //   _isLoading = false;
-            //   notifyListeners();
-            // });
-        if(response == null) return;
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        // print(response.body);
-        if (responseData.containsKey('idToken')) {
-          await _saveAuthUser(responseData, userType);
-        } else {
-          _authResponse = ResponseInfo(true, 'Could not save User info', -1);
-          _authenticatedUser = null;
+      // final DateTime now = DateTime.now();
+      // final parsedExpiryTime = expiryTimeString == null
+      //     ? DateTime.now().subtract(Duration(days: 1))
+      //     : DateTime.parse(expiryTimeString);
+      // if (parsedExpiryTime.isBefore(now)) {
+      final http.Response response = await http.post(
+        "https://securetoken.googleapis.com/v1/token?key=$_apiKey",
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'grant_type': 'refresh_token', 'refresh_token': refreshToken}))
+        .catchError((error) {
+          print(error.toString());
           _isLoading = false;
           notifyListeners();
-        }
+          _authResponse = ResponseInfo(false, error, -1);
+        });
+          // .timeout(Duration(seconds: _httpTimeout), 
+          // onTimeout: (){
+          //   _authenticatedUser = null;
+          //   _isLoading = false;
+          //   notifyListeners();
+          // });
+      if(response == null) return;
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      // print(response.body);
+      if (responseData.containsKey('idToken')) {
+        await _initializeAuthUser(responseData, userType);
+        await _saveAuthUser(responseData);
+      } else {
+        _authResponse = ResponseInfo(true, 'Could not authenticate', -1);
+        _authenticatedUser = null;
+        
+        toggleLoading(false);
       }
+      // }
 
       final String userEmail = prefs.getString('userEmail');
       final String userId = prefs.getString('userId');
       _authenticatedUser =
-          User(id: userId, email: userEmail, token: token, userType: userType);
+          User(id: userId, email: userEmail, token: idToken, userType: userType);
       
-      await _getUserData();
+      await _getUserDataOnLogin();
       _authResponse = ResponseInfo(true, 'Successful Authentication', -1);
-      _isLoading = false;
-      notifyListeners();
+      
+      toggleLoading(false);
     } else{
       _authResponse = ResponseInfo(true, 'User not created', -1);
-      _isLoading = false;
-      notifyListeners();
+      
+      toggleLoading(false);
     }
   }
 
-  Future _saveAuthUser(responseData, UserType userType) async {
+  Future _initializeAuthUser(responseData, UserType userType) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    
     _authenticatedUser = User(
         id: responseData['localId'],
         email: responseData['email'],
         token: responseData['idToken'],
-        userType: userType);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', responseData['idToken']);
-    prefs.setString('userEmail', responseData['email']);
-    prefs.setString('userId', responseData['localId']);
-    prefs.setString('userType', userType.toString());
-
-    final DateTime now = DateTime.now();
-    final DateTime expiryTime =
-        now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
-    prefs.setString('expiryTime', expiryTime.toIso8601String());
+        profileId: pref.getString("userProfileId"),
+        userType: userType,
+        markedForDelete: pref.getBool("userMarkedForDelete") ?? false);
   }
 
-  Future _saveUserData(Map<String, dynamic> data) async {
+  Future _saveAuthUser(responseData) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear(); //! comment out
+    prefs.setString('userIdToken', _authenticatedUser.token);
+    prefs.setString("userRefreshToken", responseData["refreshToken"]);
+    prefs.setString('userEmail', _authenticatedUser.email);
+    prefs.setString('userId', _authenticatedUser.id);
+    prefs.setString('userType', _authenticatedUser.userType.toString());
+    prefs.setString("userProfileId", _authenticatedUser.profileId);
+    prefs.setBool("userMarkedForDelete", _authenticatedUser.markedForDelete);
+
+    // final DateTime now = DateTime.now();
+    // // responseData['expiresIn'];
+    // final DateTime expiryTime =
+    //     now.add(Duration(seconds: int.parse(responseData["expiresIn"])));
+    // prefs.setString('expiryTime', expiryTime.toIso8601String());
+  }
+
+  Future _saveUserProfileData(Map<String, dynamic> data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     data.forEach((key, value) {
       prefs.setString(key, value.toString());
     });
   }
 
-  Future<bool> _getUserData() async {
+  // Future _deleteUserData(Map<String, dynamic> data) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   data.forEach((key, value) {
+  //     //todo: delete
+  //   });
+  // }
+
+  /// gets user data either from the cloud or from disk
+  Future<bool> _getUserDataOnLogin() async {
+    http.Response response = await http
+      .get('$_dbUrl/clients/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}');
+    
+    Map<String, dynamic> responseData = json.decode(response.body);
+    if(responseData == null){
+      await _deleteAuthUser(_authenticatedUser.token);
+      return false;
+    }
+
+    await _initializeUser(responseData);
+
+    return true;
+  }
+
+  Future<bool> _initializeUser(Map<String, dynamic> data) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    data["clientId"] = _authenticatedUser.profileId;
+
     if (_authenticatedUser.userType == UserType.Client) {
-      if(prefs.getString(Datakeys.clientId) == null){
-        http.Response response = await http
-          .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
-        Map<String, dynamic> responseData = json.decode(response.body);
-        print(responseData);
-        String key = responseData.keys.toList()[0];
-        _client = Client(
-          id: key,
-          name: responseData[key][Datakeys.clientName],
-          pos: responseData[key][Datakeys.clientPos].map<double>((x) {return double.parse(x.toString());}).toList(),
-          phone: responseData[key][Datakeys.clientPhone],
-          username: responseData[key][Datakeys.clientUsername],
-          address: responseData[key][Datakeys.clientAddress],
-          dateCreated: responseData[key][Datakeys.clientDateCreated]
-        );
+      if(prefs.getString(Datakeys.clientId) != _authenticatedUser.profileId){
+        _client = Client.fromMap(data);
       } else{
         String pos = prefs.getString(Datakeys.clientPos);
         _client = Client(
-          id: prefs.getString(Datakeys.clientId),
+          id: prefs.getString(_authenticatedUser.profileId),
           name: prefs.getString(Datakeys.clientName),
           pos: json.decode(pos == null ? "[0,0]" : pos).map<double>((x) {return double.parse(x.toString());}).toList(),
           phone: prefs.getString(Datakeys.clientPhone),
           username: prefs.getString(Datakeys.clientUsername),
           address: prefs.getString(Datakeys.clientAddress),
           dateCreated: prefs.getString(Datakeys.clientDateCreated));
-        print(_client.pos);
+        // print(_client.pos);
       }
     } else {
-      if(prefs.getString(Datakeys.clientId) == null){
+      if(prefs.getString(Datakeys.vendorId) != data["vendorId"]){
         http.Response response = await http
-          .get('$_dbUrl/clients/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}');
+          .get('$_dbUrl/vendors/${_vendor.id}.json?auth=${_authenticatedUser.token}');
         Map<String, dynamic> responseData = json.decode(response.body);
-        print(responseData);
-        String key = responseData.keys.toList()[0];
-        _vendor = Vendor(
-          id: key,
-          name: responseData[key][Datakeys.vendorName],
-          phone: responseData[key][Datakeys.vendorPhone],
-          pos: responseData[key][Datakeys.vendorPos],
-          companyName: responseData[key][Datakeys.vendorCompanyName],
-          companyAddress: responseData[key][Datakeys.vendorCompanyAddress],
-          username: responseData[key][Datakeys.vendorUsername],
-          address: responseData[key][Datakeys.vendorAddress],
-          verified: responseData[key][Datakeys.vendorVerified],
-          rate: responseData[key][Datakeys.vendorRate],
-          rating: responseData[key][Datakeys.vendorRating],
-          dateCreated: responseData[key][Datakeys.vendorDateCreated]
-        );
+        // print(responseData);
+        Vendor.fromMap(responseData);
       } else{
         _vendor = Vendor(
           id: prefs.getString(Datakeys.vendorId),
@@ -232,103 +264,87 @@ class UserModel extends ConnectedModel {
     return true;
   }
 
-  Future<bool> _addUser(
-      Map<String, dynamic> userData, String collectionName, String userId) async {
-    toggleLoading(true);
+  /// saves user to firebase and on disk immediately after signup
+  Future<bool> _saveUserOnSignUp(Map<String, dynamic> userData, String collectionName) async {
     try {
       Geolocator geolocator = Geolocator();
         Position position = await geolocator
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-      List<double> pos = [position.latitude, position.longitude];
+      List<double> pos = position == null ? null : [position.latitude, position.longitude];
       userData[collectionName.substring(0, collectionName.length - 1) + "Pos"] = pos;
 
       final http.Response response = await http.post(
-          "$_dbUrl/$collectionName/$userId.json?auth=${_authenticatedUser.token}",
+          "$_dbUrl/$collectionName.json?auth=${_authenticatedUser.token}",
           body: json.encode(userData));
       if (response.statusCode != 200 && response.statusCode != 201) {
-        toggleLoading(false);
+        _authenticatedUser.markedForDelete = true;
         return false;
       }
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      if (collectionName == "clients") {
-        _client = Client(
-            id: responseData['name'],
-            name: userData[Datakeys.clientName],
-            pos: pos,
-            phone: userData[Datakeys.clientPhone],
-            username: userData[Datakeys.clientUsername],
-            address: userData[Datakeys.clientAddress],
-            dateCreated: userData[Datakeys.clientDateCreated]);
-        print(json.encode(_client.toMap()));
-      } else {
-        _vendor = Vendor(
-            id: responseData['name'],
-            name: userData[Datakeys.vendorName],
-            pos: pos,
-            companyName: userData[Datakeys.vendorCompanyName],
-            companyAddress: userData[Datakeys.vendorCompanyAddress],
-            phone: userData[Datakeys.vendorPhone],
-            username: userData[Datakeys.vendorUsername],
-            address: userData[Datakeys.vendorAddress],
-            verified: userData[Datakeys.vendorVerified],
-            rate: userData[Datakeys.vendorRating],
-            rating: userData[Datakeys.vendorRating],
-            dateCreated: userData[Datakeys.vendorDateCreated]);
-      }
-      userData['id'] = responseData['name'];
-      await _saveUserData(userData);
-      toggleLoading(false);
+
+      _authenticatedUser.profileId = jsonDecode(response.body)["name"];
+      // String idString = _authenticatedUser.userType == UserType.Client ? "clientId" : "vendorId";
+      // userData[idString] = jsonDecode(response.body)["name"];
+
+      await _initializeUser(userData);
+
+      await _saveUserProfileData(vendor == null ? _client.toMap() : _vendor.toMap());
+
       return true;
     } catch (error) {
-      toggleLoading(false);
       print(error);
+
       return false;
     }
   }
 
-  Future<bool> updateUser(Map<String, dynamic> userData, String collectionName) async{
+  Future<bool> updateUser(String collectionName, {Client client, Vendor vendor}) async{
+    toggleLoading(true);
+
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await http.put(
           "$_dbUrl/$collectionName/${collectionName == 'clients' ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}",
-          body: json.encode(userData));
+          body: json.encode(vendor == null ? client.toMap() : vendor.toMap()));
+
       if (response.statusCode != 200 && response.statusCode != 201) {
-        _isLoading = false;
-        notifyListeners();
+        toggleLoading(false);
         return false;
       }
-      final Map<String, dynamic> responseData = json.decode(response.body);
+
       if (collectionName == "clients") {
-        _client = Client(
-            id: responseData['name'],
-            name: userData[Datakeys.clientName],
-            phone: userData[Datakeys.clientPhone],
-            username: userData[Datakeys.clientUsername],
-            address: userData[Datakeys.clientAddress],
-            dateCreated: userData[Datakeys.clientDateCreated]);
+        _client = client;
         print(json.encode(_client.toMap()));
       } else {
-        _vendor = Vendor(
-            id: responseData['name'],
-            name: userData[Datakeys.vendorName],
-            companyName: userData[Datakeys.vendorCompanyName],
-            companyAddress: userData[Datakeys.vendorCompanyAddress],
-            phone: userData[Datakeys.vendorPhone],
-            username: userData[Datakeys.vendorUsername],
-            address: userData[Datakeys.vendorAddress],
-            dateCreated: userData[Datakeys.vendorDateCreated]);
+        _vendor = vendor;
       }
-      userData['id'] = responseData['name'];
-      await _saveUserData(userData);
-      _isLoading = false;
-      notifyListeners();
+
+      // final Map<String, dynamic> responseData = json.decode(response.body);
+      // userData['id'] = responseData['name'];
+      await _saveUserProfileData(vendor == null ? client.toMap() : vendor.toMap());
+      
+      toggleLoading(false);
       return true;
     } catch (error) {
-      _isLoading = false;
-      notifyListeners();
       print(error);
+
+      toggleLoading(false);
       return false;
     }
+  }
+
+  Future<bool> _deleteAuthUser(String idToken) async{
+    final http.Response deleteResponse = await http.post(
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/deleteAccount?key=$_apiKey",
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'idToken': idToken}));
+
+    Map<String, dynamic> deleteResponseData = jsonDecode(deleteResponse.body);
+    if(deleteResponseData.containsKey("kind")){
+      _authenticatedUser = null;
+    } else{
+      return false;
+    }
+    return true;
   }
   
   Future<Map<String, dynamic>> signup(String email, String password,
@@ -344,20 +360,33 @@ class UserModel extends ConnectedModel {
 
     // _isLoading = false;
     // notifyListeners();
+    // final bool paystackCustomerCreated = await MainModel.mainModel.createPaystackCustomer();
+    // if(!paystackCustomerCreated){
+    //   toggleLoading(false);
+    //   return {'success': false, 'message': "Something wrong happened, Please try again"};
+    // }
 
+    // print(response.body);
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
     String message = 'Authentication Success';
     if (responseData.containsKey('idToken')) {
       bool userAdded = false;
       if (vendor == null) {
-        await _saveAuthUser(responseData, UserType.Client);
-        userAdded = await _addUser(client.toMap(), 'clients', _authenticatedUser.id);
+        await _initializeAuthUser(responseData, UserType.Client);
+        userAdded = await _saveUserOnSignUp(client.toMap(), 'clients');
       } else {
-        await _saveAuthUser(responseData, UserType.Vendor);
-        userAdded = await _addUser(vendor.toMap(), 'vendors', _authenticatedUser.id);
+        await _initializeAuthUser(responseData, UserType.Vendor);
+        userAdded = await _saveUserOnSignUp(vendor.toMap(), 'vendors');
       }
       success = userAdded;
+
+      if(userAdded){
+        _saveAuthUser(responseData);
+      } else{
+        await _deleteAuthUser(responseData['idToken']);
+      }
+
       if (!success) message = 'Failed to upload user data';
     } else {
       switch (responseData['error']['message']) {
@@ -380,15 +409,21 @@ class UserModel extends ConnectedModel {
     return {'success': success, 'message': message};
   }
 
+  /// Log user in
   Future<Map<String, dynamic>> login(String email, String password, UserType userType) async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
 
-    final http.Response response = await http.post(
-        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey",
+    http.Response response;
+
+    try{
+      response = await http.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=$_apiKey",
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(
-            {'email': email, 'password': password, 'returnSecureToken': true}));
+        body: json.encode({'email': email, 'password': password, 'returnSecureToken': true}));
+    } catch(err){
+      print(err);
+      toggleLoading(false);
+      return {'success': false, 'message': "Could not connect", 'code': -1};
+    }
 
     // FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
     //   email: email,
@@ -404,13 +439,24 @@ class UserModel extends ConnectedModel {
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool success = false;
-    String message = 'Authentication Success';
+    String message = 'Authentication Failed';
     int code = -1;
     if (responseData.containsKey('idToken')) {
     // if(user.){
-      await _saveAuthUser(responseData, userType);
-      await _getUserData(); //! prevent login if data not saved locally
-      success = true;
+      await _initializeAuthUser(responseData, userType);
+      if(_authenticatedUser.markedForDelete){
+        final bool userDeleted = await _deleteAuthUser(responseData['idToken']);
+        return userDeleted ? {'success': success, 'message': 'Your email is not registered', 'code': 0} : {'success': success, 'message': message, 'code': code};
+      }
+      await _saveAuthUser(responseData);
+      bool userDataLoaded =  await _getUserDataOnLogin(); //! prevent login if data not saved locally
+
+      if(userDataLoaded)
+        success = true;
+      else {
+        message = "User does not exist, Please sign up";
+        code = 0;
+      }
     } else {
       switch (responseData['error']['message']) {
         case 'EMAIL_NOT_FOUND':
@@ -435,8 +481,7 @@ class UserModel extends ConnectedModel {
       }
     }
 
-    _isLoading = false;
-    notifyListeners();
+    toggleLoading(false);
 
     return {'success': success, 'message': message, 'code': code};
   }
@@ -485,11 +530,281 @@ class UserModel extends ConnectedModel {
   }
 }
 
+class PaymentModel extends ConnectedModel{
+  String _paystackKey = "sk_test_5b529119ae8d6edb4b42e831eb3b072526ad6c0a";
+  String _url = "https://api.paystack.co/";
+  String _transactionAuthorizationUrl;
+  String _transactionReference;
+  bool _transactionSuccess = false;
+
+  double _walletBalance;
+
+  PaystackSubAccount _paystackSubAccount;
+
+  String get transactionAuthorizationUrl{
+    return _transactionAuthorizationUrl;
+  }
+
+  double get walletBalance{
+    return _walletBalance;
+  }
+
+  bool get transactionSuccess{
+    return _transactionSuccess;
+  }
+
+  /// create new paystack customer
+  Future<bool> createPaystackCustomer() async{
+    toggleLoading(true);
+
+    http.Response response;
+
+    try{
+      response = await http.post(
+        "$_url/customer",
+        headers: {
+          "Authorization": "Bearer $_paystackKey",
+          "Content-Type": "application/json"
+        },
+        body: jsonEncode({
+          "email": _authenticatedUser.email, 
+          "first_name": _client.name ?? _vendor.name
+        })
+      );
+    } catch(err){
+      print(err);
+      toggleLoading(false);
+      return false;
+    }
+
+    print(response.body);
+
+    Map<String, dynamic> customerData = jsonDecode(response.body);
+    if(customerData["status"]){
+      _walletBalance = await fetchWalletBalance();
+    }
+
+    toggleLoading(false);
+    return customerData["status"];
+  }
+
+  /// fetch paystack customer
+  Future<bool> fetchPaystackCustomer() async{
+    http.Response response = await http.get(
+      "$_url/customer/${_authenticatedUser.email}",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        // "Content-Type": "application/json"
+      },
+    );
+
+    print(response.body);
+    Map<String, dynamic> customerData = jsonDecode(response.body);
+    if(customerData["status"]){
+      // todo: sum up all transactions to get wallet total
+    }
+
+    return customerData["status"];
+  }
+
+  //? SUB-ACCOUNTS
+
+  /// create new paystack sub-account
+  Future<bool> createPaystackSubAccount(String accountNumber, String bankName) async{
+    toggleLoading(true);
+
+    http.Response response = await http.post(
+      "$_url/subaccount",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode({
+        "business_name": _client == null ? _vendor.companyName : "${_client.name} Waste MX", 
+        "settlement_bank": accountNumber, 
+        "account_number": bankName, 
+        "percentage_charge": 3
+      })
+    );
+
+    toggleLoading(false);
+
+    Map<String, dynamic> subAccountData =  jsonDecode(response.body);
+    if(subAccountData["status"]) {
+      if(_client != null)
+        _client.subAccountCode = subAccountData["data"]["subaccount_code"];
+      else
+        _vendor.subAccountCode = subAccountData["data"]["subaccount_code"];
+    }
+
+    return subAccountData["status"];
+  }
+
+  /// update paystack sub-account
+  Future<bool> updatePaystackSubAccount(PaystackSubAccount paystackSubAccount) async{
+    toggleLoading(true);
+
+    http.Response response = await http.put(
+      "$_url/subaccount/${_client == null ? _client.subAccountCode : _vendor.subAccountCode}",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(paystackSubAccount.toMap())
+    );
+
+    toggleLoading(false);
+
+    Map<String, dynamic> subAccountData =  jsonDecode(response.body);
+
+    return subAccountData["status"];
+  }
+
+  /// fetch paystack sub-account
+  Future<bool> fetchPaystackSubAccount() async{
+    toggleLoading(true);
+
+    http.Response response = await http.get(
+      "$_url/subaccount/${_client == null ? _client.subAccountCode : _vendor.subAccountCode}",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        // "Content-Type": "application/json"
+      }
+    );
+
+    toggleLoading(false);
+
+    Map<String, dynamic> subAccountData =  jsonDecode(response.body);
+    _paystackSubAccount = PaystackSubAccount.fromMap(subAccountData);
+
+    return subAccountData["status"];
+  }
+
+  //? TRANSACTIONS
+
+  /// intialiaze transaction with paystack
+  Future<bool> initializePaystackTransaction(double amount) async{
+    toggleLoading(true);
+
+    print(amount);
+
+    http.Response response = await http.post(
+      "$_url/transaction/initialize",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode({
+        "amount": amount,
+        "email": _authenticatedUser.email
+      })
+    );
+
+    toggleLoading(false);
+
+    print(response.body);
+    Map<String, dynamic> transactionData =  jsonDecode(response.body);
+
+    if(transactionData["status"] == true){
+      _transactionAuthorizationUrl = transactionData["data"]["authorization_url"];
+      _transactionReference = transactionData["data"]["reference"];
+    }
+
+    return transactionData["status"];
+  }
+
+  Future<String> verifyPaystackTransaction() async{
+    toggleLoading(true);
+
+    http.Response response = await http.get(
+      "$_url/transaction/verify/$_transactionReference",
+      headers: {
+        "Authorization": "Bearer $_paystackKey",
+      },
+    );
+
+    print(response.body);
+    Map<String, dynamic> transactionData =  jsonDecode(response.body);
+
+    bool walletUpdated = false;
+
+    if(transactionData["status"] == true){
+      print(transactionData["data"]["status"]);
+      if(transactionData["data"]["status"] == "success"){
+        _transactionSuccess = true;
+        //! make sure that this process completes: very crucial
+        //todo: make sure that this process completes: very crucial
+        walletUpdated = await updateWalletBalance(transactionData["data"]["amount"].toDouble() / 100);
+      } else{
+        _transactionSuccess = false;
+      }
+    }
+
+    toggleLoading(false);
+
+    return transactionData["data"]["gateway_response"];
+  }
+
+  Future creditMXWallet(double amount, details) async{
+
+  }
+
+  //? WALLET BALANCE
+
+  ///fetch user wallet balance
+  Future<double> fetchWalletBalance() async{
+    String url = "$_dbUrl/clients/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}";
+
+    http.Response response = await http.get(url);
+
+    Map<String, dynamic> responseData = json.decode(response.body);
+    print(responseData);
+    double _walletBalance = responseData["walletBalance"] ?? 0;
+
+    return _walletBalance;
+  }
+
+  ///update user wallet balance
+  Future<bool> updateWalletBalance(double amount) async{
+    double _walletBalance = await fetchWalletBalance();
+
+    _walletBalance += amount;
+    var userData = _vendor == null ? _client.toMap() : _vendor.toMap();
+    userData["walletBalance"] = _walletBalance;
+
+    http.Response response = await http
+      .put('$_dbUrl/${_vendor == null ? "clients" : "vendors"}/${_vendor == null ? _client.id : _vendor.id}.json?auth=${_authenticatedUser.token}',
+      body: jsonEncode(userData));
+
+    var responseData = jsonDecode(response.body);
+    return responseData != null && responseData.keys.toList()[0] != null;
+  }
+}
+
 class OfferingModel extends ConnectedModel {
   Map<String, List> _offerings = Map<String, List>();
+  String _currentOfferingType;
+  double _currentOfferingAmount;
+  bool _offeringPayable = false;
 
   Map<String, List> get allOfferings {
     return Map.from(_offerings);
+  }
+
+  String get currentOfferingType{
+    return _currentOfferingType;
+  }
+
+  double get currentOfferingAmount{
+    return _currentOfferingAmount;
+  }
+
+  bool get offeringPayable{
+    return _offeringPayable;
+  }
+
+  toggleOfferingPayable(bool value){
+    _offeringPayable = value;
   }
 
   Future<String> getLocation() async {
@@ -540,7 +855,7 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future<Map<String, dynamic>> uploadImage(File image,
+  Future<UploadImageData> uploadImage(File image,
       {String imagePath}) async {
     final mimeTypeData = lookupMimeType(image.path).split('/');
     final imageUploadRequest = http.MultipartRequest(
@@ -564,11 +879,27 @@ class OfferingModel extends ConnectedModel {
         return null;
       }
       final responseData = json.decode(response.body);
-      return responseData;
+      return UploadImageData(
+        imageUrl: responseData['imageUrl'],
+        imagePath: responseData['imagePath']
+      );
     } catch (error) {
       print(error);
       return null;
     }
+  }
+
+  Future<List<UploadImageData>> uploadImages(List<File> imageFiles) async{
+    // print(imageFiles[0].uri);
+    final List<UploadImageData> uploadImageData = new List(imageFiles.length);
+    
+    for (int i = 0; i < imageFiles.length; i++) {
+      UploadImageData uploadImageDataOne = await uploadImage(imageFiles[i]);
+      // print(uploadImageDataOne);
+      uploadImageData.add(uploadImageDataOne);
+    }
+
+    return uploadImageData;
   }
 
   Future<List<Vendor>> fetchClosestVendors() async{
@@ -585,25 +916,23 @@ class OfferingModel extends ConnectedModel {
     Map<String, dynamic> _closestVendorsData = json.decode(response.body);
     _closestVendorsData.forEach((String key, dynamic value){
       print(key);
-      value.forEach((String key, dynamic value){
+      value.forEach((String key, dynamic vendorData){
         print(key);
-        value.forEach((String key, dynamic vendorData){
-          _closestVendors.add(
-            Vendor(
-              id: key,
-              name: vendorData[Datakeys.vendorName],
-              username: vendorData[Datakeys.vendorUsername],
-              phone: vendorData[Datakeys.vendorPhone],
-              address: vendorData[Datakeys.vendorAddress],
-              dateCreated: vendorData[Datakeys.vendorDateCreated],
-              pos: vendorData[Datakeys.vendorPos].map<double>((x) {return double.parse(x.toString());}).toList(),
-              verified: vendorData[Datakeys.vendorVerified],
-              rating: vendorData[Datakeys.vendorRating],
-              rate: vendorData[Datakeys.vendorRate],
-              distance: vendorData["distance"]
-            )
-          );
-        });
+        _closestVendors.add(
+          Vendor(
+            id: key,
+            name: vendorData[Datakeys.vendorName],
+            username: vendorData[Datakeys.vendorUsername],
+            phone: vendorData[Datakeys.vendorPhone],
+            address: vendorData[Datakeys.vendorAddress],
+            dateCreated: vendorData[Datakeys.vendorDateCreated],
+            pos: vendorData[Datakeys.vendorPos].map<double>((x) {return double.parse(x.toString());}).toList(),
+            verified: vendorData[Datakeys.vendorVerified],
+            rating: vendorData[Datakeys.vendorRating],
+            rate: vendorData[Datakeys.vendorRate],
+            distance: vendorData["distance"]
+          )
+        );
       });
     });
     // toggleLoading(false);
@@ -632,6 +961,8 @@ class OfferingModel extends ConnectedModel {
       print('Upload Failed');
       return false;
     }
+
+    _currentOfferingAmount = double.parse(offering.price);
 
     final Map<String, dynamic> offeringData = {
       'name': offering.name,
@@ -701,6 +1032,8 @@ class OfferingModel extends ConnectedModel {
       return false;
     }
 
+    _currentOfferingAmount = double.parse(offering.price);
+
     final Map<String, dynamic> offeringData = {
       'name': offering.name,
       'imageUrls': _uploadImageUrls,
@@ -748,107 +1081,64 @@ class OfferingModel extends ConnectedModel {
     }
   }
 
-  Future<bool> addOffering(
-      DisposeOffering offering, List<File> imageFiles) async {
-    _isLoading = true;
-    notifyListeners();
-    // print(imageFiles[0].uri);
-    final List uploadImageData = new List(imageFiles.length);
-    final List _uploadImageUrls = new List(imageFiles.length);
-    final List _uploadImagePaths = new List(imageFiles.length);
-    // imageFiles.forEach((File imageFile) {
-    //   uploadImageData.add(await uploadImage(imageFile));
-    // });
-    for (int i = 0; i < imageFiles.length; i++) {
-      uploadImageData[i] = await uploadImage(imageFiles[i]);
-      print(uploadImageData[i]);
-      _uploadImageUrls[i] = uploadImageData[i]['imageUrl'];
-      _uploadImagePaths[i] = uploadImageData[i]['imagePath'];
-    }
-
+  Future<bool> addDisposeOffering(DisposeOffering offering, List<File> imageFiles) async {
+    toggleLoading(true);
+    
+    List<UploadImageData> uploadImageData = await uploadImages(imageFiles);
     if (uploadImageData == null) {
       print('Upload Failed');
       return false;
     }
+    offering.imageData = uploadImageData;
+    
+    _currentOfferingAmount = double.parse(offering.price);
 
-    final Map<String, dynamic> offeringData = {
-      'name': offering.name,
-      'imageUrls': _uploadImageUrls,
-      'price': offering.price,
-      'rate': offering.rate,
-      'numberOfBins': offering.numberOfBins,
-      Datakeys.clientName: offering.clientName,
-      'clientLocation': offering.clientLocation,
-      'userId': _authenticatedUser.id,
-      'imagePath': _uploadImagePaths,
-    };
-
+    _offerings[OfferingType.dispose] = [];
     try {
       final http.Response response = await http.post(
           '$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}',
-          body: json.encode(offeringData));
+          body: json.encode(offering.toMap()));
       if (response.statusCode != 200 && response.statusCode != 201) {
-        _isLoading = false;
-        notifyListeners();
+        toggleLoading(false);
+
         return false;
       }
       final Map<String, dynamic> responseData = json.decode(response.body);
-      //? save uploaded offering locally
-      final DisposeOffering newDisposeOffering = DisposeOffering(
-        id: responseData['name'],
-        name: offering.name,
-        imageUrls: _uploadImageUrls,
-        price: offering.price,
-        rate: offering.rate,
-        numberOfBins: offering.numberOfBins,
-        clientName: offering.clientName,
-        clientLocation: offering.clientLocation,
-        userId: _authenticatedUser.id,
-        imagePaths: _uploadImagePaths,
-      );
-      _offerings['Dispose Offerings'].add(newDisposeOffering);
-      _isLoading = false;
-      notifyListeners();
+      //todo: save uploaded offering locally
+      offering.id = responseData["name"];
+
+      _currentOfferingType = OfferingType.dispose;
+      _offerings[OfferingType.dispose].insert(0, offering);
+      
+      toggleLoading(false);
       return true;
     } catch (error) {
-      _isLoading = false;
-      notifyListeners();
       print(error);
+      
+      toggleLoading(false);
       return false;
     }
   }
 
   void fetchOfferings() async {
-    _isLoading = true;
-    notifyListeners();
+    toggleLoading(true);
+
     http.Response response1 = await http
         .get('$_dbUrl/dispose_offerings.json?auth=${_authenticatedUser.token}');
     // print(response1.body);
     // http.Response response2 = await http.get('$_dbUrl/recycle_offerings.json?auth=${_authenticatedUser.token}');
-    _isLoading = false;
-    notifyListeners();
+    
     final List<DisposeOffering> disposeOfferings = [];
     final Map<String, dynamic> offeringsData = json.decode(response1.body);
     if (offeringsData != null) {
       offeringsData.forEach((String offeringId, dynamic offeringData) {
-        final DisposeOffering offering = DisposeOffering(
-          id: offeringId,
-          name: "house", //offeringData['title'],
-          iconUrl: 'assets/throw-to-paper-bin.png',
-          imageUrls: offeringData['imageUrls'],
-          price: offeringData['price'],
-          rate: offeringData['imageUrl'],
-          numberOfBins: offeringData['numberOfBins'],
-          clientName: offeringData[Datakeys.clientName],
-          clientLocation: offeringData['clientLocation'],
-          userId: _authenticatedUser.id,
-          imagePaths: offeringData['imagePaths'],
-          date: DateTime.now().month.toString()
-        );
+        final DisposeOffering offering = DisposeOffering.fromMap(offeringData);
         disposeOfferings.add(offering);
       });
       _offerings['Dispose Offerings'] = disposeOfferings;
     }
+
+    toggleLoading(false);
   }
 
   //TODO: implement update
@@ -856,6 +1146,64 @@ class OfferingModel extends ConnectedModel {
   //? make sure to add ?auth=<idToken> in the urls
 }
 
+class TransactionModel extends ConnectedModel{
+
+  /// add new [Transaction]
+  Future<bool> addTransaction(Transaction transaction) async{
+    toggleLoading(true);
+
+    http.Response response = await http.post("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}",
+    body: jsonEncode(transaction.toMap()));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      toggleLoading(false);
+      return false;
+    }
+
+    _transactions.add(transaction);
+    toggleLoading(false);
+    return true;
+  }
+
+  /// fetch all [Transactions] associated with user
+  Future<bool> fetchTransactions() async{
+    toggleLoading(true);
+
+    http.Response response = await http.get("$_dbUrl/transactions/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}");
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      toggleLoading(false);
+      return false;
+    }
+
+    List<Map<String, dynamic>> responseData = jsonDecode(response.body);
+    _transactions = []; // reset transactions
+    responseData.forEach((Map<String, dynamic> data){
+      _transactions.add(Transaction.fromMap(data));
+    });
+
+    toggleLoading(false);
+    return true;
+  }
+
+  /// move pending [Transaction] amount to [Escrow]
+  Future<bool> addEscrow(Escrow escrow) async{
+    toggleLoading(true);
+
+    http.Response response = await http.post("$_dbUrl/escrows/${_authenticatedUser.profileId}.json?auth=${_authenticatedUser.token}",
+    body: jsonEncode(escrow.toMap()));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      toggleLoading(false);
+      return false;
+    }
+
+    // _escrows.add(escrow);
+    toggleLoading(false);
+    return true;
+  }
+}
+
+/*
 class TransactionModel extends ConnectedModel{
   Wallet _wallet;
   String _authEmail = "test4@skyblazar.com";
@@ -979,3 +1327,4 @@ class TransactionModel extends ConnectedModel{
     toggleLoading(false);
   }
 }
+*/
